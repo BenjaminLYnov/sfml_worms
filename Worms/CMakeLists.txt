@@ -21,17 +21,6 @@ foreach(_source IN ITEMS ${WORMS_SOURCES})
     source_group("${_group_path}" FILES "${_source}")
 endforeach()
 
-# La commande personnalisée après la création de la cible 'Worms' pour copier coller les ressources à côtés du .exe
-add_custom_command(TARGET Worms POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/Worms/resources $<TARGET_FILE_DIR:Worms>/resources)
-
-# Copiez également le dossier des ressources dans le répertoire de la solution (où se trouve le fichier .sln)
-add_custom_command(TARGET Worms POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/Worms/resources ${CMAKE_CURRENT_BINARY_DIR}/resources)
-
-    
 ########################################################################################################################
 # Dépendances
 

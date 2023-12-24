@@ -1,27 +1,16 @@
 #include "Sprite.h"
 #include <SFML/Graphics.hpp> // Incluez l'en-tête complet pour l'implémentation de la SFML
-#include "Resources.h" // Inclure le fichier d'en-tête généré
+#include <iostream>
 
-Sprite::Sprite(const std::string &imagePath)
+Sprite::Sprite(const unsigned char *Data, size_t Size)
 {
-    // Chargez la texture depuis le fichier image
-    texture = std::make_unique<sf::Texture>();
+    // Initialiser les instances
+    Texture = std::make_unique<sf::Texture>();
+    SfmlSprite = std::make_unique<sf::Sprite>();
 
-     if (!texture->loadFromMemory(LongRoyalSword_data, LongRoyalSword_size)) {
-    //  if (!texture->loadFromMemory(DALLE_20231217_125108_A_futuri_data, DALLE_20231217_125108_A_futuri_size)) {
-        // Gérer l'erreur
-    }
-    
-    // if (!texture->loadFromFile(imagePath))
-    // {
-    //     // Gestion de l'erreur de chargement de la texture
-    //     // Vous pouvez ajouter ici un code de gestion d'erreur approprié
-    // }
-
-    // Initialisez le sprite avec la texture chargée
-    sprite = std::make_unique<sf::Sprite>(*texture);
-
-    // ... Autres initialisations de la classe Sprite
+    // Chargez la texture depuis la memoire
+    if (Data && Size > 0)
+        LoadTextureFromMemory(Data, Size);
 }
 
 void Sprite::Start()
@@ -34,18 +23,37 @@ void Sprite::Update(float deltaTime)
     // Code de mise à jour spécifique si nécessaire
 }
 
-void Sprite::SetPosition(const sf::Vector2f &newPosition)
+bool Sprite::LoadTextureFromMemory(const unsigned char *Data, size_t Size)
 {
-    sprite->setPosition(newPosition);
+    if (Texture->loadFromMemory(Data, Size))
+    {
+        // Initialisez le sprite avec la texture chargée
+        SfmlSprite = std::make_unique<sf::Sprite>(*Texture);
+        return true; // Chargement réussi
+    }
+    // Gérer l'erreur si le chargement échoue
+    return false;
+}
+
+void Sprite::SetPosition(const sf::Vector2f &NewPosition)
+{
+    if (!SfmlSprite)
+        return;
+    SfmlSprite->setPosition(NewPosition);
 }
 
 sf::Vector2f Sprite::GetPosition() const
 {
-    return sprite->getPosition();
+    if (!SfmlSprite)
+        return sf::Vector2f(0, 0);
+    return SfmlSprite->getPosition();
 }
 
 void Sprite::Render(sf::RenderWindow &Window)
 {
+    if (!SfmlSprite)
+        return;
+
     // Dessinez le sprite sur la fenêtre SFML
-    Window.draw(*sprite);
+    Window.draw(*SfmlSprite);
 }

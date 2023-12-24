@@ -1,12 +1,13 @@
 #include "Worm.h"
 #include <iostream>
 #include "GameObject/Components/Sprite/Sprite.h"
+#include "Resources/Resources.h"
 
 Worm::Worm()
 {
 
     // Crée un std::shared_ptr pour un nouvel objet Sprite
-    mSprite = std::make_shared<Sprite>("./resources/LongRoyalSword.PNG");
+    mSprite = std::make_shared<Sprite>(circle50_data, circle50_size);
 
     // Ajoute le Sprite comme composant
     AddComponent(mSprite);
