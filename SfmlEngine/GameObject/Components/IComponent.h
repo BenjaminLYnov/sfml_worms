@@ -35,6 +35,9 @@ public:
     // Récupère le GameObject propriétaire de ce composant.
     GameObject *GetOwner() const;
 
+protected:
+    
+
 private:
     GameObject *Owner = nullptr; // Pointeur vers le GameObject propriétaire.
 };

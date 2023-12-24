@@ -1,8 +1,10 @@
 #pragma once
 
-#include "GameObject/GameObject.h"
+#include "GameObject/Actor/Actor.h"
 
-class Worm : public GameObject
+class Sprite;
+
+class Worm : public Actor
 {
 public:
     Worm();
@@ -14,4 +16,5 @@ public:
     void Render(sf::RenderWindow &Window) const;
 
 private:
+    std::shared_ptr<Sprite> mSprite;
 };

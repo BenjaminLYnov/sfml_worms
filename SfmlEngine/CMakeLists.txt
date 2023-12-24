@@ -15,6 +15,9 @@ target_include_directories(SfmlEngine PUBLIC
     $<BUILD_INTERFACE:${SFML_SOURCE_DIR}/include>  # Chemin absolu vers le répertoire d'en-tête SFML
 )
 
+# Inclusion de libraries
+include_directories(${PROJECT_SOURCE_DIR}/lib)
+
 # Organisez l'architecture virtuelle pour refléter la structure des fichiers
 foreach(_source IN ITEMS ${SFMLENGINE_SOURCES})
     get_filename_component(_source_path "${_source}" PATH)

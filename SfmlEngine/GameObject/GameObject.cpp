@@ -5,8 +5,10 @@
 
 GameObject::GameObject()
 {
-    TransformComponent = std::make_shared<Transform>();
-    AddComponent(TransformComponent);
+    WorldTransformComponent = std::make_shared<Transform>();
+    RelativeTransformComponent = std::make_shared<Transform>();
+    AddComponent(WorldTransformComponent);
+    AddComponent(RelativeTransformComponent);
 }
 
 void GameObject::Start()
@@ -53,37 +55,76 @@ std::shared_ptr<T> GameObject::GetComponent() const
     return nullptr;
 }
 
-void GameObject::SetPosition(const sf::Vector2f &Position)
+void GameObject::SetWorldPosition(const sf::Vector2f &Position)
 {
-    TransformComponent->SetPosition(Position);
+    WorldTransformComponent->SetPosition(Position);
 }
 
-void GameObject::SetScale(const sf::Vector2f &Scale)
+void GameObject::SetRelativePosition(const sf::Vector2f &Position)
 {
-    TransformComponent->SetScale(Scale);
+    if (RelativeTransformComponent)
+    {
+        RelativeTransformComponent->SetPosition(Position);
+    }
 }
 
-void GameObject::SetRotation(float Rotation)
+void GameObject::SetWorldScale(const sf::Vector2f &Scale)
 {
-    TransformComponent->SetRotation(Rotation);
+    WorldTransformComponent->SetScale(Scale);
 }
 
-sf::Vector2f GameObject::GetPosition() const
+void GameObject::SetRelativeScale(const sf::Vector2f &Scale)
 {
-    return TransformComponent->GetPosition();
+    if (RelativeTransformComponent)
+    {
+        RelativeTransformComponent->SetScale(Scale);
+    }
 }
 
-sf::Vector2f GameObject::GetScale() const
+void GameObject::SetWorldRotation(const float Rotation)
 {
-    return TransformComponent->GetScale();
+    WorldTransformComponent->SetRotation(Rotation);
 }
 
-float GameObject::GetRotation() const
+void GameObject::SetRelativeRotation(const float Rotation)
 {
-    return TransformComponent->GetRotation();
+    if (RelativeTransformComponent)
+    {
+        RelativeTransformComponent->SetRotation(Rotation);
+    }
 }
 
-std::shared_ptr<Transform> GameObject::GetTransform() const
+sf::Vector2f GameObject::GetWorldPosition() const
 {
-    return TransformComponent;
+    return WorldTransformComponent->GetPosition();
+}
+
+sf::Vector2f GameObject::GetRelativePosition() const
+{
+    return RelativeTransformComponent ? RelativeTransformComponent->GetPosition() : sf::Vector2f();
+}
+
+sf::Vector2f GameObject::GetWorldScale() const
+{
+    return WorldTransformComponent->GetScale();
+}
+
+sf::Vector2f GameObject::GetRelativeScale() const
+{
+    return RelativeTransformComponent ? RelativeTransformComponent->GetScale() : sf::Vector2f();
+}
+
+float GameObject::GetWorldRotation() const
+{
+    return WorldTransformComponent->GetRotation();
+}
+
+float GameObject::GetRelativeRotation() const
+{
+    return RelativeTransformComponent ? RelativeTransformComponent->GetRotation() : 0.0f;
+}
+
+std::shared_ptr<Transform> GameObject::GetWorldTransform() const
+{
+    return WorldTransformComponent;
 }

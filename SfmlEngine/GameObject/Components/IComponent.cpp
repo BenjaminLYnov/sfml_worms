@@ -1,5 +1,6 @@
 #include "IComponent.h"
 
+
 void IComponent::Start()
 {
     // Implémentation par défaut (peut être vide)

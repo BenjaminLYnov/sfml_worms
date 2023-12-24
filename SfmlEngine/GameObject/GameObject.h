@@ -18,14 +18,14 @@ class GameObject
 public:
     GameObject();
 
-    // 
-    virtual void Start() = 0;
+    //
+    virtual void Start();
 
     // Met à jour tous les composants du GameObject.
-    virtual void Update(const float DeltaTime) = 0;
+    virtual void Update(const float DeltaTime);
 
     // Appelle la méthode de rendu sur tous les composants du GameObject.
-    virtual void Render(sf::RenderWindow &Window) const = 0;
+    virtual void Render(sf::RenderWindow &Window) const;
 
     // Ajoute un composant au GameObject.
     void AddComponent(std::shared_ptr<IComponent> Component);
@@ -35,30 +35,51 @@ public:
     std::shared_ptr<T> GetComponent() const;
 
     // Définit la position du GameObject.
-    void SetPosition(const sf::Vector2f &Position);
+    void SetWorldPosition(const sf::Vector2f &Position);
+
+    // Définit la position relative du GameObject.
+    void SetRelativePosition(const sf::Vector2f &Position);
 
     // Définit l'échelle du GameObject.
-    void SetScale(const sf::Vector2f &Scale);
+    void SetWorldScale(const sf::Vector2f &Scale);
+
+    // Définit l'échelle relative du GameObject.
+    void SetRelativeScale(const sf::Vector2f &Scale);
 
     // Définit la rotation du GameObject.
-    void SetRotation(float Rotation);
+    void SetWorldRotation(const float Rotation);
+
+    // Définit la rotation relative du GameObject.
+    void SetRelativeRotation(const float Rotation);
 
     // Récupère la position actuelle du GameObject.
-    sf::Vector2f GetPosition() const;
+    sf::Vector2f GetWorldPosition() const;
+
+    // Récupère la position relative actuelle du GameObject.
+    sf::Vector2f GetRelativePosition() const;
 
     // Récupère l'échelle actuelle du GameObject.
-    sf::Vector2f GetScale() const;
+    sf::Vector2f GetWorldScale() const;
+
+    // Récupère l'échelle relative actuelle du GameObject.
+    sf::Vector2f GetRelativeScale() const;
 
     // Récupère la rotation actuelle du GameObject.
-    float GetRotation() const;
+    float GetWorldRotation() const;
+
+    // Récupère la rotation relative actuelle du GameObject.
+    float GetRelativeRotation() const;
 
     // Récupère une référence partagée vers le composant Transform du GameObject.
-    std::shared_ptr<Transform> GetTransform() const;
+    std::shared_ptr<Transform> GetWorldTransform() const;
 
 private:
     // Liste des composants attachés à ce GameObject.
     std::vector<std::shared_ptr<IComponent>> Components;
 
     // Composant Transform spécifique gérant la position, l'échelle et la rotation du GameObject.
-    std::shared_ptr<Transform> TransformComponent;
+    std::shared_ptr<Transform> WorldTransformComponent;
+
+    // Composant Transform spécifique gérant la position, l'échelle et la rotation relative du GameObject.
+    std::shared_ptr<Transform> RelativeTransformComponent;
 };
