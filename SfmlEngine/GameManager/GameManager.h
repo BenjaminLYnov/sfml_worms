@@ -20,8 +20,8 @@ public:
     // Ajoute un nouveau niveau au GameManager
     void AddLevel(std::shared_ptr<Level> NewLevel);
 
-    void SaveGame(const std::string &Filename, const GameData &Data);
-    bool LoadGame(const std::string &Filename, GameData &Data);
+    // void SaveGame(const std::string &Filename, const GameData &Data);
+    // bool LoadGame(const std::string &Filename, GameData &Data);
 
 private:
     sf::RenderWindow *Window;

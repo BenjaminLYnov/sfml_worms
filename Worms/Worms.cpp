@@ -90,14 +90,14 @@ int main()
     // std::cout << loadedGameData.level << "\n";
     // std::cout << loadedGameData.score << "\n";
 
-    // // Instance Game Manager
-    // std::shared_ptr<GameManager> SGameManager = std::make_unique<GameManager>();
+    // Instance Game Manager
+    std::shared_ptr<GameManager> SGameManager = std::make_unique<GameManager>();
 
-    // // Add Level
-    // SGameManager->AddLevel(std::make_shared<MainMenu>());
+    // Add Level
+    SGameManager->AddLevel(std::make_shared<MainMenu>());
 
-    // // Run Game Loop
-    // SGameManager->Run();
+    // Run Game Loop
+    SGameManager->Run();
 
     return 0;
 }

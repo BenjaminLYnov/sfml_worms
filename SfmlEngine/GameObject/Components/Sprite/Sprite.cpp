@@ -1,16 +1,22 @@
 #include "Sprite.h"
 #include <SFML/Graphics.hpp> // Incluez l'en-tête complet pour l'implémentation de la SFML
+#include "Resources.h" // Inclure le fichier d'en-tête généré
 
 Sprite::Sprite(const std::string &imagePath)
 {
     // Chargez la texture depuis le fichier image
     texture = std::make_unique<sf::Texture>();
-    
-    if (!texture->loadFromFile(imagePath))
-    {
-        // Gestion de l'erreur de chargement de la texture
-        // Vous pouvez ajouter ici un code de gestion d'erreur approprié
+
+     if (!texture->loadFromMemory(LongRoyalSword_data, LongRoyalSword_size)) {
+    //  if (!texture->loadFromMemory(DALLE_20231217_125108_A_futuri_data, DALLE_20231217_125108_A_futuri_size)) {
+        // Gérer l'erreur
     }
+    
+    // if (!texture->loadFromFile(imagePath))
+    // {
+    //     // Gestion de l'erreur de chargement de la texture
+    //     // Vous pouvez ajouter ici un code de gestion d'erreur approprié
+    // }
 
     // Initialisez le sprite avec la texture chargée
     sprite = std::make_unique<sf::Sprite>(*texture);

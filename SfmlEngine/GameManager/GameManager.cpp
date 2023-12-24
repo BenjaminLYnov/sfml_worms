@@ -51,29 +51,29 @@ void GameManager::AddLevel(std::shared_ptr<Level> NewLevel)
     Levels.push_back(NewLevel);
 }
 
-void GameManager::SaveGame(const std::string& filename, const GameData& data) {
-    std::ofstream outFile(filename);
-    if (!outFile) {
-        std::cerr << "Impossible d'ouvrir le fichier pour la sauvegarde." << std::endl;
-        return;
-    }
+// void GameManager::SaveGame(const std::string& filename, const GameData& data) {
+//     std::ofstream outFile(filename);
+//     if (!outFile) {
+//         std::cerr << "Impossible d'ouvrir le fichier pour la sauvegarde." << std::endl;
+//         return;
+//     }
 
-    outFile << data.ToJson().dump(4);
-}
+//     outFile << data.ToJson().dump(4);
+// }
 
-bool GameManager::LoadGame(const std::string& filename, GameData& data) {
-    std::ifstream inFile(filename);
-    if (!inFile) {
-        std::cerr << "Impossible d'ouvrir le fichier pour charger les données." << std::endl;
-        return false;
-    }
+// bool GameManager::LoadGame(const std::string& filename, GameData& data) {
+//     std::ifstream inFile(filename);
+//     if (!inFile) {
+//         std::cerr << "Impossible d'ouvrir le fichier pour charger les données." << std::endl;
+//         return false;
+//     }
 
-    nlohmann::json jsonData;
-    inFile >> jsonData;
-    data = GameData::FromJson(jsonData);
+//     nlohmann::json jsonData;
+//     inFile >> jsonData;
+//     data = GameData::FromJson(jsonData);
 
-    return true;
-}
+//     return true;
+// }
 
 // PRIVATE
 
