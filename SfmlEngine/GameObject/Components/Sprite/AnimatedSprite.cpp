@@ -1,4 +1,5 @@
 #include "AnimatedSprite.h"
+#include <SFML/Graphics/Sprite.hpp>
 
 AnimatedSprite::AnimatedSprite() : FrameTime(0.1f), ElapsedTime(0.0f), CurrentFrame(0) {}
 

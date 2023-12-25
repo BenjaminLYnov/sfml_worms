@@ -9,6 +9,10 @@ class IdleAnimation;
 class WalkAnimation;
 class WinnnerAnimation;
 
+// Inputs Action
+class IAMove;
+class IAJump;
+
 class Worm : public Character
 {
 public:
@@ -28,4 +32,7 @@ private:
     std::shared_ptr<IdleAnimation> IdleA;
     std::shared_ptr<WalkAnimation> WalkA;
     std::shared_ptr<WinnnerAnimation> WinnnerA;
+
+    // std::shared_ptr<In> ;
+
 };

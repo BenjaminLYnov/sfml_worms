@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./../IComponent.h"
-#include "EMode.h"
+#include "Mode.h"
 
 class StateMode : public IComponent
 {
