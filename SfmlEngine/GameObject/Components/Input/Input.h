@@ -17,9 +17,15 @@ public:
 
     virtual void Start() override;
     virtual void Update(const float DeltaTime) override;
+    
+    virtual void PollActionsEvents();
 
-    void BindAction(InputAction &IA, ETriggerEvent TriggerEvent, const Callback &Callback);
+    void BindAction(std::shared_ptr<InputAction> &IA, ETriggerEvent TriggerEvent, const Callback &Callback);
+
+protected:
+    void AddInputAction(std::shared_ptr<InputAction> &NewIA);
 
 private:
+    std::vector<std::shared_ptr<InputAction>> InputActions;
 
 };

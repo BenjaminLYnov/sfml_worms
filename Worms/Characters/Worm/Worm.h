@@ -3,15 +3,7 @@
 #include "GameObject/Actor/Character/Character.h"
 
 class Sprite;
-
-// ANIMATIONS
-class IdleAnimation;
-class WalkAnimation;
-class WinnnerAnimation;
-
-// Inputs Action
-class IAMove;
-class IAJump;
+class InputAction;
 
 class Worm : public Character
 {
@@ -28,11 +20,12 @@ protected:
     void InitAnimations();
 
 private:
+    // Sprites Animation
     std::shared_ptr<Sprite> CurrentSprite;
-    std::shared_ptr<IdleAnimation> IdleA;
-    std::shared_ptr<WalkAnimation> WalkA;
-    std::shared_ptr<WinnnerAnimation> WinnnerA;
+    std::shared_ptr<Sprite> IdleA;
+    std::shared_ptr<Sprite> WalkA;
+    std::shared_ptr<Sprite> WinnnerA;
 
-    // std::shared_ptr<In> ;
-
+    // Input Action
+    std::shared_ptr<InputAction> IA_Move;
 };

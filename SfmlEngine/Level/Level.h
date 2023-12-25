@@ -3,12 +3,16 @@
 #include <vector>
 #include "GameObject/GameObject.h"
 
+class Character;
+
 // Forward declaration de sf::RenderWindow
-namespace sf {
+namespace sf
+{
     class RenderWindow;
 }
 
-class Level {
+class Level
+{
 public:
     Level();
 
@@ -21,8 +25,13 @@ public:
     void Update(const float DeltaTime);
 
     // Effectue le rendu de tous les GameObjects du niveau
-    void Render(sf::RenderWindow& Window);
+    void Render(sf::RenderWindow &Window) const;
+
+    // Assigne le Character que le joueur contrôle dans le level
+    void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
 
 protected:
     std::vector<std::shared_ptr<GameObject>> GameObjects;
+
+    std::shared_ptr<Character> CharacterControlled;
 };

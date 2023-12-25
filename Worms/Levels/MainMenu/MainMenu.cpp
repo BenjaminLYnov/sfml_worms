@@ -4,7 +4,11 @@
 
 MainMenu::MainMenu()
 {
-    AddGameObject(std::make_shared<Worm>());
+    // Instance Main Character 
+    std::shared_ptr<Worm> MainWorm = std::make_shared<Worm>();
+    AddGameObject(MainWorm);
+
+    SetCharacterControlled(MainWorm);
 }
 
 void MainMenu::Start()

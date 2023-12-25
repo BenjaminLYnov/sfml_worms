@@ -3,7 +3,7 @@
 #include "GameObject/Components/Input/InputAction.h"
 #include <SFML/Window/Keyboard.hpp>
 
-class IAMove : InputAction
+class IAMove : public InputAction
 {
 public:
     IAMove()

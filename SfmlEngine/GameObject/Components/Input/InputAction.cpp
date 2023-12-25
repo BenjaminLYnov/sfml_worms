@@ -2,34 +2,38 @@
 #include "TriggerEvent.h"
 #include <iostream>
 
-void InputAction::AddAction(ETriggerEvent &TriggerEvent, const Callback &Callback)
+void InputAction::BindAction(ETriggerEvent TriggerEvent, const Callback &Callback)
 {
-    switch ((TriggerEvent))
-    {
-    case ETriggerEvent::STARTED:
-        TEStart.push_back(Callback);
-        break;
-    case ETriggerEvent::COMPLETED:
-        TECompleted.push_back(Callback);
-        break;
-    case ETriggerEvent::TRIGGERED:
-        TETriggered.push_back(Callback);
-        break;
-    default:
-        break;
-    }
+    Callbacks[TriggerEvent].push_back(Callback);
 }
 
-void InputAction::Update(const float DeltaTime)
+void InputAction::PollKeyEvents()
 {
+    // On Started
     for (auto Key : Keys)
-    {
-        // if (sf::Keyboard::)
-        // // if (sf::Keyboard::isKeyPressed(Key))
-        // {
-        //     std::cout << "toto\n";
-        // }
-    }
+        if (sf::Keyboard::isKeyPressed(Key) && !bIsKeyPressed)
+        {
+            CallCallbacks(ETriggerEvent::STARTED);
+            bIsKeyPressed = true;
+            break;
+        }
+
+    // On Triggered
+    for (auto Key : Keys)
+        if (sf::Keyboard::isKeyPressed(Key))
+        {
+            CallCallbacks(ETriggerEvent::TRIGGERED);
+            break;
+        }
+
+    // On Completed
+    for (auto Key : Keys)
+        if (!sf::Keyboard::isKeyPressed(Key) && bIsKeyPressed)
+        {
+            CallCallbacks(ETriggerEvent::COMPLETED);
+            bIsKeyPressed = false;
+            break;
+        }
 }
 
 // PROTECTED
@@ -40,4 +44,10 @@ void InputAction::AddKey(sf::Keyboard::Key NewKey)
         if (Key == NewKey)
             return;
     Keys.push_back(NewKey);
+}
+
+void InputAction::CallCallbacks(ETriggerEvent TriggerEvent)
+{
+    for (const auto Callback : Callbacks[TriggerEvent])
+        Callback();
 }

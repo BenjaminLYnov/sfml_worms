@@ -14,7 +14,24 @@ void Input::Update(const float DeltaTime)
 {
 }
 
-void Input::BindAction(InputAction &IA, ETriggerEvent TriggerEvent, const Callback& Callback)
+void Input::PollActionsEvents()
 {
-    IA.AddAction(TriggerEvent, Callback);
+    for (const auto IA : InputActions)
+        IA->PollKeyEvents();
+}
+
+void Input::BindAction(std::shared_ptr<InputAction> &IA, ETriggerEvent TriggerEvent, const Callback &Callback)
+{
+    AddInputAction(IA);
+    IA->BindAction(TriggerEvent, Callback);
+}
+
+// PROTECTED
+
+void Input::AddInputAction(std::shared_ptr<InputAction> &NewIA)
+{
+    for (const auto IA : InputActions)
+        if (IA == NewIA)
+            return;
+    InputActions.push_back(NewIA);
 }

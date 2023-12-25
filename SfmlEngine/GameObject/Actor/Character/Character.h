@@ -13,6 +13,7 @@ class Character : public Actor
 public:
     Character();
 
+    std::shared_ptr<Input> GetInputCOmpoennt();
 
 protected:
 
