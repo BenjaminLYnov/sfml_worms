@@ -10,6 +10,8 @@ SquareCollider::SquareCollider(const sf::Vector2f InitialSize) : Size(InitialSiz
 
     Shape = new sf::RectangleShape(Size);
 
+    Shape->setOrigin(Size.x / 2, Size.y / 2);
+
     // Définit la couleur de remplissage du rectangle en transparent
     Shape->setFillColor(sf::Color::Transparent);
 
@@ -18,12 +20,6 @@ SquareCollider::SquareCollider(const sf::Vector2f InitialSize) : Size(InitialSiz
 
     // Définit une couleur pour la bordure, par exemple, verte
     Shape->setOutlineColor(sf::Color::Green);
-    // Shape->setPosition(20, 40);
-
-    // GetOwner()->GetWorldPosition();
-    // sf::Vector2f CurrentPosition = GetRelativePosition();
-    // sf::Vector2f NewPosition = GetOwner()->GetWorldPosition() + CurrentPosition;
-    // SetRelativePosition(NewPosition);
 }
 
 SquareCollider::~SquareCollider()
@@ -43,18 +39,12 @@ void SquareCollider::Start()
     // sf::Vector2f NewPosition = GetOwner()->GetWorldPosition() + CurrentPosition;
     // SetRelativePosition(NewPosition);
     // Shape->setPosition(GetRelativePosition());
-
 }
 
 void SquareCollider::Update(const float DeltaTime)
 {
     // Implémentation de la logique de mise à jour spécifique à SquareCollider
-
-    sf::Vector2f NewPosition = GetOwner()->GetWorldPosition() + GetRelativePosition();
-    // SetRelativePosition(NewPosition);
-    // std::cout << NewPosition.x << "\n";
-    Shape->setPosition(NewPosition);
-
+    Shape->setPosition(GetOwner()->GetWorldPosition() + Offset);
 }
 
 void SquareCollider::Render(sf::RenderWindow &Window)
@@ -82,8 +72,10 @@ void SquareCollider::OnCollisionExit(ICollider *Other)
 void SquareCollider::SetSize(const sf::Vector2f &NewSize)
 {
     Size = NewSize;
-    if (Shape)
-        Shape->setSize(Size);
+    if (!Shape)
+        return;
+    Shape->setSize(Size);
+    Shape->setOrigin(Size.x / 2, Size.y / 2);
 }
 
 sf::Vector2f SquareCollider::GetSize() const

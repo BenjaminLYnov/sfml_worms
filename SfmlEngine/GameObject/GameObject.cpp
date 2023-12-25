@@ -1,7 +1,10 @@
 #include "GameObject.h"
 #include "./Components/IComponent.h"
 #include "./Components/Transform/Transform.h"
+#include "./Components/Collider/ICollider.h"
+#include "./Components/Sprite/Sprite.h"
 #include <SFML/Graphics.hpp> // Inclure l'en-tête complet pour l'implémentation
+
 
 GameObject::GameObject()
 {
@@ -46,11 +49,9 @@ std::shared_ptr<T> GameObject::GetComponent() const
 {
     for (const auto &Component : Components)
     {
-        std::shared_ptr<T> derived = std::dynamic_pointer_cast<T>(Component);
-        if (derived != nullptr)
-        {
-            return derived;
-        }
+        std::shared_ptr<T> Derived = std::dynamic_pointer_cast<T>(Component);
+        if (Derived)
+            return Derived;
     }
     return nullptr;
 }
@@ -58,6 +59,12 @@ std::shared_ptr<T> GameObject::GetComponent() const
 void GameObject::SetWorldPosition(const sf::Vector2f &Position)
 {
     WorldTransformComponent->SetPosition(Position);
+
+    // Update components Position as Well
+    // for (const auto &Component : Components)
+    // {
+        
+    // }
 }
 
 void GameObject::SetRelativePosition(const sf::Vector2f &Position)

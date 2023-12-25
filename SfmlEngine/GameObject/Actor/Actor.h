@@ -3,6 +3,7 @@
 #include "../GameObject.h"
 
 class SquareCollider;
+class ActorComponent;
 
 class Actor : public GameObject
 {
@@ -11,5 +12,6 @@ public:
 
 protected:
     std::shared_ptr<SquareCollider> SquareColliderComponent;
-
+    std::vector<std::shared_ptr<ActorComponent>> ActorComponents;
+    
 };

@@ -1,10 +1,15 @@
 #pragma once
 
-#include "GameObject/Actor/Actor.h"
+#include "GameObject/Actor/Character/Character.h"
 
 class Sprite;
 
-class Worm : public Actor
+// ANIMATIONS
+class IdleAnimation;
+class WalkAnimation;
+class WinnnerAnimation;
+
+class Worm : public Character
 {
 public:
     Worm();
@@ -15,6 +20,12 @@ public:
 
     void Render(sf::RenderWindow &Window) const;
 
+protected:
+    void InitAnimations();
+
 private:
-    std::shared_ptr<Sprite> mSprite;
+    std::shared_ptr<Sprite> CurrentSprite;
+    std::shared_ptr<IdleAnimation> IdleA;
+    std::shared_ptr<WalkAnimation> WalkA;
+    std::shared_ptr<WinnnerAnimation> WinnnerA;
 };

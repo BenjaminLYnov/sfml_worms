@@ -1,12 +1,13 @@
 #include "Sprite.h"
 #include <SFML/Graphics.hpp> // Incluez l'en-tête complet pour l'implémentation de la SFML
 #include <iostream>
+#include "GameObject/GameObject.h"
 
 Sprite::Sprite(const unsigned char *Data, size_t Size)
 {
     // Initialiser les instances
-    Texture = std::make_unique<sf::Texture>();
-    SfmlSprite = std::make_unique<sf::Sprite>();
+    Texture = std::make_shared<sf::Texture>();
+    SfmlSprite = std::make_shared<sf::Sprite>();
 
     // Chargez la texture depuis la memoire
     if (Data && Size > 0)
@@ -18,28 +19,56 @@ void Sprite::Start()
     // Code d'initialisation spécifique si nécessaire
 }
 
-void Sprite::Update(float deltaTime)
+void Sprite::Update(const float DeltaTime)
 {
-    // Code de mise à jour spécifique si nécessaire
+    AnimatedSprite.Update(DeltaTime);
+    SfmlSprite->setPosition(GetOwner()->GetWorldPosition() + Offset);
 }
 
 bool Sprite::LoadTextureFromMemory(const unsigned char *Data, size_t Size)
 {
     if (Texture->loadFromMemory(Data, Size))
     {
+        // Améliorer la qualité de rendu de la texture
+        Texture->setSmooth(true);
+
         // Initialisez le sprite avec la texture chargée
-        SfmlSprite = std::make_unique<sf::Sprite>(*Texture);
+        SfmlSprite = std::make_shared<sf::Sprite>(*Texture);
+        SetOriginToCenter();
+
+        AnimatedSprite.SetSprite(SfmlSprite);
+
         return true; // Chargement réussi
     }
     // Gérer l'erreur si le chargement échoue
     return false;
 }
 
-void Sprite::SetPosition(const sf::Vector2f &NewPosition)
+void Sprite::SetAnimationSpeed(const float Speed)
+{
+    AnimatedSprite.SetAnimationSpeed(Speed);
+}
+
+void Sprite::AddAnimationFrame(const sf::IntRect &Frame)
+{
+    AnimatedSprite.AddAnimationFrame(Frame);
+    SetOriginToCenter();
+}
+
+void Sprite::SetOffset(const sf::Vector2f &NewOffset)
+{
+    Offset = NewOffset;
+    if (!SfmlSprite)
+        return;
+    SfmlSprite->setPosition(GetOwner()->GetWorldPosition() + Offset);
+}
+
+void Sprite::SetOriginToCenter()
 {
     if (!SfmlSprite)
         return;
-    SfmlSprite->setPosition(NewPosition);
+    sf::IntRect Bounds = SfmlSprite->getTextureRect();
+    SfmlSprite->setOrigin(Bounds.width * 0.5, Bounds.height * 0.5);
 }
 
 sf::Vector2f Sprite::GetPosition() const

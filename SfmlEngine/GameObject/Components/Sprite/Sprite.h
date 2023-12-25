@@ -3,7 +3,8 @@
 #include "./../IComponent.h"
 #include <SFML/System/Vector2.hpp> // Inclusion nécessaire pour utiliser sf::Vector2f, un type de template spécialisé de la SFML
 #include <string>
-#include <memory> // Incluez l'en-tête pour std::unique_ptr
+#include <memory> // Incluez l'en-tête pour std::shared_ptr
+#include "AnimatedSprite.h";
 
 namespace sf
 {
@@ -21,12 +22,16 @@ public:
     virtual void Start() override;
 
     // Implémentation de la méthode Update (héritée de Component).
-    virtual void Update(float DeltaTime) override;
+    virtual void Update(const float DeltaTime) override;
 
     bool LoadTextureFromMemory(const unsigned char *Data = nullptr, size_t Size = 0);
 
+    void SetAnimationSpeed(const float Speed);
+    void AddAnimationFrame(const sf::IntRect &Frame);
+    void SetOriginToCenter();
+
     // Méthode pour définir la position du sprite.
-    void SetPosition(const sf::Vector2f &NewPosition);
+    void SetOffset(const sf::Vector2f &NewPosition);
 
     // Méthode pour obtenir la position du sprite.
     sf::Vector2f GetPosition() const;
@@ -34,7 +39,12 @@ public:
     // Dessiner le sprite sur une fenêtre SFML.
     virtual void Render(sf::RenderWindow &Window) override;
 
-private:
-    std::unique_ptr<sf::Texture> Texture; // std::unique_ptr pour sf::Texture
-    std::unique_ptr<sf::Sprite> SfmlSprite;   // std::unique_ptr pour sf::Sprite
+protected:
+    sf::Vector2f Offset;
+
+    std::shared_ptr<sf::Texture> Texture;   // std::shared_ptr pour sf::Texture
+    std::shared_ptr<sf::Sprite> SfmlSprite; // std::shared_ptr pour sf::Sprite
+
+    AnimatedSprite AnimatedSprite;
+    // std::shared_ptr<AnimateSprite> AnimateSprite;   // std::shared_ptr pour sf::Sprite
 };

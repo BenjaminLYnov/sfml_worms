@@ -23,16 +23,16 @@ public:
     virtual void OnCollisionStay(ICollider *Other) = 0;  // Appelé tant que la collision persiste
     virtual void OnCollisionExit(ICollider *Other) = 0;  // Appelé lorsqu'une collision prend fin
 
-    void SetRelativePosition(const sf::Vector2f &position);
-    void SetRelativeScale(const sf::Vector2f &scale);
-    void SetRelativeRotation(float rotation);
+    void SetOffset(const sf::Vector2f &NewOffset);
+    // void SetRelativeRotation(float rotation);
 
-    sf::Vector2f GetRelativePosition() const;
-    sf::Vector2f GetRelativeScale() const;
-    float GetRelativeRotation() const;
+    sf::Vector2f GetOffset() const;
+    // sf::Vector2f GetRelativeScale() const;
+    // float GetRelativeRotation() const;
 
 protected:
-    // Composant Transform spécifique gérant la position, l'échelle et la rotation relative du collider.
-    Transform *RelativeTransformComponent;
+    sf::Vector2f Offset;
+    // Composant Transform spécifique gérant la Offset, l'échelle et la rotation relative du collider.
+    // Transform *RelativeTransformComponent;
     // std::shared_ptr<Transform> RelativeTransformComponent;
 };
