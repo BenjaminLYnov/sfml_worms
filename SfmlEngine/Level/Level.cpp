@@ -22,12 +22,15 @@ void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
     GameObjects.push_back(GameObject);
 }
 
-void Level::Update(const float DeltaTime)
+void Level::ProcessEvents()
 {
     if (CharacterControlled)
-        if (CharacterControlled->GetInputCOmpoennt())
-            CharacterControlled->GetInputCOmpoennt()->PollActionsEvents();
+        if (CharacterControlled->GetInputComponent())
+            CharacterControlled->GetInputComponent()->PollActionsEvents();
+}
 
+void Level::Update(const float DeltaTime)
+{
     for (auto &GameObject : GameObjects)
     {
         GameObject->Update(DeltaTime);

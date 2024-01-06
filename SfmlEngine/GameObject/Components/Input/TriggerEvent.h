@@ -1,6 +1,6 @@
 enum class ETriggerEvent
 {
-    STARTED,
-    COMPLETED,
-    TRIGGERED
+    Started,
+    Completed,
+    Triggered
 };

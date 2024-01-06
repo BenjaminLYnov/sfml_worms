@@ -56,6 +56,16 @@ std::shared_ptr<T> GameObject::GetComponent() const
     return nullptr;
 }
 
+void GameObject::AddWorldPosition(const sf::Vector2f &AmountPosition)
+{
+    WorldTransformComponent->SetPosition(GetWorldPosition() + AmountPosition);
+}
+
+void GameObject::AddRelativePosition(const sf::Vector2f &AmountPosition)
+{
+    RelativeTransformComponent->SetPosition(GetRelativePosition() + AmountPosition);
+}
+
 void GameObject::SetWorldPosition(const sf::Vector2f &Position)
 {
     WorldTransformComponent->SetPosition(Position);

@@ -9,29 +9,26 @@ GameManager::GameManager()
     // Initialisation supplémentaire si nécessaire
 }
 
-GameManager::~GameManager()
-{
-}
-
 void GameManager::Run()
 {
+    // Vérifier si le level a été instancié
     if (!CurrentLevel)
-    {
-        std::cout << "No Level";
         return;
-    }
 
+    // Instance la fenêtre de jeu
     InitWindow();
 
+    // Vérifier si le fenêtre de jeu a bien été instancié
     if (!Window)
-    {
-        std::cout << "No Window";
         return;
-    }
 
+    // Démarre le level
     CurrentLevel->Start();
 
+    // Instance Clock pour déterminer le Delta Time
     sf::Clock Clock;
+
+    // Boucle de jeu principal
     while (Window->isOpen())
     {
         ProcessEvents();
@@ -79,12 +76,11 @@ void GameManager::AddLevel(std::shared_ptr<Level> NewLevel)
 
 void GameManager::InitWindow()
 {
-    Window = new sf::RenderWindow(sf::VideoMode(800, 600), "SFML Window");
-    // Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "SFML Window");
+    Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "SFML Window");
 
     // Limite les FPS à 60
-    Window->setFramerateLimit(60);
-    // Window->setVerticalSyncEnabled(true);
+    // Window->setFramerateLimit(60);
+    Window->setVerticalSyncEnabled(true);
 }
 
 void GameManager::ProcessEvents()
@@ -93,26 +89,45 @@ void GameManager::ProcessEvents()
     while (Window->pollEvent(Event))
     {
         if (Event.type == sf::Event::Closed)
-        {
             Window->close();
+
+        if (Event.type == sf::Event::MouseWheelScrolled)
+        {
+            if (Event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+            {
+                // Traiter le défilement vertical
+                float delta = Event.mouseWheelScroll.delta;
+                // Faire quelque chose avec delta (positif pour le défilement vers le haut, négatif pour le bas)
+                // std::cout << delta << "\n";
+            }
+            else if (Event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
+            {
+                // Traiter le défilement horizontal (si pris en charge)
+                float delta = Event.mouseWheelScroll.delta;
+                // std::cout << delta << "\n";
+
+                // Faire quelque chose avec delta
+            }
         }
-        // Autres gestionnaires d'événements ici
     }
+
+    if (CurrentLevel)
+        CurrentLevel->ProcessEvents();
 }
 
 void GameManager::Update(const float DeltaTime)
 {
-    if (CurrentLevel)
-        CurrentLevel->Update(DeltaTime);
+    if (!CurrentLevel)
+        return;
+    CurrentLevel->Update(DeltaTime);
 }
 
 void GameManager::Render(sf::RenderWindow &Window)
 {
-    Window.clear();
-
     // Rendu des objets
-    if (CurrentLevel)
-        CurrentLevel->Render(Window);
-
+    if (!CurrentLevel)
+        return;
+    Window.clear();
+    CurrentLevel->Render(Window);
     Window.display();
 }

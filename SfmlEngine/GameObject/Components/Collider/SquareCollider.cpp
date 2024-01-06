@@ -16,7 +16,7 @@ SquareCollider::SquareCollider(const sf::Vector2f InitialSize) : Size(InitialSiz
     Shape->setFillColor(sf::Color::Transparent);
 
     // Définit l'épaisseur de la bordure du rectangle
-    Shape->setOutlineThickness(0.5f);
+    Shape->setOutlineThickness(1);
 
     // Définit une couleur pour la bordure, par exemple, verte
     Shape->setOutlineColor(sf::Color::Green);
@@ -35,10 +35,6 @@ SquareCollider::~SquareCollider()
 void SquareCollider::Start()
 {
     // Implémentation de la logique de démarrage spécifique à SquareCollider
-    // sf::Vector2f CurrentPosition = GetRelativePosition();
-    // sf::Vector2f NewPosition = GetOwner()->GetWorldPosition() + CurrentPosition;
-    // SetRelativePosition(NewPosition);
-    // Shape->setPosition(GetRelativePosition());
 }
 
 void SquareCollider::Update(const float DeltaTime)

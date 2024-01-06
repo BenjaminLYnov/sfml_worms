@@ -95,7 +95,7 @@ class binary_reader
     /*!
     @param[in] format  the binary format to parse
     @param[in] sax_    a SAX event processor
-    @param[in] strict  whether to expect the input to be consumed completed
+    @param[in] strict  whether to expect the input to be consumed Completed
     @param[in] tag_handler  how to treat CBOR tags
 
     @return whether parsing was successful
@@ -905,7 +905,7 @@ class binary_reader
 
     @param[out] result  created string
 
-    @return whether string creation completed
+    @return whether string creation Completed
     */
     bool get_cbor_string(string_t& result)
     {
@@ -1001,7 +1001,7 @@ class binary_reader
 
     @param[out] result  created byte array
 
-    @return whether byte array creation completed
+    @return whether byte array creation Completed
     */
     bool get_cbor_binary(binary_t& result)
     {
@@ -1096,7 +1096,7 @@ class binary_reader
     @param[in] len  the length of the array or static_cast<std::size_t>(-1) for an
                     array of indefinite size
     @param[in] tag_handler how CBOR tags should be treated
-    @return whether array creation completed
+    @return whether array creation Completed
     */
     bool get_cbor_array(const std::size_t len,
                         const cbor_tag_handler_t tag_handler)
@@ -1134,7 +1134,7 @@ class binary_reader
     @param[in] len  the length of the object or static_cast<std::size_t>(-1) for an
                     object of indefinite size
     @param[in] tag_handler how CBOR tags should be treated
-    @return whether object creation completed
+    @return whether object creation Completed
     */
     bool get_cbor_object(const std::size_t len,
                          const cbor_tag_handler_t tag_handler)
@@ -1571,7 +1571,7 @@ class binary_reader
 
     @param[out] result  created string
 
-    @return whether string creation completed
+    @return whether string creation Completed
     */
     bool get_msgpack_string(string_t& result)
     {
@@ -1654,7 +1654,7 @@ class binary_reader
 
     @param[out] result  created byte array
 
-    @return whether byte array creation completed
+    @return whether byte array creation Completed
     */
     bool get_msgpack_binary(binary_t& result)
     {
@@ -1765,7 +1765,7 @@ class binary_reader
 
     /*!
     @param[in] len  the length of the array
-    @return whether array creation completed
+    @return whether array creation Completed
     */
     bool get_msgpack_array(const std::size_t len)
     {
@@ -1787,7 +1787,7 @@ class binary_reader
 
     /*!
     @param[in] len  the length of the object
-    @return whether object creation completed
+    @return whether object creation Completed
     */
     bool get_msgpack_object(const std::size_t len)
     {
@@ -1843,7 +1843,7 @@ class binary_reader
                          input (true, default) or whether the last read
                          character should be considered instead
 
-    @return whether string creation completed
+    @return whether string creation Completed
     */
     bool get_ubjson_string(string_t& result, const bool get_char = true)
     {
@@ -2003,7 +2003,7 @@ class binary_reader
                                is `false`
     @param[in] prefix  type marker if already read, otherwise set to 0
 
-    @return whether size determination completed
+    @return whether size determination Completed
     */
     bool get_ubjson_size_value(std::size_t& result, bool& is_ndarray, char_int_type prefix = 0)
     {
@@ -2226,7 +2226,7 @@ class binary_reader
     @param[out] result  pair of the size and the type
     @param[in] inside_ndarray  whether the parser is parsing an ND array dimensional vector
 
-    @return whether pair creation completed
+    @return whether pair creation Completed
     */
     bool get_ubjson_size_type(std::pair<std::size_t, char_int_type>& result, bool inside_ndarray = false)
     {
@@ -2293,7 +2293,7 @@ class binary_reader
 
     /*!
     @param prefix  the previously read or set type prefix
-    @return whether value creation completed
+    @return whether value creation Completed
     */
     bool get_ubjson_value(const char_int_type prefix)
     {
@@ -2476,7 +2476,7 @@ class binary_reader
     }
 
     /*!
-    @return whether array creation completed
+    @return whether array creation Completed
     */
     bool get_ubjson_array()
     {
@@ -2584,7 +2584,7 @@ class binary_reader
     }
 
     /*!
-    @return whether object creation completed
+    @return whether object creation Completed
     */
     bool get_ubjson_object()
     {
@@ -2775,7 +2775,7 @@ class binary_reader
     @param[in] format   the current format (for diagnostics)
     @param[out] result  number of type @a NumberType
 
-    @return whether conversion completed
+    @return whether conversion Completed
 
     @note This function needs to respect the system's endianness, because
           bytes in CBOR, MessagePack, and UBJSON are stored in network order
@@ -2820,7 +2820,7 @@ class binary_reader
     @param[in] len number of characters to read
     @param[out] result string created by reading @a len bytes
 
-    @return whether string creation completed
+    @return whether string creation Completed
 
     @note We can not reserve @a len bytes for the result, because @a len
           may be too large. Usually, @ref unexpect_eof() detects the end of
@@ -2853,7 +2853,7 @@ class binary_reader
     @param[in] len number of bytes to read
     @param[out] result byte array created by reading @a len bytes
 
-    @return whether byte array creation completed
+    @return whether byte array creation Completed
 
     @note We can not reserve @a len bytes for the result, because @a len
           may be too large. Usually, @ref unexpect_eof() detects the end of

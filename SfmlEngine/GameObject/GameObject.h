@@ -34,9 +34,15 @@ public:
     template <typename T>
     std::shared_ptr<T> GetComponent() const;
 
-    // Définit la position du GameObject.
-    void SetWorldPosition(const sf::Vector2f &Position);
+    // Incrémente position monde du GameObject.
+    void AddWorldPosition(const sf::Vector2f &AmountPosition);
 
+    // Incrémente position relative du GameObject.
+    void AddRelativePosition(const sf::Vector2f &AmountPosition);
+
+    // Définit la position monde du GameObject.
+    void SetWorldPosition(const sf::Vector2f &Position);
+   
     // Définit la position relative du GameObject.
     void SetRelativePosition(const sf::Vector2f &Position);
 

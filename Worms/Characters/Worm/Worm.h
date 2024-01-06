@@ -12,12 +12,19 @@ public:
 
     void Start() override;
 
-    void Update(const float DeltaTime);
+    void Update(const float DeltaTime) override;
 
-    void Render(sf::RenderWindow &Window) const;
+    void Render(sf::RenderWindow &Window) const override;
 
 protected:
     void InitAnimations();
+
+    virtual void Move(const sf::Vector2f Value);
+    virtual void Started();
+    virtual void Triggered();
+    virtual void Completed();
+
+    void SetupBindAction() override;
 
 private:
     // Sprites Animation
@@ -27,5 +34,5 @@ private:
     std::shared_ptr<Sprite> WinnnerA;
 
     // Input Action
-    std::shared_ptr<InputAction> IA_Move;
+    std::shared_ptr<InputAction> IaMove;
 };

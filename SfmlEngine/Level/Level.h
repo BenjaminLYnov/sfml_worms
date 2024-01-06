@@ -21,6 +21,9 @@ public:
     // Ajoute un GameObject au niveau
     void AddGameObject(std::shared_ptr<GameObject> GameObject);
 
+    // Gestionnaires d'événements
+    virtual void ProcessEvents();
+
     // Met à jour tous les GameObjects du niveau
     void Update(const float DeltaTime);
 

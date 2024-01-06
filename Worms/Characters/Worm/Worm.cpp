@@ -3,7 +3,8 @@
 
 // Inclusion des Components
 #include "GameObject/Components/Collider/SquareCollider.h"
-#include "GameObject/Components/Input/InputAction.h"
+#include "GameObject/Components/Input/InputAction/InputAction.h"
+#include "GameObject/Components/Input/InputAction/Key/Key.h"
 #include "GameObject/Components/Sprite/Sprite.h"
 
 // Inclusion l'entête Resources necéssaire pour instancier les animations
@@ -16,12 +17,55 @@
 
 // Include les Inputs Action
 #include "GameObject/Components/Input/TriggerEvent.h"
-#include "Characters/InputActions/IAMove.h"
+#include "Characters/InputActions/MoveAction.h"
+#include <SFML/Graphics.hpp>
 
-Worm::Worm()
+Worm::Worm() : Character()
 {
-
     // Instance Animations
+    InitAnimations();
+
+    SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
+
+    AddComponent(CurrentSprite);
+    SetWorldPosition(sf::Vector2f(400, 300));
+
+    // Instance Inputs Acitonsqzdsqzdsdzq
+    IaMove = std::make_shared<MoveAction>();
+
+    MaxWalkSpeed = 200;
+}
+
+void Worm::Start()
+{
+    Character::Start();
+
+    SetupBindAction();
+}
+
+void Worm::Update(const float DeltaTime)
+{
+    Character::Update(DeltaTime);
+}
+
+void Worm::Render(sf::RenderWindow &Window) const
+{
+    Character::Render(Window);
+}
+
+// PROTECTED
+
+void Worm::SetupBindAction()
+{
+    InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
+
+    // InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
+    // InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
+    // InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
+}
+
+void Worm::InitAnimations()
+{
     IdleA = std::make_shared<IdleAnimation>();
     WalkA = std::make_shared<WalkAnimation>();
     WinnnerA = std::make_shared<WinnnerAnimation>();
@@ -29,45 +73,25 @@ Worm::Worm()
     CurrentSprite = WinnnerA;
     // CurrentSprite = WalkA;
     // CurrentSprite = IdleA;
-
-    SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
-
-    AddComponent(CurrentSprite);
-    SetWorldPosition(sf::Vector2f(400, 300));
-
-    // Instance Inputs Acitons
-    IA_Move = std::make_shared<IAMove>();
-
-    InputComponent->BindAction(IA_Move, ETriggerEvent::STARTED, []()
-                               { std::cout << "Start" << std::endl; });
-
-    InputComponent->BindAction(IA_Move, ETriggerEvent::TRIGGERED, []()
-                               { std::cout << "COMPLETED" << std::endl; });
-
-    InputComponent->BindAction(IA_Move, ETriggerEvent::COMPLETED, []()
-                               { std::cout << "TRINGGERED" << std::endl; });
 }
 
-void Worm::Start()
+void Worm::Move(const sf::Vector2f Value)
 {
-    Character::Start();
+    // std::cout << Value.x << "   " << Value.y << "\n";
+    SetInputMovement(Value);
 }
 
-void Worm::Update(const float DeltaTime)
+void Worm::Started()
 {
-    Character::Update(DeltaTime);
-
-    // InputComponent->Update(DeltaTime);
-
-    // std::cout << "worm update\n";
+    std::cout << "started\n";
 }
 
-void Worm::Render(sf::RenderWindow &Window) const
+void Worm::Triggered()
 {
-    Character::Render(Window);
-    // std::cout << "worm render\n";
+    std::cout << "Triggered\n";
 }
 
-void Worm::InitAnimations()
+void Worm::Completed()
 {
+    std::cout << "Completed\n";
 }

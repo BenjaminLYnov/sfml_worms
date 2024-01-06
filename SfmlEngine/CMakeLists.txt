@@ -4,9 +4,10 @@ project(SfmlEngine)
 file(GLOB_RECURSE SFMLENGINE_SOURCES
     *.cpp
     *.h
+    *.tpp
 )
 
-# Créez la bibliothèque Engine (par exemple, une bibliothèque statique)
+# Créez la bibliothèque Engine (une bibliothèque statique)
 add_library(SfmlEngine STATIC ${SFMLENGINE_SOURCES})
 
 # Incluez le répertoire parent comme un répertoire d'inclusion système

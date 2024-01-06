@@ -13,7 +13,6 @@ class GameManager
 {
 public:
     GameManager();
-    ~GameManager();
 
     void Run(); // Lance la boucle de jeu principale
 
@@ -24,8 +23,7 @@ public:
     // bool LoadGame(const std::string &Filename, GameData &Data);
 
 private:
-    sf::RenderWindow *Window;
-    // std::shared_ptr<sf::RenderWindow> Window;
+    std::shared_ptr<sf::RenderWindow> Window;   // Fenêtre de jeu
     std::vector<std::shared_ptr<Level>> Levels; // Tableau de niveaux
 
     void InitWindow();                  // Traite les événements de la fenêtre

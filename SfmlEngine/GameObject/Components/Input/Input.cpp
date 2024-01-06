@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "InputAction.h"
+#include "InputAction/InputAction.h"
 #include "TriggerEvent.h"
 
 Input::Input()
@@ -18,12 +18,6 @@ void Input::PollActionsEvents()
 {
     for (const auto IA : InputActions)
         IA->PollKeyEvents();
-}
-
-void Input::BindAction(std::shared_ptr<InputAction> &IA, ETriggerEvent TriggerEvent, const Callback &Callback)
-{
-    AddInputAction(IA);
-    IA->BindAction(TriggerEvent, Callback);
 }
 
 // PROTECTED
