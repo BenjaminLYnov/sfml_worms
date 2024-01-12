@@ -24,6 +24,9 @@ protected:
     virtual void Triggered();
     virtual void Completed();
 
+
+    virtual void Jump();
+
     void SetupBindAction() override;
 
 private:
@@ -35,4 +38,5 @@ private:
 
     // Input Action
     std::shared_ptr<InputAction> IaMove;
+    std::shared_ptr<InputAction> IaJump;
 };

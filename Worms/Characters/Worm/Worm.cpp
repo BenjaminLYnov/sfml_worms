@@ -18,6 +18,7 @@
 // Include les Inputs Action
 #include "GameObject/Components/Input/TriggerEvent.h"
 #include "Characters/InputActions/MoveAction.h"
+#include "Characters/InputActions/JumpAction.h"
 #include <SFML/Graphics.hpp>
 
 Worm::Worm() : Character()
@@ -32,6 +33,7 @@ Worm::Worm() : Character()
 
     // Instance Inputs Acitonsqzdsqzdsdzq
     IaMove = std::make_shared<MoveAction>();
+    IaJump = std::make_shared<JumpAction>();
 
     MaxWalkSpeed = 200;
 }
@@ -58,8 +60,9 @@ void Worm::Render(sf::RenderWindow &Window) const
 void Worm::SetupBindAction()
 {
     InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
+    InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
 
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
     // InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
     // InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
 }
@@ -77,21 +80,25 @@ void Worm::InitAnimations()
 
 void Worm::Move(const sf::Vector2f Value)
 {
-    // std::cout << Value.x << "   " << Value.y << "\n";
     SetInputMovement(Value);
 }
 
 void Worm::Started()
 {
-    std::cout << "started\n";
+    // std::cout << "started\n";
 }
 
 void Worm::Triggered()
 {
-    std::cout << "Triggered\n";
+    // std::cout << "Triggered\n";
 }
 
 void Worm::Completed()
 {
-    std::cout << "Completed\n";
+    // std::cout << "Completed\n";
+}
+
+void Worm::Jump()
+{
+    // std::cout << "Jump\n";
 }

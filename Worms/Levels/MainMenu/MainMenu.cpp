@@ -12,9 +12,10 @@ MainMenu::MainMenu()
 
 
     AddGameObject(MainWorm);
-    AddGameObject(AnotherWorm);
+    // AddGameObject(AnotherWorm);
 
     SetCharacterControlled(MainWorm);
+    // SetCharacterControlled(AnotherWorm);
 }
 
 void MainMenu::Start()

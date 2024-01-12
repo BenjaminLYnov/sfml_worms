@@ -28,6 +28,9 @@ void GameManager::Run()
     // Instance Clock pour déterminer le Delta Time
     sf::Clock Clock;
 
+    sf::View view(sf::FloatRect(0, 0, 800, 600));
+    Window->setView(view);
+    
     // Boucle de jeu principal
     while (Window->isOpen())
     {
