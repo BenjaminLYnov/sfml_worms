@@ -91,7 +91,7 @@ int main()
     // std::cout << loadedGameData.score << "\n";
 
     // Instance Game Manager
-    std::shared_ptr<GameManager> SGameManager = std::make_unique<GameManager>();
+    std::unique_ptr<GameManager> SGameManager = std::make_unique<GameManager>();
 
     // Add Level
     SGameManager->AddLevel(std::make_shared<MainMenu>());
