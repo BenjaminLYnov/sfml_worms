@@ -14,4 +14,5 @@ MoveAction::MoveAction()
     AddKey(Key::Keyboard::Left, true, Axis::Horizontal, true);
 
     AddKey(Key::Joystick::LStickAxis);
+    AddKey(Key::Keyboard::H);
 }

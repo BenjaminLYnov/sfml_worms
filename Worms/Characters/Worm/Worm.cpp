@@ -14,6 +14,8 @@
 #include "Animations/IdleAnimation.h"
 #include "Animations/WalkAnimation.h"
 #include "Animations/WinnnerAnimation.h"
+#include "Animations/JumpAnimation.h"
+
 
 // Include les Inputs Action
 #include "GameObject/Components/Input/TriggerEvent.h"
@@ -59,9 +61,9 @@ void Worm::SetupBindAction()
 {
     InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
 
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
 }
 
 void Worm::InitAnimations()
@@ -69,10 +71,9 @@ void Worm::InitAnimations()
     IdleA = std::make_shared<IdleAnimation>();
     WalkA = std::make_shared<WalkAnimation>();
     WinnnerA = std::make_shared<WinnnerAnimation>();
+    JumpA = std::make_shared<JumpAnimation>();
 
-    CurrentSprite = WinnnerA;
-    // CurrentSprite = WalkA;
-    // CurrentSprite = IdleA;
+    CurrentSprite = JumpA;
 }
 
 void Worm::Move(const sf::Vector2f Value)
@@ -83,6 +84,8 @@ void Worm::Move(const sf::Vector2f Value)
 
 void Worm::Started()
 {
+    CurrentSprite = WalkA;
+
     std::cout << "started\n";
 }
 
@@ -93,5 +96,7 @@ void Worm::Triggered()
 
 void Worm::Completed()
 {
+    CurrentSprite = IdleA;
+
     std::cout << "Completed\n";
 }

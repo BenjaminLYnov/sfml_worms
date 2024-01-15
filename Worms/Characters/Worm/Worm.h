@@ -32,6 +32,8 @@ private:
     std::shared_ptr<Sprite> IdleA;
     std::shared_ptr<Sprite> WalkA;
     std::shared_ptr<Sprite> WinnnerA;
+    std::shared_ptr<Sprite> JumpA;
+
 
     // Input Action
     std::shared_ptr<InputAction> IaMove;
