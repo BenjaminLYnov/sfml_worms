@@ -2,17 +2,17 @@
 
 #include "GameObject/Components/Sprite/Sprite.h"
 
-class WalkAnimation : public Sprite
+class FallAnimation : public Sprite
 {
 public:
-    WalkAnimation() : Sprite(wwalk_data, wwalk_size)
+    FallAnimation() : Sprite(wfall_data, wfall_size)
     {
         SetAnimationSpeed(0.05);
 
         const int RectWidth = 60;
         const int RectHeight = 60;
         const int RectLeft = 0;
-        const int NbFrames = 15;
+        const int NbFrames = 2;
 
         for (size_t i = 0; i < NbFrames; i++)
         {

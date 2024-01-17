@@ -12,10 +12,11 @@ public:
         const int RectWidth = 60;
         const int RectHeight = 52;
         const int RectLeft = 0;
+        const int NbFrames = 14;
 
-        for (size_t i = 0; i < 14; i++)
+        for (size_t i = 0; i < NbFrames; i++)
         {
-            const int RectTop = i * 60;
+            const int RectTop = i * RectHeight;
             AddAnimationFrame(sf::IntRect(RectLeft, RectTop, RectWidth, RectHeight));
         }
     }

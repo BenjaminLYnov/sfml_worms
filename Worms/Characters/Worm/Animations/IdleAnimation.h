@@ -14,10 +14,9 @@ public:
         const int RectLeft = 0;
         const int NbFrames = 15;
 
-
         for (size_t i = 0; i < NbFrames; i++)
         {
-            const int RectTop = i * 60;
+            const int RectTop = i * RectHeight;
             AddAnimationFrame(sf::IntRect(RectLeft, RectTop, RectWidth, RectHeight));
         }
     }
