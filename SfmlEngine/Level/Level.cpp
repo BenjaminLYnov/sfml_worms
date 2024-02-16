@@ -1,6 +1,9 @@
 #include "Level.h"
 #include <SFML/Graphics.hpp> // Inclure l'en-tête complet pour l'implémentation
 #include "Level.h"
+
+#include <iostream>
+
 #include "GameObject/Actor/Character/Character.h"
 #include "GameObject/Components/Input/Input.h"
 
@@ -20,6 +23,18 @@ void Level::Start()
 void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
 {
     GameObjects.push_back(GameObject);
+}
+
+void Level::RemoveGameObject(std::shared_ptr<GameObject> GameObject)
+{
+    for (auto it = GameObjects.begin(); it != GameObjects.end(); ++it)
+    {
+	    if (*it == GameObject)
+	    {
+	    	GameObjects.erase(it);
+			return;
+		}
+	}
 }
 
 void Level::ProcessEvents()

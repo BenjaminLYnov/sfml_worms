@@ -19,12 +19,22 @@ public:
 protected:
     void InitAnimations();
 
+#pragma region InputAction
     virtual void Move(const sf::Vector2f Value);
+    virtual void Jump();
+    //virtual void Fire();
+    
+#pragma endregion
+
     virtual void Started();
     virtual void Triggered();
     virtual void Completed();
 
     void SetupBindAction() override;
+
+    int TakeDamage(const int Damage);
+
+    void OnDestroy();
 
 private:
     // Sprites Animation
@@ -35,4 +45,10 @@ private:
 
     // Input Action
     std::shared_ptr<InputAction> IaMove;
+    std::shared_ptr<InputAction> IaJump;
+    //std::shared_ptr<InputAction> IaFire;
+
+    int Health;
+
+    bool bIsAlive;
 };
