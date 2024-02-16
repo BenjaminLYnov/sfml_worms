@@ -6,7 +6,7 @@ file(GLOB_RECURSE WORMS_SOURCES
     *.h
 )
 
-add_executable(Worms ${WORMS_SOURCES})
+add_executable(Worms ${WORMS_SOURCES} "Characters/InputActions/JumpAction.cpp" "Characters/InputActions/JumpAction.h" )
 
 # Ajoutez le chemin vers les entêtes
 target_include_directories(Worms PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/)

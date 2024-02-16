@@ -18,7 +18,7 @@ namespace sf
 class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
-    GameObject();
+	GameObject();
 
     //
     virtual void Start();

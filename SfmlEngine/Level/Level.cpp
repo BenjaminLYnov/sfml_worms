@@ -28,6 +28,18 @@ std::vector<std::shared_ptr<GameObject>>& Level::GetGameObjects()
     return GameObjects;
 }
 
+void Level::RemoveGameObject(std::shared_ptr<GameObject> GameObject)
+{
+    for (auto it = GameObjects.begin(); it != GameObjects.end(); ++it)
+    {
+	    if (*it == GameObject)
+	    {
+	    	GameObjects.erase(it);
+			return;
+		}
+	}
+}
+
 void Level::ProcessEvents()
 {
     if (CharacterControlled)

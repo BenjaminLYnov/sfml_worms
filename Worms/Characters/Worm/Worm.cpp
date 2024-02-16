@@ -22,6 +22,8 @@
 #include "Characters/InputActions/JumpAction.h"
 #include <SFML/Graphics.hpp>
 
+#include "Characters/InputActions/JumpAction.h"
+
 Worm::Worm() : Character()
 {
     // Instance Animations
@@ -39,9 +41,13 @@ Worm::Worm() : Character()
 
     SetWorldPosition(sf::Vector2f(400, 300));
 
-    // Instance Inputs Acitonsqzdsqzdsdzq
+    // Instance Inputs Acitons
     IaMove = std::make_shared<MoveAction>();
     IaJump = std::make_shared<JumpAction>();
+
+    IaJump = std::make_shared<JumpAction>();
+
+    //IaFire = std::make_shared<InputAction>();
 
     MaxWalkSpeed = 200;
 
@@ -51,6 +57,9 @@ Worm::Worm() : Character()
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::Started);
     SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Worm::Triggered);
     SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &Worm::Completed);
+	Health = 100;
+
+    bIsAlive = true;
 }
 
 void Worm::Start()
@@ -85,6 +94,24 @@ void Worm::SetupBindAction()
     // InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
 }
 
+int Worm::TakeDamage(const int Damage)
+{
+    Health -= Damage;
+
+    if(Health < 0)
+	{
+		Health = 0;
+        bIsAlive = false;
+	}
+
+    return Health;
+}
+
+void Worm::OnDestroy()
+{
+	std::cout << "Worm Destroyed\n";
+}
+
 void Worm::InitAnimations()
 {
     IdleA = std::make_shared<IdleAnimation>();
@@ -101,6 +128,16 @@ void Worm::Move(const sf::Vector2f Value)
     AxisMoveValue = Value;
     // SetInputMovement(Value);
 }
+
+void Worm::Jump()
+{
+	std::cout << "Jump\n";
+}
+
+//void Worm::Fire()
+//{
+//	std::cout << "Fire\n";
+//}
 
 void Worm::Started()
 {
