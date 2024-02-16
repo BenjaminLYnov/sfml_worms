@@ -3,9 +3,11 @@
 #include <memory>
 #include <vector>
 #include <SFML/System/Vector2.hpp> // Inclusion nécessaire pour sf::Vector2f en raison de sa nature en tant que type de template spécialisé
+#include <string>
 
 class IComponent;
 class Transform;
+class Level;
 
 // Forward declaration de sf::RenderWindow
 namespace sf
@@ -13,7 +15,7 @@ namespace sf
     class RenderWindow;
 }
 
-class GameObject
+class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
     GameObject();
@@ -34,6 +36,8 @@ public:
     template <typename T>
     std::shared_ptr<T> GetComponent() const;
 
+    std::vector<std::shared_ptr<IComponent>> GetComponents();
+
     // Incrémente position monde du GameObject.
     void AddWorldPosition(const sf::Vector2f &AmountPosition);
 
@@ -42,7 +46,7 @@ public:
 
     // Définit la position monde du GameObject.
     void SetWorldPosition(const sf::Vector2f &Position);
-   
+
     // Définit la position relative du GameObject.
     void SetRelativePosition(const sf::Vector2f &Position);
 
@@ -79,7 +83,27 @@ public:
     // Récupère une référence partagée vers le composant Transform du GameObject.
     std::shared_ptr<Transform> GetWorldTransform() const;
 
+    // Déinifit le nom du GameObject.
+    void SetName(const std::string &NewName);
+
+    // Récupère le nom du GameObject.
+    std::string GetName() const;
+
+    // Détruit le GameObject du Level
+    void SetLevel(Level *Level);
+
+    // Détruit le GameObject du Level
+    void Destroy(GameObject *GameObjectToDestroy = nullptr);
+
+    // Récupère tous les GameObject du Level
+    std::vector<std::shared_ptr<GameObject>> GetAllGameObjects();
+
+protected:
 private:
+    Level *OwnerLevel; // Pointeur vers le levle propriétaire.
+
+    std::string Name;
+
     // Liste des composants attachés à ce GameObject.
     std::vector<std::shared_ptr<IComponent>> Components;
 
@@ -88,4 +112,8 @@ private:
 
     // Composant Transform spécifique gérant la position, l'échelle et la rotation relative du GameObject.
     std::shared_ptr<Transform> RelativeTransformComponent;
+
+    void UpdateComponentsPosition();
 };
+
+#include "GameObject.tpp"

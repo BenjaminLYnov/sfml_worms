@@ -4,12 +4,14 @@
 #include "./Components/Collider/ICollider.h"
 #include "./Components/Sprite/Sprite.h"
 #include <SFML/Graphics.hpp> // Inclure l'en-tête complet pour l'implémentation
-
+#include "Level/Level.h"
+#include <iostream>
 
 GameObject::GameObject()
 {
     WorldTransformComponent = std::make_shared<Transform>();
     RelativeTransformComponent = std::make_shared<Transform>();
+
     AddComponent(WorldTransformComponent);
     AddComponent(RelativeTransformComponent);
 }
@@ -42,39 +44,25 @@ void GameObject::AddComponent(std::shared_ptr<IComponent> Component)
 {
     Components.push_back(Component);
     Component->SetOwner(this);
-}
-
-template <typename T>
-std::shared_ptr<T> GameObject::GetComponent() const
-{
-    for (const auto &Component : Components)
-    {
-        std::shared_ptr<T> Derived = std::dynamic_pointer_cast<T>(Component);
-        if (Derived)
-            return Derived;
-    }
-    return nullptr;
+    // Component->SetOwner(shared_from_this());
 }
 
 void GameObject::AddWorldPosition(const sf::Vector2f &AmountPosition)
 {
     WorldTransformComponent->SetPosition(GetWorldPosition() + AmountPosition);
+    UpdateComponentsPosition();
 }
 
 void GameObject::AddRelativePosition(const sf::Vector2f &AmountPosition)
 {
     RelativeTransformComponent->SetPosition(GetRelativePosition() + AmountPosition);
+    UpdateComponentsPosition();
 }
 
 void GameObject::SetWorldPosition(const sf::Vector2f &Position)
 {
     WorldTransformComponent->SetPosition(Position);
-
-    // Update components Position as Well
-    // for (const auto &Component : Components)
-    // {
-        
-    // }
+    UpdateComponentsPosition();
 }
 
 void GameObject::SetRelativePosition(const sf::Vector2f &Position)
@@ -82,6 +70,7 @@ void GameObject::SetRelativePosition(const sf::Vector2f &Position)
     if (RelativeTransformComponent)
     {
         RelativeTransformComponent->SetPosition(Position);
+        UpdateComponentsPosition();
     }
 }
 
@@ -144,4 +133,52 @@ float GameObject::GetRelativeRotation() const
 std::shared_ptr<Transform> GameObject::GetWorldTransform() const
 {
     return WorldTransformComponent;
+}
+
+void GameObject::SetName(const std::string &NewName)
+{
+    Name = NewName;
+}
+
+std::string GameObject::GetName() const
+{
+    return Name;
+}
+
+void GameObject::SetLevel(Level *Level)
+{
+    OwnerLevel = Level;
+}
+
+void GameObject::Destroy(GameObject *GameObjectToDestroy)
+{
+    if (!OwnerLevel)
+        return;
+
+    if (!GameObjectToDestroy)
+        GameObjectToDestroy = this;
+
+    OwnerLevel->RemoveGameObject(GameObjectToDestroy);
+}
+
+std::vector<std::shared_ptr<GameObject>> GameObject::GetAllGameObjects()
+{
+    std::vector<std::shared_ptr<GameObject>> GameObjects;
+    if (!OwnerLevel)
+        return GameObjects;
+    GameObjects = OwnerLevel->GetGameObjects();
+    return GameObjects;
+}
+
+// PROTECTED
+
+// PRIVATE
+
+void GameObject::UpdateComponentsPosition()
+{
+    // Update components Position as Well
+    for (const auto &Component : Components)
+    {
+        Component->UpdatePosition();
+    }
 }

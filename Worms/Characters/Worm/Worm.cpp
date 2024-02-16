@@ -6,6 +6,7 @@
 #include "GameObject/Components/Input/InputAction/InputAction.h"
 #include "GameObject/Components/Input/InputAction/Key/Key.h"
 #include "GameObject/Components/Sprite/Sprite.h"
+#include "GameObject/Components/Rigidbody/Rigidbody.h"
 
 // Inclusion l'entête Resources necéssaire pour instancier les animations
 #include "Resources/Resources.h"
@@ -26,9 +27,16 @@ Worm::Worm() : Character()
     // Instance Animations
     InitAnimations();
 
+    // Init Components
+    SquareColliderComponent = std::make_shared<SquareCollider>();
     SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
 
+    RigidbodyComponent = std::make_shared<Rigidbody>();
+
+    AddComponent(SquareColliderComponent);
     AddComponent(CurrentSprite);
+    // AddComponent(RigidbodyComponent);
+
     SetWorldPosition(sf::Vector2f(400, 300));
 
     // Instance Inputs Acitonsqzdsqzdsdzq
@@ -36,10 +44,18 @@ Worm::Worm() : Character()
     IaJump = std::make_shared<JumpAction>();
 
     MaxWalkSpeed = 200;
+
+    // std::cout << SquareColliderComponent->HasLayer(Layers::ALL);
+    // std::cout << SquareColliderComponent->HasLayer(Layers::STATIC);
+
+    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::Started);
+    SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Worm::Triggered);
+    SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &Worm::Completed);
 }
 
 void Worm::Start()
 {
+
     Character::Start();
 
     SetupBindAction();
@@ -48,6 +64,8 @@ void Worm::Start()
 void Worm::Update(const float DeltaTime)
 {
     Character::Update(DeltaTime);
+    AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
+    AxisMoveValue = sf::Vector2f(0, 0);
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -62,7 +80,7 @@ void Worm::SetupBindAction()
     InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
 
-    InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
+    // InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
     // InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
     // InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
 }
@@ -80,12 +98,14 @@ void Worm::InitAnimations()
 
 void Worm::Move(const sf::Vector2f Value)
 {
-    SetInputMovement(Value);
+    AxisMoveValue = Value;
+    // SetInputMovement(Value);
 }
 
 void Worm::Started()
 {
     // std::cout << "started\n";
+    // std::cout << GetName() <<"\n";
 }
 
 void Worm::Triggered()
@@ -100,5 +120,13 @@ void Worm::Completed()
 
 void Worm::Jump()
 {
+    // Destroy();
     // std::cout << "Jump\n";
+
+    std::vector<std::shared_ptr<GameObject>> GameObjects = GetAllGameObjects();
+
+    // std::cout << GameObjects.size();
+    // GameObjects[1]->SetRelativePosition(sf::Vector2f(400, 400));
+    // GameObjects[1]->SetWorldPosition(sf::Vector2f(400, 400));
+
 }

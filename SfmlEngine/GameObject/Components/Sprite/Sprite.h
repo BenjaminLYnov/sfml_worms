@@ -24,6 +24,8 @@ public:
     // Implémentation de la méthode Update (héritée de Component).
     virtual void Update(const float DeltaTime) override;
 
+    virtual void UpdatePosition() override;
+
     bool LoadTextureFromMemory(const unsigned char *Data = nullptr, size_t Size = 0);
 
     void SetAnimationSpeed(const float Speed);

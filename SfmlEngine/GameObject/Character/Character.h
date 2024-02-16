@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../Actor.h"
+#include "../GameObject.h"
 #include "./Animations/CharacterRun.h"
 #include "GameObject/Components/Input/Input.h"
 
 class StateMode;
 class CharacterRun;
-// class Input;
+class Input;
 
-class Character : public Actor
+class Character : public GameObject
 {
 public:
     Character();
@@ -23,12 +23,15 @@ public:
     float MinWalkSpeed = 20;
 
 protected:
+
     std::shared_ptr<StateMode> StateModeComponent;
     std::shared_ptr<Input> InputComponent;
 
     std::vector<std::shared_ptr<CharacterRun>> CharacterRun;
 
     sf::Vector2f InputMovement = sf::Vector2f(0, 0);
+
+    sf::Vector2f AxisMoveValue;
 
     void PerformInputMovement(const float DeltaTime);
 

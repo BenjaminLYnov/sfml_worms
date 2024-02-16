@@ -30,12 +30,16 @@ void GameManager::Run()
 
     sf::View view(sf::FloatRect(0, 0, 800, 600));
     Window->setView(view);
-    
+
     // Boucle de jeu principal
     while (Window->isOpen())
     {
         ProcessEvents();
+
         Update(Clock.restart().asSeconds());
+
+        CurrentLevel->OnCollision();
+        
         Render(*Window);
     }
 }

@@ -22,7 +22,12 @@ void Sprite::Start()
 void Sprite::Update(const float DeltaTime)
 {
     AnimatedSprite.Update(DeltaTime);
-    SfmlSprite->setPosition(GetOwner()->GetWorldPosition() + Offset);
+}
+
+void Sprite::UpdatePosition()
+{
+    sf::Vector2f NewPosition = GetOwner()->GetWorldPosition() + GetOwner()->GetRelativePosition() + Offset;
+    SfmlSprite->setPosition(NewPosition);
 }
 
 bool Sprite::LoadTextureFromMemory(const unsigned char *Data, size_t Size)

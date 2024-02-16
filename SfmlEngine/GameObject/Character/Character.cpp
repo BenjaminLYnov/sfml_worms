@@ -3,7 +3,7 @@
 #include "Math/Vector/Vector.h"
 #include <iostream>
 
-Character::Character() : Actor()
+Character::Character() : GameObject()
 {
     InputComponent = std::make_shared<Input>();
     AddComponent(InputComponent);
@@ -11,7 +11,7 @@ Character::Character() : Actor()
 
 void Character::Update(const float DeltaTime)
 {
-    Actor::Update(DeltaTime);
+    GameObject::Update(DeltaTime);
     PerformInputMovement(DeltaTime);
 }
 

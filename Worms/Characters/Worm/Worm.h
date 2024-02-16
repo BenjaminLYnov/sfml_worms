@@ -1,9 +1,11 @@
 #pragma once
 
-#include "GameObject/Actor/Character/Character.h"
+#include "GameObject/Character/Character.h"
 
 class Sprite;
 class InputAction;
+class Rigidbody;
+class SquareCollider;
 
 class Worm : public Character
 {
@@ -16,14 +18,17 @@ public:
 
     void Render(sf::RenderWindow &Window) const override;
 
+    std::shared_ptr<SquareCollider> SquareColliderComponent;
+
 protected:
+    std::shared_ptr<Rigidbody> RigidbodyComponent;
+
     void InitAnimations();
 
     virtual void Move(const sf::Vector2f Value);
     virtual void Started();
     virtual void Triggered();
     virtual void Completed();
-
 
     virtual void Jump();
 

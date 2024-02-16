@@ -1,6 +1,6 @@
 #pragma once
 
-// Inclusion nécessaire pour utiliser sf::Vector2f et sf::IntRect, un type de template spécialisé de la SFML
+// Inclusion nécessaire pour utiliser sf::Vector2f et sf::IntRect : type de template spécialisé de la SFML
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 
