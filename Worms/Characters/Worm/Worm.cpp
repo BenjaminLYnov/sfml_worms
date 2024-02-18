@@ -20,9 +20,17 @@
 #include "GameObject/Components/Input/TriggerEvent.h"
 #include "Characters/InputActions/MoveAction.h"
 #include "Characters/InputActions/JumpAction.h"
+#include "Characters/InputActions/FireAction.h"
+
+
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include "Characters/InputActions/JumpAction.h"
+
+// Weapon
+#include "Items/Weapons/FireGun/FireGun.h"
+
 
 Worm::Worm() : Character()
 {
@@ -44,19 +52,16 @@ Worm::Worm() : Character()
     // Instance Inputs Acitons
     IaMove = std::make_shared<MoveAction>();
     IaJump = std::make_shared<JumpAction>();
-
-    IaJump = std::make_shared<JumpAction>();
-
-    //IaFire = std::make_shared<InputAction>();
+    IaFire = std::make_shared<FireAction>();
 
     MaxWalkSpeed = 200;
 
     // std::cout << SquareColliderComponent->HasLayer(Layers::ALL);
     // std::cout << SquareColliderComponent->HasLayer(Layers::STATIC);
 
-    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::Started);
-    SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Worm::Triggered);
-    SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &Worm::Completed);
+    // SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::Started);
+    // SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Worm::Triggered);
+    // SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &Worm::Completed);
 	Health = 100;
 
     bIsAlive = true;
@@ -64,9 +69,7 @@ Worm::Worm() : Character()
 
 void Worm::Start()
 {
-
     Character::Start();
-
     SetupBindAction();
 }
 
@@ -88,6 +91,7 @@ void Worm::SetupBindAction()
 {
     InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
+    InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
 
     // InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
     // InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
@@ -129,15 +133,15 @@ void Worm::Move(const sf::Vector2f Value)
     // SetInputMovement(Value);
 }
 
-void Worm::Jump()
+void Worm::Fire()
 {
-	std::cout << "Jump\n";
+    const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
+	// SpawnGameObject<FireGun>(Location);
+	std::shared_ptr<FireGun> FireGunS = SpawnGameObject<FireGun>(Location);
+    sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
+    // sf::Vector2f force = sf::Vector2f(1, -1) * 30000.f;
+    FireGunS->AddForce(force);
 }
-
-//void Worm::Fire()
-//{
-//	std::cout << "Fire\n";
-//}
 
 void Worm::Started()
 {
@@ -160,7 +164,10 @@ void Worm::Jump()
     // Destroy();
     // std::cout << "Jump\n";
 
-    std::vector<std::shared_ptr<GameObject>> GameObjects = GetAllGameObjects();
+    // SpawnGameObject<Worm>();
+
+    // auto GameObjects = GetAllGameObjectByClass<Worm>();
+    // std::vector<std::shared_ptr<GameObject>> GameObjects = GetAllGameObjects();
 
     // std::cout << GameObjects.size();
     // GameObjects[1]->SetRelativePosition(sf::Vector2f(400, 400));

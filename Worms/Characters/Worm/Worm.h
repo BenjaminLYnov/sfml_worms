@@ -28,15 +28,13 @@ protected:
 #pragma region InputAction
     virtual void Move(const sf::Vector2f Value);
     virtual void Jump();
-    //virtual void Fire();
+    virtual void Fire();
     
 #pragma endregion
 
     virtual void Started();
     virtual void Triggered();
     virtual void Completed();
-
-    virtual void Jump();
 
     void SetupBindAction() override;
 
@@ -54,7 +52,7 @@ private:
     // Input Action
     std::shared_ptr<InputAction> IaMove;
     std::shared_ptr<InputAction> IaJump;
-    //std::shared_ptr<InputAction> IaFire;
+    std::shared_ptr<InputAction> IaFire;
 
     int Health;
 

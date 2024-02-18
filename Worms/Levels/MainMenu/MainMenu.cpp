@@ -7,21 +7,27 @@
 #include "PhysicExo/Vector.h"
 #include "PhysicExo/Particle.h"
 
+#include "Items/Weapons/Weapon.h"
+
 MainMenu::MainMenu()
 {
     // Instance Main Character
     MainWorm = std::make_shared<Worm>();
     std::shared_ptr<Worm> AnotherWorm = std::make_shared<Worm>();
+    std::shared_ptr<Weapon> Weap = std::make_shared<Weapon>();
+    std::shared_ptr<Item> Itema = std::make_shared<Item>();
+
 
     MainWorm->SetName("p1");
     AnotherWorm->SetName("p2");
 
     AddGameObject(MainWorm);
     AddGameObject(AnotherWorm);
+    // AddGameObject(Weap);
 
-    MainWorm->SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &MainMenu::Enter);
+    // MainWorm->SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &MainMenu::Enter);
     // MainWorm->SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &MainMenu::Stay);
-    MainWorm->SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &MainMenu::Exit);
+    // MainWorm->SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &MainMenu::Exit);
     // MainWorm->SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &MainMenu::Exit, MainWorm);
 
     AnotherWorm->SetWorldPosition(sf::Vector2f(200, 200));

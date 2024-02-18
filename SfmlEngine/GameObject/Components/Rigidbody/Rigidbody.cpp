@@ -2,8 +2,8 @@
 #include "iostream"
 #include "GameObject/GameObject.h"
 
-const float AIR_RESISTANCE = 0.1f;     // Coefficient de résistance de l'air
-const float TERMINAL_VELOCITY = 50.0f; // Vitesse terminale
+const float AIR_RESISTANCE = 0.1f;      // Coefficient de résistance de l'air
+const float TERMINAL_VELOCITY = 500.0f; // Vitesse terminale
 
 Rigidbody::Rigidbody() : Velocity(0, 0), ForceAccumulator(0, 0)
 {
@@ -19,27 +19,21 @@ void Rigidbody::Update(const float DeltaTime)
         return;
 
     // Appliquer la gravité
-    AddForce(Gravity);
-
-    // // Appliquer les forces accumulées pour mettre à jour la vitesse
-    // Velocity += ForceAccumulator * DeltaTime;
-
-    // std::cout << Velocity.y << "\n";
+    AddForce(Gravity * GravityScale);
 
     sf::Vector2f airResistance = -AIR_RESISTANCE * Velocity;
 
     // Appliquer la résistance de l'air
     AddForce(airResistance);
 
-    // Mettre à jour la vitesse
+    // Appliquer les forces accumulées pour mettre à jour la vitesse
     Velocity += ForceAccumulator * DeltaTime;
 
     // Limiter la vitesse à la vitesse terminale
     if (Velocity.y > TERMINAL_VELOCITY)
-    {
         Velocity.y = TERMINAL_VELOCITY;
-    }
 
+    // Réinitialiser les forces accumulées
     ForceAccumulator = sf::Vector2f(0, 0);
 
     // Mettre à jour la position en fonction de la vitesse
@@ -55,6 +49,11 @@ void Rigidbody::AddForce(const sf::Vector2f &Force)
 void Rigidbody::SetVelocity(const sf::Vector2f &NewVelocity)
 {
     Velocity = NewVelocity;
+}
+
+void Rigidbody::ResetVelocity()
+{
+    Velocity = sf::Vector2f(0, 0);
 }
 
 sf::Vector2f Rigidbody::GetVelocity() const

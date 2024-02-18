@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 #include "./../IComponent.h"
-#include "Callback.h"
+#include "InputCallback.h"
 
 class InputAction;
 enum class ETriggerEvent;

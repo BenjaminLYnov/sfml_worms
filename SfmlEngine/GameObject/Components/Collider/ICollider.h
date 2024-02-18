@@ -6,6 +6,7 @@
 #include "CollisionEvent.h"
 #include <functional>
 #include <map>
+#include "ColliderCallback.h"
 
 class Transform;
 class GameObject;
@@ -25,15 +26,13 @@ public:
 
     virtual ~ICollider(); // Déclaration du destructeur
 
-    using Callback = std::function<void()>;
-
     // Redéfinition des méthodes virtuelles pures de IComponent.
     virtual void Start() override = 0;
     virtual void Update(const float DeltaTime) override = 0;
     virtual void Render(sf::RenderWindow &Window) override = 0;
 
     // Méthodes spécifiques à ICollider.
-    virtual void OnCollision(std::shared_ptr<ICollider> Other);    // Appelé lors d'un test de collision
+    virtual void OnCollision(std::shared_ptr<ICollider> Other);       // Appelé lors d'un test de collision
     virtual bool IsOnCollision(std::shared_ptr<ICollider> Other) = 0; // Pour tester une collision
 
     void SetOffset(const sf::Vector2f &NewOffset);
@@ -52,26 +51,28 @@ public:
 
     char GetMask() const;
 
-    template <typename T, typename Method, typename... Args>
-    void AddCallback(ECollisionEvent CollisionEvent, T *Obj, Method MethodToBind, Args... args);
+    template <typename T, typename Method>
+    void AddCallback(ECollisionEvent CollisionEvent, T *Obj, Method MethodToBind);
+    // template <typename T, typename Method, typename... Args>
+    // void AddCallback(ECollisionEvent CollisionEvent, T *Obj, Method MethodToBind, Args... args);
 
-    virtual void CallCallbacks(ECollisionEvent CollisionEvent);
+    virtual void CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited = nullptr);
 
 protected:
     sf::Vector2f Offset;
 
     bool _WasOnCollision = false;
 
-    unsigned char Mask = Layers::ALL; 
+    unsigned char Mask = Layers::ALL;
 
-    std::map<ECollisionEvent, std::vector<Callback>> Callbacks;
+    std::map<ECollisionEvent, std::vector<ColliderCallback>> Callbacks;
 
-    bool HasGameObject(GameObject* GameObjectToCheck) const;
-    void AddGameObject(GameObject* GameObjectToAdd);
-    void RemoveGameObject(GameObject* GameObjectToRemove);
+    bool HasGameObject(GameObject *GameObjectToCheck) const;
+    void AddGameObject(GameObject *GameObjectToAdd);
+    void RemoveGameObject(GameObject *GameObjectToRemove);
 
     // GameObject *GameObjects;
-    std::vector<GameObject*> GameObjects;
+    std::vector<GameObject *> GameObjects;
 };
 
 #include "ICollider.tpp" // Inclure les définitions de template

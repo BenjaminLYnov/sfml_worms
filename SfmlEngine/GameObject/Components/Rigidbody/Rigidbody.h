@@ -14,12 +14,16 @@ public:
 
     // Méthodes pour manipuler la physique
     void AddForce(const sf::Vector2f& Force);
+
     void SetVelocity(const sf::Vector2f& Velocity);
+    void ResetVelocity();
 
     // Getters pour les propriétés physiques
     sf::Vector2f GetVelocity() const;
 
     sf::Vector2f Gravity = sf::Vector2f(0, 9.8f);
+
+    float GravityScale = 20;
 
 private:
     sf::Vector2f Velocity;  // Vitesse du Rigidbody

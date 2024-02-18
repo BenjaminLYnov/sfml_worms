@@ -23,28 +23,19 @@ void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
     GameObject->SetLevel(this);
 }
 
-std::vector<std::shared_ptr<GameObject>>& Level::GetGameObjects()
+std::vector<std::shared_ptr<GameObject>> &Level::GetGameObjects()
 {
     return GameObjects;
 }
 
-void Level::RemoveGameObject(std::shared_ptr<GameObject> GameObject)
-{
-    for (auto it = GameObjects.begin(); it != GameObjects.end(); ++it)
-    {
-	    if (*it == GameObject)
-	    {
-	    	GameObjects.erase(it);
-			return;
-		}
-	}
-}
-
 void Level::ProcessEvents()
 {
-    if (CharacterControlled)
-        if (CharacterControlled->GetInputComponent())
-            CharacterControlled->GetInputComponent()->PollActionsEvents();
+    if (!CharacterControlled)
+        return;
+    if (!CharacterControlled->GetInputComponent())
+        return;
+    std::cout << "wtf\n";
+    CharacterControlled->GetInputComponent()->PollActionsEvents();
 }
 
 void Level::Update(const float DeltaTime)
@@ -69,6 +60,9 @@ void Level::OnCollision()
     // Parcours tous les game object du level
     for (auto &GameObjectToCheckCollision : GameObjects)
     {
+        if (!GameObjectToCheckCollision)
+            continue;
+
         // Récupère le collider du game object actuelle de la boucle
         std::shared_ptr<ICollider> ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
 

@@ -15,10 +15,10 @@ namespace sf
     class RenderWindow;
 }
 
-class GameObject : public std::enable_shared_from_this<GameObject>
+class GameObject
 {
 public:
-	GameObject();
+    GameObject();
 
     //
     virtual void Start();
@@ -98,7 +98,14 @@ public:
     // Récupère tous les GameObject du Level
     std::vector<std::shared_ptr<GameObject>> GetAllGameObjects();
 
+    template <typename T>
+    std::vector<std::shared_ptr<T>> GetAllGameObjectByClass();
+
+    template <typename T>
+   std::shared_ptr<T> SpawnGameObject(const sf::Vector2f Location = sf::Vector2f(0, 0), const sf::Vector2f Scale = sf::Vector2f(1, 1), const float Rotation = 0.f);
+
 protected:
+
 private:
     Level *OwnerLevel; // Pointeur vers le levle propriétaire.
 

@@ -44,10 +44,10 @@ char ICollider::GetMask() const
     return Mask;
 }
 
-void ICollider::CallCallbacks(ECollisionEvent CollisionEvent)
+void ICollider::CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited)
 {
     for (const auto Callback : Callbacks[CollisionEvent])
-        Callback();
+        Callback(GameObjectHited);
 }
 
 //////////////////////////////////////////////////////
@@ -85,6 +85,9 @@ void ICollider::OnCollision(std::shared_ptr<ICollider> Other)
     // Vérifier s'il y a collision
     const bool bIsOnCollision = IsOnCollision(Other);
 
+    // Récupère le GameObject du collider touché
+    GameObject * GameObjectHited = Other->GetOwner();
+
     // S'il n'y pas collision
     if (!bIsOnCollision)
     {
@@ -95,7 +98,7 @@ void ICollider::OnCollision(std::shared_ptr<ICollider> Other)
             RemoveGameObject(Other->GetOwner());
 
             // Appel des callbacks lors de l'exit
-            CallCallbacks(ECollisionEvent::Exit);
+            CallCallbacks(ECollisionEvent::Exit, GameObjectHited);
         }
         return;
     }
@@ -109,9 +112,9 @@ void ICollider::OnCollision(std::shared_ptr<ICollider> Other)
         AddGameObject(Other->GetOwner());
 
         // Appel des callbacks lors de la collision
-        CallCallbacks(ECollisionEvent::Enter);
+        CallCallbacks(ECollisionEvent::Enter, GameObjectHited);
     }
 
     // Appel des callbacks de tant qu'il y a collision
-    CallCallbacks(ECollisionEvent::Stay);
+    CallCallbacks(ECollisionEvent::Stay, GameObjectHited);
 }

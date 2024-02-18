@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "../Callback.h"
+#include "../InputCallback.h"
 #include "Axis.h"
 
 class ActionKey;
@@ -13,14 +13,14 @@ class InputAction
 public:
     virtual ~InputAction() = default;
 
-    virtual void BindAction(ETriggerEvent TriggerEvent, const Callback &Callback);
+    virtual void BindAction(ETriggerEvent TriggerEvent, const InputCallback &Callback);
     virtual void PollKeyEvents();
 
 protected:
     virtual void AddKey(ActionKey NewActionKey, const bool bIsAxisKey = false, const Axis AxisType = Axis::Horizontal, const bool bNegateFlag = false);
 
 private:
-    std::map<ETriggerEvent, std::vector<Callback>> Callbacks;
+    std::map<ETriggerEvent, std::vector<InputCallback>> Callbacks;
     std::vector<ActionKey> ActionKeys;
 
     // Variable pour suivre si la touche a déjà été traitée

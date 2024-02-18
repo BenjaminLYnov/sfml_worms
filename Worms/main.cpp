@@ -2,6 +2,9 @@
 #include "Levels/MainMenu/MainMenu.h"
 #include "GameManager/GameManager.h"
 
+// Inclusion l'entête Resources necéssaire pour instancier les sprites
+#include "Resources/Resources.h"
+
 // #include <fstream>
 // #include <string>
 // #include <lib/nlohmann/json.hpp>

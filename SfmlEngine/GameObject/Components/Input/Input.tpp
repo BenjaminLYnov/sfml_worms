@@ -3,12 +3,12 @@
 #include <functional>
 #include <type_traits>
 #include <tuple>
-#include "Callback.h"
+#include "InputCallback.h"
 
 template <typename T, typename Method>
 void Input::BindAction(std::shared_ptr<InputAction> &IA, ETriggerEvent TriggerEvent, T *Obj, Method MethodToBind)
 {
-    Callback boundAction = MakeBoundAction(Obj, MethodToBind);
+    InputCallback boundAction = MakeBoundAction(Obj, MethodToBind);
     AddInputAction(IA);
     IA->BindAction(TriggerEvent, boundAction);
 }
@@ -16,7 +16,7 @@ void Input::BindAction(std::shared_ptr<InputAction> &IA, ETriggerEvent TriggerEv
 ////////////////////// 
 // 
 template <typename T, typename Method>
-Callback MakeBoundAction(T *obj, Method MethodToBind)
+InputCallback MakeBoundAction(T *obj, Method MethodToBind)
 {
     if constexpr (arg_count<Method>() == 0)
     {

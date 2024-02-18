@@ -5,7 +5,7 @@
 #include "ActionKey.h"
 #include "Math/Vector/Vector.h"
 
-void InputAction::BindAction(ETriggerEvent TriggerEvent, const Callback &Callback)
+void InputAction::BindAction(ETriggerEvent TriggerEvent, const InputCallback &Callback)
 {
     Callbacks[TriggerEvent].push_back(Callback);
 }
@@ -56,7 +56,7 @@ void InputAction::AddKey(ActionKey NewActionKey, const bool bIsAxisKey, const Ax
 
 void InputAction::CallCallbacks(ETriggerEvent TriggerEvent, const sf::Vector2f Value)
 {
-    for (const auto Callback : Callbacks[TriggerEvent])
+    for (const InputCallback Callback : Callbacks[TriggerEvent])
         Callback(Value);
 }
 
