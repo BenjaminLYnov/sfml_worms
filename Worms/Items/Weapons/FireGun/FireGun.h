@@ -9,11 +9,14 @@
 class SquareCollider;
 class GameObject;
 class Rigidbody;
+class Deleguate;
 
 class FireGun : public Weapon
 {
 public:
     FireGun();
+
+    std::shared_ptr<Deleguate> DeleguateOnDestroy;
 
     virtual void Start() override;
     virtual void Update(const float DeltaTime) override;

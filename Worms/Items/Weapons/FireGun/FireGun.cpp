@@ -6,6 +6,7 @@
 #include "GameObject/GameObject.h"
 #include "iostream"
 // #include "Worms"
+#include "Deleguate.h"
 
 FireGun::FireGun() : Weapon()
 {
@@ -23,8 +24,10 @@ FireGun::FireGun() : Weapon()
     // AddComponent(Icon);
     // AddComponent(Animation);
 
-    // SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
-    SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &FireGun::AnotherOnCollisionEnter);
+    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
+    
+
+    DeleguateOnDestroy = std::make_shared<Deleguate>();
 }
 
 void FireGun::Start()
@@ -51,8 +54,10 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     // std::cout << GameObjectHited->GetName() << "\n";
     // GameObjectHited->Destroy();
 
-    GameObjectHited->Destroy();
+    // GameObjectHited->Destroy();
     // GameObjectHited->Apply();
+
+    DeleguateOnDestroy->Broadcast();
     Destroy();
 }
 
@@ -62,5 +67,5 @@ void FireGun::AnotherOnCollisionEnter(GameObject *GameObjectHited)
         return;
 
     
-    std::cout << GameObjectHited->GetName() << "\n";
+    // std::cout << GameObjectHited->GetName() << "\n";
 }

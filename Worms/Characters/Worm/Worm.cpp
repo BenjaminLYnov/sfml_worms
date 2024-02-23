@@ -22,14 +22,13 @@
 #include "Characters/InputActions/JumpAction.h"
 #include "Characters/InputActions/FireAction.h"
 
-
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include "Characters/InputActions/JumpAction.h"
-
 // Weapon
 #include "Items/Weapons/FireGun/FireGun.h"
+
+#include "Deleguate.h"
 
 
 Worm::Worm() : Character()
@@ -40,6 +39,9 @@ Worm::Worm() : Character()
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
     SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
+
+    DeleguateFire = std::make_shared<Deleguate>();
+    DeleguateActionDone = std::make_shared<Deleguate>();
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
 
@@ -92,10 +94,6 @@ void Worm::SetupBindAction()
     InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
     InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
-
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::Started);
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Triggered);
-    // InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::Completed);
 }
 
 int Worm::TakeDamage(const int Damage)
@@ -138,10 +136,13 @@ void Worm::Fire()
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
 	// SpawnGameObject<FireGun>(Location);
 	std::shared_ptr<FireGun> FireGunS = SpawnGameObject<FireGun>(Location);
-    sf::Vector2f force = sf::Vector2f(1, -1) * 80000.f;
-    // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
+    // sf::Vector2f force = sf::Vector2f(1, -1) * 80000.f;
+    sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
     // sf::Vector2f force = sf::Vector2f(1, -1) * 30000.f;
     FireGunS->AddForce(force);
+
+    // DeleguateFire->Broadcast();
+    FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 }
 
 void Worm::Started()
@@ -174,4 +175,10 @@ void Worm::Jump()
     // GameObjects[1]->SetRelativePosition(sf::Vector2f(400, 400));
     // GameObjects[1]->SetWorldPosition(sf::Vector2f(400, 400));
 
+}
+
+// PRIVATE
+
+void Worm::CallDeleguateActionDone() {
+    DeleguateActionDone->Broadcast();
 }

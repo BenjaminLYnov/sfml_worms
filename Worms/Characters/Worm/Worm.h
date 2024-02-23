@@ -6,9 +6,15 @@ class Sprite;
 class InputAction;
 class Rigidbody;
 class SquareCollider;
+class Deleguate;
 
 class Worm : public Character
 {
+
+public:
+    std::shared_ptr<Deleguate> DeleguateFire;
+    std::shared_ptr<Deleguate> DeleguateActionDone;
+
 public:
     Worm();
 
@@ -57,4 +63,6 @@ private:
     int Health;
 
     bool bIsAlive;
+
+    void CallDeleguateActionDone();
 };

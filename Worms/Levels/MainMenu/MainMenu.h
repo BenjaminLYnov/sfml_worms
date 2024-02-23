@@ -13,10 +13,7 @@ public:
     void Update(const float DeltaTime) override;
 
 private:
-    void Enter();
-    void Stay();
-    void Exit();
-    // void Exit(std::shared_ptr<Worm> w);
-
     std::shared_ptr<Worm> MainWorm;
+
+    void Toto();
 };
