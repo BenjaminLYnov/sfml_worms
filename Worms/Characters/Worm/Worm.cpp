@@ -138,7 +138,8 @@ void Worm::Fire()
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
 	// SpawnGameObject<FireGun>(Location);
 	std::shared_ptr<FireGun> FireGunS = SpawnGameObject<FireGun>(Location);
-    sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
+    sf::Vector2f force = sf::Vector2f(1, -1) * 80000.f;
+    // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
     // sf::Vector2f force = sf::Vector2f(1, -1) * 30000.f;
     FireGunS->AddForce(force);
 }

@@ -22,6 +22,7 @@ public:
 
 protected:
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
+    virtual void AnotherOnCollisionEnter(GameObject *GameObjectHited);
 
 private:
     std::shared_ptr<SquareCollider> SquareColliderComponent;

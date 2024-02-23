@@ -34,7 +34,6 @@ void Level::ProcessEvents()
         return;
     if (!CharacterControlled->GetInputComponent())
         return;
-    std::cout << "wtf\n";
     CharacterControlled->GetInputComponent()->PollActionsEvents();
 }
 

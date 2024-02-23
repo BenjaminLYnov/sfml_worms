@@ -21,9 +21,10 @@ FireGun::FireGun() : Weapon()
     AddComponent(SquareColliderComponent);
     AddComponent(RigidbodyComponent);
     // AddComponent(Icon);
-    // AddComponent(Animation);lol
+    // AddComponent(Animation);
 
-    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
+    // SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
+    SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &FireGun::AnotherOnCollisionEnter);
 }
 
 void FireGun::Start()
@@ -51,5 +52,15 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     // GameObjectHited->Destroy();
 
     GameObjectHited->Destroy();
+    // GameObjectHited->Apply();
     Destroy();
+}
+
+void FireGun::AnotherOnCollisionEnter(GameObject *GameObjectHited)
+{
+    if (!GameObjectHited)
+        return;
+
+    
+    std::cout << GameObjectHited->GetName() << "\n";
 }
