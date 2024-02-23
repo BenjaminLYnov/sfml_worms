@@ -140,25 +140,10 @@ void Worm::Fire()
     sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
     // sf::Vector2f force = sf::Vector2f(1, -1) * 30000.f;
     FireGunS->AddForce(force);
+    FireGunS->SetOwner(this);
 
     // DeleguateFire->Broadcast();
     FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
-}
-
-void Worm::Started()
-{
-    // std::cout << "started\n";
-    // std::cout << GetName() <<"\n";
-}
-
-void Worm::Triggered()
-{
-    // std::cout << "Triggered\n";
-}
-
-void Worm::Completed()
-{
-    // std::cout << "Completed\n";
 }
 
 void Worm::Jump()

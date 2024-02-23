@@ -16,12 +16,17 @@ public:
 
     virtual void Start() override;
     virtual void Update(const float DeltaTime) override;
+
+    virtual GameObject* GetOwner();
+    virtual void SetOwner(GameObject* _Owner);
     
 protected:
     std::shared_ptr<Sprite> Animation;
     std::shared_ptr<Sprite> Icon;
 
 private:
+    GameObject* Owner;
+
 };
 
 #endif

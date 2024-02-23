@@ -25,7 +25,6 @@ FireGun::FireGun() : Weapon()
     // AddComponent(Animation);
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
-    
 
     DeleguateOnDestroy = std::make_shared<Deleguate>();
 }
@@ -51,21 +50,8 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 {
     if (!GameObjectHited)
         return;
-    // std::cout << GameObjectHited->GetName() << "\n";
-    // GameObjectHited->Destroy();
-
-    // GameObjectHited->Destroy();
-    // GameObjectHited->Apply();
-
+    if (GameObjectHited == GetOwner())
+        return;
     DeleguateOnDestroy->Broadcast();
     Destroy();
-}
-
-void FireGun::AnotherOnCollisionEnter(GameObject *GameObjectHited)
-{
-    if (!GameObjectHited)
-        return;
-
-    
-    // std::cout << GameObjectHited->GetName() << "\n";
 }

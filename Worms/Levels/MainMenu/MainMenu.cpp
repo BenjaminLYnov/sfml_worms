@@ -15,11 +15,13 @@ MainMenu::MainMenu()
 {
     // Instance Main Character
     MainWorm = std::make_shared<Worm>();
-    std::shared_ptr<Worm> AnotherWorm = std::make_shared<Worm>();
+    AnotherWorm = std::make_shared<Worm>();
 
     MainWorm->SetName("p1");
 
     MainWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Toto);
+    AnotherWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Jojo);
+
     // MainWorm->DeleguateFire->AddCallback(this, &MainMenu::Toto);
 
     AnotherWorm->SetName("p2");
@@ -42,6 +44,11 @@ void MainMenu::Update(const float DeltaTime)
 }
 
 void MainMenu::Toto() {
-    std::cout << "joueur a fini son tour \n";
-    // std::cout << "joueur a tired une projectile\n";
+    std::cout << "AnotherWorm \n";
+    SetCharacterControlled(AnotherWorm);
+}
+
+void MainMenu::Jojo() {
+    std::cout << "MainWorm \n";
+    SetCharacterControlled(MainWorm);
 }

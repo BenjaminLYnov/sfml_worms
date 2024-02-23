@@ -37,11 +37,6 @@ protected:
     virtual void Fire();
     
 #pragma endregion
-
-    virtual void Started();
-    virtual void Triggered();
-    virtual void Completed();
-
     void SetupBindAction() override;
 
     int TakeDamage(const int Damage);

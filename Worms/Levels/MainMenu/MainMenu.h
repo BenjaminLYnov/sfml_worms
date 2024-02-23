@@ -14,6 +14,8 @@ public:
 
 private:
     std::shared_ptr<Worm> MainWorm;
+    std::shared_ptr<Worm> AnotherWorm;
 
     void Toto();
+    void Jojo();
 };
