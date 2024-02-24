@@ -7,6 +7,7 @@
 #include "iostream"
 // #include "Worms"
 #include "Deleguate.h"
+#include "Characters/Worm/Worm.h"
 
 FireGun::FireGun() : Weapon()
 {
@@ -37,6 +38,12 @@ void FireGun::Start()
 void FireGun::Update(const float DeltaTime)
 {
     Item::Update(DeltaTime);
+    LifeTime -= DeltaTime;
+    if(LifeTime <= 0)
+    {
+	    DeleguateOnDestroy->Broadcast();
+		Destroy();
+	}
 }
 
 void FireGun::AddForce(const sf::Vector2f &Force)

@@ -22,7 +22,7 @@ MainMenu::MainMenu()
     MainWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Toto);
     AnotherWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Jojo);
 
-    // MainWorm->DeleguateFire->AddCallback(this, &MainMenu::Toto);
+    //MainWorm->DeleguateFire->AddCallback(this, &MainMenu::Toto);
 
     AnotherWorm->SetName("p2");
 

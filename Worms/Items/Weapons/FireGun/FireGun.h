@@ -30,6 +30,8 @@ private:
     std::shared_ptr<SquareCollider> SquareColliderComponent;
     std::shared_ptr<Rigidbody> RigidbodyComponent;
 
+    float LifeTime = 10.0f;
+
 };
 
 #endif
