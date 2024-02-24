@@ -18,7 +18,9 @@ namespace sf
 class GameObject
 {
 public:
-    GameObject();
+	virtual ~GameObject() = default;
+
+	GameObject();
 
     //
     virtual void Start();

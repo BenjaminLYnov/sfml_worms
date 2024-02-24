@@ -47,6 +47,11 @@ void GameObject::AddComponent(std::shared_ptr<IComponent> Component)
     // Component->SetOwner(shared_from_this());
 }
 
+std::vector<std::shared_ptr<IComponent>> GameObject::GetComponents()
+{
+    return Components;
+}
+
 void GameObject::AddWorldPosition(const sf::Vector2f &AmountPosition)
 {
     WorldTransformComponent->SetPosition(GetWorldPosition() + AmountPosition);

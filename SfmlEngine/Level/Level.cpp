@@ -52,6 +52,8 @@ void Level::Render(sf::RenderWindow &Window) const
 void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
 {
     CharacterControlled = NewCharacterControlled;
+
+    std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
 }
 
 void Level::OnCollision()

@@ -15,8 +15,7 @@ public:
     std::shared_ptr<Deleguate> DeleguateFire;
     std::shared_ptr<Deleguate> DeleguateActionDone;
 
-public:
-    Worm();
+	Worm();
 
     void Start() override;
 
@@ -25,6 +24,15 @@ public:
     void Render(sf::RenderWindow &Window) const override;
 
     std::shared_ptr<SquareCollider> SquareColliderComponent;
+
+#pragma region State
+
+    bool bIsControlled;
+    bool bIsAlive;
+    bool bCanFire;
+    bool bCanMove;
+
+#pragma endregion State
 
 protected:
     std::shared_ptr<Rigidbody> RigidbodyComponent;
@@ -56,8 +64,6 @@ private:
     std::shared_ptr<InputAction> IaFire;
 
     int Health;
-
-    bool bIsAlive;
 
     void CallDeleguateActionDone();
 };

@@ -67,6 +67,9 @@ Worm::Worm() : Character()
 	Health = 100;
 
     bIsAlive = true;
+    bCanMove = false;
+    bCanFire = false;
+    bIsControlled = false;
 }
 
 void Worm::Start()
@@ -104,6 +107,7 @@ int Worm::TakeDamage(const int Damage)
 	{
 		Health = 0;
         bIsAlive = false;
+        OnDestroy();
 	}
 
     return Health;
@@ -127,12 +131,21 @@ void Worm::InitAnimations()
 
 void Worm::Move(const sf::Vector2f Value)
 {
+    if(!bCanMove)
+    {
+	    return;
+    }
+
     AxisMoveValue = Value;
     // SetInputMovement(Value);
 }
 
 void Worm::Fire()
 {
+    if(!bCanFire)
+    {
+    	return;
+	}
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
 	// SpawnGameObject<FireGun>(Location);
 	std::shared_ptr<FireGun> FireGunS = SpawnGameObject<FireGun>(Location);
@@ -144,6 +157,9 @@ void Worm::Fire()
 
     // DeleguateFire->Broadcast();
     FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+
+    bCanFire = false;
+    bCanMove = false;
 }
 
 void Worm::Jump()

@@ -3,6 +3,7 @@
 #include "GameManager/GameManager.h"
 
 // Inclusion l'entête Resources necéssaire pour instancier les sprites
+#include "Levels/MainMenu/LevelRules.h"
 #include "Resources/Resources.h"
 
 // #include <fstream>
@@ -97,7 +98,8 @@ int main()
     std::unique_ptr<GameManager> SGameManager = std::make_unique<GameManager>();
 
     // Add Level
-    SGameManager->AddLevel(std::make_shared<MainMenu>());
+    //SGameManager->AddLevel(std::make_shared<MainMenu>());
+    SGameManager->AddLevel(std::make_shared<LevelRules>());
 
     // Run Game Loop
     SGameManager->Run();
