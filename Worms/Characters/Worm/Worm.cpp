@@ -61,11 +61,7 @@ Worm::Worm() : Character()
     // std::cout << SquareColliderComponent->HasLayer(Layers::ALL);
     // std::cout << SquareColliderComponent->HasLayer(Layers::STATIC);
 
-    // SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::Started);
-    // SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Worm::Triggered);
-    // SquareColliderComponent->AddCallback(ECollisionEvent::Exit, this, &Worm::Completed);
 	Health = 100;
-
     bIsAlive = true;
 }
 
@@ -80,6 +76,8 @@ void Worm::Update(const float DeltaTime)
     Character::Update(DeltaTime);
     AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     AxisMoveValue = sf::Vector2f(0, 0);
+    // CurrentSprite = WalkA;
+
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -120,7 +118,7 @@ void Worm::InitAnimations()
     WalkA = std::make_shared<WalkAnimation>();
     WinnnerA = std::make_shared<WinnnerAnimation>();
 
-    CurrentSprite = WinnnerA;
+    // CurrentSprite = WinnnerA;
     // CurrentSprite = WalkA;
     // CurrentSprite = IdleA;
 }
@@ -134,7 +132,6 @@ void Worm::Move(const sf::Vector2f Value)
 void Worm::Fire()
 {
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
-	// SpawnGameObject<FireGun>(Location);
 	std::shared_ptr<FireGun> FireGunS = SpawnGameObject<FireGun>(Location);
     // sf::Vector2f force = sf::Vector2f(1, -1) * 80000.f;
     sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;

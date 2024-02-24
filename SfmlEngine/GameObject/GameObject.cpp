@@ -42,6 +42,8 @@ void GameObject::Render(sf::RenderWindow &Window) const
 
 void GameObject::AddComponent(std::shared_ptr<IComponent> Component)
 {
+    if (!Component)
+        return;
     Components.push_back(Component);
     Component->SetOwner(this);
     // Component->SetOwner(shared_from_this());
