@@ -98,7 +98,7 @@ int main()
     std::unique_ptr<GameManager> SGameManager = std::make_unique<GameManager>();
 
     // Add Level
-    //SGameManager->AddLevel(std::make_shared<MainMenu>());
+    // SGameManager->AddLevel(std::make_shared<MainMenu>());
     SGameManager->AddLevel(std::make_shared<LevelRules>());
 
     // Run Game Loop

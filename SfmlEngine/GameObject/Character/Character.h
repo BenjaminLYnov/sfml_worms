@@ -19,11 +19,12 @@ public:
 
     void SetInputMovement(const sf::Vector2f NewInputMovement);
 
+    virtual float TakeDamage(const float Damage) { return 0; };
+
     float MaxWalkSpeed = 500;
     float MinWalkSpeed = 20;
 
 protected:
-
     std::shared_ptr<StateMode> StateModeComponent;
     std::shared_ptr<Input> InputComponent;
 

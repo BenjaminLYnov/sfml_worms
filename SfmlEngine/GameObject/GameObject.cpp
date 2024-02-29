@@ -157,6 +157,11 @@ void GameObject::SetLevel(Level *Level)
     OwnerLevel = Level;
 }
 
+Level* GameObject::GetWorld()
+{
+    return OwnerLevel;
+}
+
 void GameObject::Destroy(GameObject *GameObjectToDestroy)
 {
     if (!OwnerLevel)
@@ -168,16 +173,6 @@ void GameObject::Destroy(GameObject *GameObjectToDestroy)
     OwnerLevel->RemoveGameObject(GameObjectToDestroy);
 }
 
-std::vector<std::shared_ptr<GameObject>> GameObject::GetAllGameObjects()
-{
-    std::vector<std::shared_ptr<GameObject>> GameObjects;
-    if (!OwnerLevel)
-        return GameObjects;
-    GameObjects = OwnerLevel->GetGameObjects();
-    return GameObjects;
-}
-
-// PROTECTED
 
 // PRIVATE
 

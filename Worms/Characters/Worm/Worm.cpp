@@ -30,7 +30,6 @@
 
 #include "Deleguate.h"
 
-
 Worm::Worm() : Character()
 {
     // Instance Animations
@@ -44,10 +43,12 @@ Worm::Worm() : Character()
     DeleguateActionDone = std::make_shared<Deleguate>();
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
+    RigidbodyComponent->GravityScale = 25;
+    RigidbodyComponent->GravityScale = 0;
 
     AddComponent(SquareColliderComponent);
     AddComponent(CurrentSprite);
-    // AddComponent(RigidbodyComponent);
+    AddComponent(RigidbodyComponent);
 
     SetWorldPosition(sf::Vector2f(400, 300));
 
@@ -61,7 +62,9 @@ Worm::Worm() : Character()
     // std::cout << SquareColliderComponent->HasLayer(Layers::ALL);
     // std::cout << SquareColliderComponent->HasLayer(Layers::STATIC);
 
-	Health = 100;
+    MaxHealth = 30;
+    // MaxHealth = 100;
+    CurrentHealth = MaxHealth;
     bIsAlive = true;
     bCanMove = false;
     bCanFire = false;
@@ -80,7 +83,6 @@ void Worm::Update(const float DeltaTime)
     AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     AxisMoveValue = sf::Vector2f(0, 0);
     // CurrentSprite = WalkA;
-
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -97,23 +99,23 @@ void Worm::SetupBindAction()
     InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
 }
 
-int Worm::TakeDamage(const int Damage)
+float Worm::TakeDamage(const float Damage)
 {
-    Health -= Damage;
+    CurrentHealth -= Damage;
 
-    if(Health < 0)
-	{
-		Health = 0;
+    if (CurrentHealth <= 0)
+    {
+        CurrentHealth = 0;
         bIsAlive = false;
         OnDestroy();
-	}
+    }
 
-    return Health;
+    return CurrentHealth;
 }
 
 void Worm::OnDestroy()
 {
-	std::cout << "Worm Destroyed\n";
+    std::cout << "Worm Destroyed\n";
 }
 
 void Worm::InitAnimations()
@@ -129,54 +131,41 @@ void Worm::InitAnimations()
 
 void Worm::Move(const sf::Vector2f Value)
 {
-    if(!bCanMove)
-    {
-	    return;
-    }
+    if (!bCanMove)
+        return;
+    // AxisMoveValue = Value;
 
-    AxisMoveValue = Value;
-    // SetInputMovement(Value);
+    const sf::Vector2f Force = Value * 500.f;
+    RigidbodyComponent->AddForce(Force);
 }
 
 void Worm::Fire()
 {
-    if(!bCanFire)
-    {
-    	return;
-	}
+    if (!bCanFire)
+        return;
+
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
-	std::shared_ptr<FireGun> FireGunS = SpawnGameObject<FireGun>(Location);
-    // sf::Vector2f force = sf::Vector2f(1, -1) * 80000.f;
+   FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+
     sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
-    // sf::Vector2f force = sf::Vector2f(1, -1) * 30000.f;
+    // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
+
     FireGunS->AddForce(force);
     FireGunS->SetOwner(this);
-
-    // DeleguateFire->Broadcast();
     FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 
-    bCanFire = false;
-    bCanMove = false;
+    // bCanFire = false;
+    // bCanMove = false;
 }
 
 void Worm::Jump()
 {
-    // Destroy();
-    // std::cout << "Jump\n";
-
-    // SpawnGameObject<Worm>();
-
-    // auto GameObjects = GetAllGameObjectByClass<Worm>();
-    // std::vector<std::shared_ptr<GameObject>> GameObjects = GetAllGameObjects();
-
-    // std::cout << GameObjects.size();
-    // GameObjects[1]->SetRelativePosition(sf::Vector2f(400, 400));
-    // GameObjects[1]->SetWorldPosition(sf::Vector2f(400, 400));
-
+    RigidbodyComponent->AddForce(sf::Vector2f(0, -24000));
 }
 
 // PRIVATE
 
-void Worm::CallDeleguateActionDone() {
+void Worm::CallDeleguateActionDone()
+{
     DeleguateActionDone->Broadcast();
 }

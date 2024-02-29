@@ -1,6 +1,8 @@
 #ifndef MOUSE_BUTTONS_H
 #define MOUSE_BUTTONS_H
 
+#pragma once
+
 #include <SFML/Window/Mouse.hpp>
 
 enum class MouseButtons {

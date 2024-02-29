@@ -1,6 +1,8 @@
 #ifndef RIGIDBODY_H
 #define RIGIDBODY_H
 
+#pragma once
+
 #include "./../IComponent.h"
 #include <SFML/System/Vector2.hpp>  // Inclure la classe de vecteur de SFML
 
@@ -21,7 +23,8 @@ public:
     // Getters pour les propriétés physiques
     sf::Vector2f GetVelocity() const;
 
-    sf::Vector2f Gravity = sf::Vector2f(0, 9.8f);
+    sf::Vector2f Gravity = sf::Vector2f(0, 2000);
+    // sf::Vector2f Gravity = sf::Vector2f(0, 9.8f);
 
     float GravityScale = 20;
 

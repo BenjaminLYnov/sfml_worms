@@ -7,16 +7,11 @@
 #include <functional>
 #include <map>
 #include "ColliderCallback.h"
+#include "Mobility.h"
+#include "CollisionResponse.h"
 
 class Transform;
 class GameObject;
-
-enum Layers
-{
-    ALL = 1,
-    STATIC = (1 << 1),
-    ENNEMY = (1 << 2),
-};
 
 class ICollider : public IComponent
 {
@@ -32,7 +27,7 @@ public:
     virtual void Render(sf::RenderWindow &Window) override = 0;
 
     // Méthodes spécifiques à ICollider.
-    virtual void OnCollision(std::shared_ptr<ICollider> Other);       // Appelé lors d'un test de collision
+    virtual void OnCollision(std::shared_ptr<ICollider> Other) = 0;
     virtual bool IsOnCollision(std::shared_ptr<ICollider> Other) = 0; // Pour tester une collision
 
     void SetOffset(const sf::Vector2f &NewOffset);
@@ -43,36 +38,36 @@ public:
     // float GetRelativeRotation() const;
 
     void SetWasOnCollision(bool _isOnCollision);
-    void SetLayer(Layers NewLayers);
-    void AddLayer(Layers LayersToAdd);
-    void RemoveLayer(Layers LayerSToRemove);
 
-    bool HasLayer(Layers LayersToCheck);
+    void SetMobility(const EMobility NewMobility);
+    EMobility GetMobility() const;
 
-    char GetMask() const;
+    void SetCollisionResponse(const ECollisionResponse NewCollisionResponse);
+    ECollisionResponse GetCollisionResponse() const;
 
     template <typename T, typename Method>
     void AddCallback(ECollisionEvent CollisionEvent, T *Obj, Method MethodToBind);
-    // template <typename T, typename Method, typename... Args>
-    // void AddCallback(ECollisionEvent CollisionEvent, T *Obj, Method MethodToBind, Args... args);
-
-    virtual void CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited = nullptr);
 
 protected:
     sf::Vector2f Offset;
 
     bool _WasOnCollision = false;
 
-    unsigned char Mask = Layers::ALL;
+    EMobility Mobility = EMobility::Movable;
+    ECollisionResponse CollisionResponse = ECollisionResponse::Block;
 
     std::map<ECollisionEvent, std::vector<ColliderCallback>> Callbacks;
+
+    void ManageCollisionResponses(GameObject *GameObjectHited, const bool bIsOnCollision);
 
     bool HasGameObject(GameObject *GameObjectToCheck) const;
     void AddGameObject(GameObject *GameObjectToAdd);
     void RemoveGameObject(GameObject *GameObjectToRemove);
 
-    // GameObject *GameObjects;
     std::vector<GameObject *> GameObjects;
+
+private:
+    virtual void CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited = nullptr);
 };
 
 #include "ICollider.tpp" // Inclure les définitions de template

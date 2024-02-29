@@ -9,7 +9,6 @@ Particle::Particle()
     SquareColliderComponent = std::make_shared<SquareCollider>();
     RigidbodyComponent = std::make_shared<Rigidbody>();
     
-    SquareColliderComponent->AddLayer(Layers::STATIC);
 
     AddComponent(SquareColliderComponent);
     AddComponent(RigidbodyComponent);

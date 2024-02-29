@@ -5,7 +5,6 @@
 #include "GameObject/Components/Rigidbody/Rigidbody.h"
 #include "GameObject/GameObject.h"
 #include "iostream"
-// #include "Worms"
 #include "Deleguate.h"
 #include "Characters/Worm/Worm.h"
 
@@ -14,6 +13,7 @@ FireGun::FireGun() : Weapon()
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
     SquareColliderComponent->SetSize(sf::Vector2f(10, 10));
+    SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
 
@@ -39,11 +39,8 @@ void FireGun::Update(const float DeltaTime)
 {
     Item::Update(DeltaTime);
     LifeTime -= DeltaTime;
-    if(LifeTime <= 0)
-    {
-	    DeleguateOnDestroy->Broadcast();
-		Destroy();
-	}
+    if (LifeTime <= 0)
+        Destroy();
 }
 
 void FireGun::AddForce(const sf::Vector2f &Force)
@@ -59,6 +56,16 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
         return;
     if (GameObjectHited == GetOwner())
         return;
-    DeleguateOnDestroy->Broadcast();
+
+    Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
+    if (WormHited)
+        WormHited->TakeDamage(DammageAmount);
+
     Destroy();
+}
+
+void FireGun::Destroy(GameObject *GameObjectToDestroy)
+{
+    DeleguateOnDestroy->Broadcast();
+    GameObject::Destroy();
 }

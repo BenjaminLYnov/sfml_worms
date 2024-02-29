@@ -1,5 +1,6 @@
 #ifndef JOYSTICK_BUTTONS_H
 #define JOYSTICK_BUTTONS_H
+#pragma once
 
 enum class JoystickButtons
 {

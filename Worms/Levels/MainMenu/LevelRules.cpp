@@ -3,6 +3,10 @@
 #include "Deleguate.h"
 #include "Characters/Worm/Worm.h"
 
+#include "GameObject/Shapes/Square.h"
+#include "GameObject/Shapes/Circle.h"
+#include "GameObject/Components/Collider/SquareCollider.h"
+
 LevelRules::LevelRules()
 {
 	// Instance Main Character
@@ -20,13 +24,20 @@ LevelRules::LevelRules()
 	AnotherWorm->SetName("p2");
 
 	AddGameObject(MainWorm);
-	AddGameObject(AnotherWorm);
+	// AddGameObject(AnotherWorm.get());
 
 	AnotherWorm->SetWorldPosition(sf::Vector2f(200, 200));
-	SetCharacterControlled(MainWorm);
+	SetCharacterControlled(MainWorm.get());
 	MainWorm->bIsControlled = true;
 	MainWorm->bCanFire = true;
 	MainWorm->bCanMove = true;
+
+	// Shapes
+	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
+	Square1->SetWorldPosition(sf::Vector2f(400, 400));
+	Square1->SquareColliderComponent->SetSize(sf::Vector2f(700, 200));
+	Square1->SquareColliderComponent->SetMobility(EMobility::Stationary);
+	AddGameObject(Square1);
 }
 
 void LevelRules::Start()
@@ -41,9 +52,10 @@ void LevelRules::Update(const float DeltaTime)
 
 void LevelRules::SwitchCharacter()
 {
-	for(auto &Worm : Worms)
+	
+	for (auto &Worm : Worms)
 	{
-		if(Worm->bIsControlled)
+		if (Worm->bIsControlled)
 		{
 			Worm->bIsControlled = false;
 		}
@@ -52,8 +64,7 @@ void LevelRules::SwitchCharacter()
 			Worm->bIsControlled = true;
 			Worm->bCanFire = true;
 			Worm->bCanMove = true;
-			SetCharacterControlled(Worm);
+			SetCharacterControlled(Worm.get());
 		}
-
 	}
 }

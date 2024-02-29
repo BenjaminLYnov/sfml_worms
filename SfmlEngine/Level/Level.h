@@ -21,7 +21,13 @@ public:
     // Ajoute un GameObject au niveau
     void AddGameObject(std::shared_ptr<GameObject> GameObject);
 
-    std::vector<std::shared_ptr<GameObject>>& GetGameObjects();
+    std::vector<std::shared_ptr<GameObject>> GetAllGameObjects();
+
+    template <typename T>
+    std::vector<T *> GetAllGameObjectByClass();
+
+    template <typename T>
+    T *SpawnGameObject(const sf::Vector2f Location = sf::Vector2f(0, 0), const sf::Vector2f Scale = sf::Vector2f(1, 1), const float Rotation = 0.f);
 
     // Gestionnaires d'événements
     virtual void ProcessEvents();
@@ -33,19 +39,17 @@ public:
     virtual void Render(sf::RenderWindow &Window) const;
 
     // Assigne le Character que le joueur contrôle dans le level
-    void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
-	
+    void SetCharacterControlled(Character *NewCharacterControlled);
+
     void OnCollision();
 
     void RemoveGameObject(GameObject *GameObjectToRemove);
 
 protected:
     std::vector<std::shared_ptr<GameObject>> GameObjects;
-    std::shared_ptr<Character> CharacterControlled;
+    Character *CharacterControlled;
 
 private:
-    std::vector<std::shared_ptr<GameObject>> GetAllOtherGameObject(std::shared_ptr<GameObject> GameObjectToIgnore);
-
-    // virtual void OnCollisionEnter();
-	// virtual void OnCollisionExit();
 };
+
+#include "Level.tpp"

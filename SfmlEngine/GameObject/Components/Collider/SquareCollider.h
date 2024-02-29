@@ -23,10 +23,12 @@ public:
 
     virtual void UpdatePosition() override;
 
-    virtual bool IsOnCollision(std::shared_ptr<ICollider> Other) override;  // Appelé lors d'un test de collision 
+    virtual void OnCollision(std::shared_ptr<ICollider> Other) override;
 
-	virtual void CancelCollisionWith(const std::shared_ptr<SquareCollider> OtherCollider);
-    
+    virtual bool IsOnCollision(std::shared_ptr<ICollider> Other) override; // Appelé lors d'un test de collision
+
+    virtual void CancelCollisionWith(const std::shared_ptr<SquareCollider> OtherCollider);
+
     // Définit la taille du collider carré
     void SetSize(const sf::Vector2f &NewSize);
 
@@ -35,14 +37,11 @@ public:
     sf::FloatRect GetRect() const;
 
 protected:
-
-
-
 private:
     sf::RectangleShape *Shape; // Représentation graphique du collider pour le rendu
     sf::Vector2f Size;         // Taille du collider carré
 
     sf::FloatRect Rect;
 
-	sf::Vector2f GetVectorMoveToCancelCollision(sf::FloatRect OtherRect);
+    sf::Vector2f GetVectorMoveToCancelCollision(sf::FloatRect OtherRect);
 };

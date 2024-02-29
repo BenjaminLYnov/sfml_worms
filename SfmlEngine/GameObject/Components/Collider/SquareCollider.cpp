@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "GameObject/GameObject.h"
 #include <iostream>
+#include "GameObject/Components/Rigidbody/Rigidbody.h"
 
 SquareCollider::SquareCollider(const sf::Vector2f InitialSize) : Size(InitialSize)
 {
@@ -54,7 +55,59 @@ void SquareCollider::Render(sf::RenderWindow &Window)
         Window.draw(*Shape);
 }
 
+void SquareCollider::OnCollision(std::shared_ptr<ICollider> Other)
+{
+    if (!Other)
+        return;
 
+    std::shared_ptr<SquareCollider> OtherCollider = std::dynamic_pointer_cast<SquareCollider>(Other);
+
+    if (!OtherCollider)
+        return;
+
+    // Vérifier s'il y a collision
+    const bool bIsOnCollision = IsOnCollision(OtherCollider);
+
+    // Récupère le GameObject de l'autre collider touché
+    GameObject *GameObjectHited = Other->GetOwner();
+
+    switch (GetCollisionResponse())
+    {
+    case ECollisionResponse::Ignore:
+        return;
+        break;
+    case ECollisionResponse::Overlap:
+        if (Other->GetCollisionResponse() == ECollisionResponse::Ignore)
+            return;
+        ICollider::OnCollision(Other);
+        ManageCollisionResponses(GameObjectHited, bIsOnCollision);
+        break;
+    case ECollisionResponse::Block:
+        if (bIsOnCollision && Other->GetCollisionResponse() == ECollisionResponse::Block)
+        {
+            switch (GetMobility())
+            {
+            case EMobility::Static:
+                break;
+            case EMobility::Stationary:
+                OtherCollider->CancelCollisionWith(std::shared_ptr<SquareCollider>(this, [](SquareCollider* p){ /* ne rien faire */ }));
+                return;
+                break;
+            case EMobility::Movable:
+                break;
+            default:
+                break;
+            }
+            CancelCollisionWith(OtherCollider);
+        }
+        ManageCollisionResponses(GameObjectHited, bIsOnCollision);
+        break;
+    default:
+        break;
+    }
+
+    // Cancel Collision
+}
 
 bool SquareCollider::IsOnCollision(std::shared_ptr<ICollider> Other)
 {
@@ -116,12 +169,21 @@ void SquareCollider::CancelCollisionWith(const std::shared_ptr<SquareCollider> O
     GetRect().intersects(OtherCollider->GetRect(), Intersect);
 
     sf::Vector2f CancelVector = GetVectorMoveToCancelCollision(OtherCollider->GetRect());
-    // CancelVector.x *= Intersect.width;
-    // CancelVector.y *= Intersect.height;
-    CancelVector.x *= Intersect.width + 1;
-    CancelVector.y *= Intersect.height + 1;
+    CancelVector.x *= Intersect.width;
+    CancelVector.y *= Intersect.height;
+    // CancelVector.x *= Intersect.width + 1;
+    // CancelVector.y *= Intersect.height + 1;
 
     GetOwner()->AddWorldPosition(CancelVector);
+
+    std::shared_ptr<Rigidbody> Rb = GetOwner()->GetComponent<Rigidbody>();
+    if (Rb)
+    {
+        if (CancelVector.y < 0)
+        {
+            Rb->SetVelocity(sf::Vector2f(Rb->GetVelocity().x, 0));
+        }
+    }
 }
 
 // Private

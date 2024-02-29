@@ -19,18 +19,19 @@ MainMenu::MainMenu()
 
     MainWorm->SetName("p1");
 
-    MainWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Toto);
-    AnotherWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Jojo);
+    // MainWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Toto);
+    // AnotherWorm->DeleguateActionDone->AddCallback(this, &MainMenu::Jojo);
 
     //MainWorm->DeleguateFire->AddCallback(this, &MainMenu::Toto);
 
     AnotherWorm->SetName("p2");
 
-    AddGameObject(MainWorm);
-    AddGameObject(AnotherWorm);
     
     AnotherWorm->SetWorldPosition(sf::Vector2f(200, 200));
-    SetCharacterControlled(MainWorm);
+    SetCharacterControlled(MainWorm.get());
+
+	MainWorm->bCanMove = true;
+	MainWorm->bCanFire = true;
 }
 
 void MainMenu::Start()
@@ -41,14 +42,13 @@ void MainMenu::Start()
 void MainMenu::Update(const float DeltaTime)
 {
     Level::Update(DeltaTime);
+
 }
 
 void MainMenu::Toto() {
     std::cout << "AnotherWorm \n";
-    SetCharacterControlled(AnotherWorm);
 }
 
 void MainMenu::Jojo() {
     std::cout << "MainWorm \n";
-    SetCharacterControlled(MainWorm);
 }

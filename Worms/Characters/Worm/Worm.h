@@ -15,13 +15,13 @@ public:
     std::shared_ptr<Deleguate> DeleguateFire;
     std::shared_ptr<Deleguate> DeleguateActionDone;
 
-	Worm();
+    Worm();
 
     void Start() override;
-
     void Update(const float DeltaTime) override;
-
     void Render(sf::RenderWindow &Window) const override;
+
+    float TakeDamage(const float Damage) override;
 
     std::shared_ptr<SquareCollider> SquareColliderComponent;
 
@@ -43,11 +43,9 @@ protected:
     virtual void Move(const sf::Vector2f Value);
     virtual void Jump();
     virtual void Fire();
-    
+
 #pragma endregion
     void SetupBindAction() override;
-
-    int TakeDamage(const int Damage);
 
     void OnDestroy();
 
@@ -63,7 +61,8 @@ private:
     std::shared_ptr<InputAction> IaJump;
     std::shared_ptr<InputAction> IaFire;
 
-    int Health;
+    int MaxHealth;
+    int CurrentHealth;
 
     void CallDeleguateActionDone();
 };

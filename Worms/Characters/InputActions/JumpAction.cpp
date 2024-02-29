@@ -3,6 +3,5 @@
 
 JumpAction::JumpAction()
 {
-    AddKey(Key::Keyboard::M);
     AddKey(Key::Keyboard::Space);
 }

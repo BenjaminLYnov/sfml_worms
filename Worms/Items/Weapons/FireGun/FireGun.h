@@ -23,6 +23,10 @@ public:
 
     virtual void AddForce(const sf::Vector2f &Force);
 
+    float DammageAmount = 10.0f;
+
+    void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
+
 protected:
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
 
@@ -30,7 +34,7 @@ private:
     std::shared_ptr<SquareCollider> SquareColliderComponent;
     std::shared_ptr<Rigidbody> RigidbodyComponent;
 
-    float LifeTime = 10.0f;
+    float LifeTime = 7.0f;
 
 };
 

@@ -1,6 +1,8 @@
 #ifndef KEYBOARD_KEYS_H
 #define KEYBOARD_KEYS_H
 
+#pragma once
+
 #include <SFML/Window/Keyboard.hpp>
 
 enum class KeyboardButtons

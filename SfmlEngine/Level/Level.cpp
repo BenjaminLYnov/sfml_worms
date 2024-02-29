@@ -13,17 +13,20 @@ Level::Level()
 
 void Level::Start()
 {
-    for (auto &GameObject : GameObjects)
-        GameObject->Start();
+    for (std::shared_ptr<GameObject> Go : GameObjects)
+        if (Go)
+            Go->Start();
 }
 
 void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
 {
+    if (!GameObject)
+        return;
     GameObjects.push_back(GameObject);
     GameObject->SetLevel(this);
 }
 
-std::vector<std::shared_ptr<GameObject>> &Level::GetGameObjects()
+std::vector<std::shared_ptr<GameObject>> Level::GetAllGameObjects()
 {
     return GameObjects;
 }
@@ -39,27 +42,30 @@ void Level::ProcessEvents()
 
 void Level::Update(const float DeltaTime)
 {
-    for (auto &GameObject : GameObjects)
-        GameObject->Update(DeltaTime);
+    for (std::shared_ptr<GameObject> Go : GameObjects)
+        if (Go)
+            Go->Update(DeltaTime);
 }
 
 void Level::Render(sf::RenderWindow &Window) const
 {
-    for (const auto &GameObject : GameObjects)
-        GameObject->Render(Window);
+    for (std::shared_ptr<GameObject> Go : GameObjects)
+        if (Go)
+            Go->Render(Window);
 }
 
-void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
+void Level::SetCharacterControlled(Character *NewCharacterControlled)
 {
+    if (!NewCharacterControlled)
+        return;
     CharacterControlled = NewCharacterControlled;
-
-    std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
+    // std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
 }
 
 void Level::OnCollision()
 {
     // Parcours tous les game object du level
-    for (auto &GameObjectToCheckCollision : GameObjects)
+    for (std::shared_ptr<GameObject> GameObjectToCheckCollision : GameObjects)
     {
         if (!GameObjectToCheckCollision)
             continue;
@@ -71,12 +77,12 @@ void Level::OnCollision()
         if (!ColliderToCheck)
             continue;
 
-        // Récupère tous les autres Game Objects
-        std::vector<std::shared_ptr<GameObject>> AllOtherGameObject = GetAllOtherGameObject(GameObjectToCheckCollision);
-
-        // Les parcourir tous les autres Game Objects
-        for (auto &OtherGameObject : AllOtherGameObject)
+        // Les parcourir tous les Game Objects en ignorant lui même
+        for (std::shared_ptr<GameObject> OtherGameObject : GameObjects)
         {
+            if (OtherGameObject == GameObjectToCheckCollision)
+                continue;
+
             // Récupère le Collider de l'autre game object actuelle de la boucle
             std::shared_ptr<ICollider> OtherCollider = OtherGameObject->GetComponent<ICollider>();
 
@@ -93,19 +99,10 @@ void Level::OnCollision()
 void Level::RemoveGameObject(GameObject *GameObjectToRemove)
 {
     // Utiliser std::remove_if pour trouver et supprimer l'élément
-    GameObjects.erase(std::remove_if(GameObjects.begin(), GameObjects.end(),
-                                     [GameObjectToRemove](const std::shared_ptr<GameObject> &ptr)
-                                     { return ptr.get() == GameObjectToRemove; }),
-                      GameObjects.end());
+    // GameObjects.erase(std::remove_if(GameObjects.begin(), GameObjects.end(),
+    //                                  [GameObjectToRemove](const std::shared_ptr<GameObject> &ptr)
+    //                                  { return ptr.get() == GameObjectToRemove; }),
+    //                   GameObjects.end());
 }
 
 // PRIVATE
-
-std::vector<std::shared_ptr<GameObject>> Level::GetAllOtherGameObject(std::shared_ptr<GameObject> GameObjectToIgnore)
-{
-    std::vector<std::shared_ptr<GameObject>> AllOtherGameObject;
-    for (auto &GameObjectToAdd : GameObjects)
-        if (GameObjectToAdd != GameObjectToIgnore)
-            AllOtherGameObject.push_back(GameObjectToAdd);
-    return AllOtherGameObject;
-}

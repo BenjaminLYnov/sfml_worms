@@ -30,6 +30,7 @@ void GameManager::Run()
 
     sf::View view(sf::FloatRect(0, 0, 800, 600));
     Window->setView(view);
+    Window->setFramerateLimit(60);
 
     // Boucle de jeu principal
     while (Window->isOpen())
