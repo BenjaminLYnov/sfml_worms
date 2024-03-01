@@ -29,8 +29,10 @@ public:
 
     bool bIsControlled;
     bool bIsAlive;
+    bool bIsMoving;
     bool bCanFire;
     bool bCanMove;
+    bool bIsAiming;
 
 #pragma endregion State
 
@@ -40,11 +42,15 @@ protected:
     void InitAnimations();
 
 #pragma region InputAction
-    virtual void Move(const sf::Vector2f Value);
+
+    virtual void OnMoveStart(const sf::Vector2f Value);
+    virtual void OnMoveCompleted();
+    virtual void Aim(const sf::Vector2f Value);
     virtual void Jump();
     virtual void Fire();
 
 #pragma endregion
+
     void SetupBindAction() override;
 
     void OnDestroy();
@@ -60,9 +66,24 @@ private:
     std::shared_ptr<InputAction> IaMove;
     std::shared_ptr<InputAction> IaJump;
     std::shared_ptr<InputAction> IaFire;
+    std::shared_ptr<InputAction> IaAim;
 
     int MaxHealth;
     int CurrentHealth;
+    bool bIsFacingRight;
 
+    sf::Vector2f MoveDirection;
+
+    float AimAngle = 0;
+    sf::Vector2f AimDirection = sf::Vector2f(1, 0);
+    float movementTimer = 0;
+
+    float M_PI = 3.14159265358979323846;
+    const float MIN_AIM_ANGLE = -85;
+    const float MAX_AIM_ANGLE = 85;
+    const float MOVEMENT_DELAY = 0.1f;
+
+    void Move(float DeltaTime);
+    void DrawAimLine(sf::RenderWindow &Window) const;
     void CallDeleguateActionDone();
 };
