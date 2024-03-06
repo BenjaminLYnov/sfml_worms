@@ -16,12 +16,13 @@ FireGun::FireGun() : Weapon()
     SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
+    RigidbodyComponent->GravityScale = 5;
 
     Icon = std::make_shared<Sprite>();
     Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
 
-    AddComponent(SquareColliderComponent);
-    AddComponent(RigidbodyComponent);
+    AddComponent(SquareColliderComponent.get());
+    AddComponent(RigidbodyComponent.get());
     // AddComponent(Icon);
     // AddComponent(Animation);
 

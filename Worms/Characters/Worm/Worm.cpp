@@ -3,6 +3,9 @@
 
 // Inclusion des Components
 #include "GameObject/Components/Collider/SquareCollider.h"
+#include "GameObject/Components/Collider/CircleCollider.h"
+#include "GameObject/Components/Collider/TriangleCollider.h"
+
 #include "GameObject/Components/Input/InputAction/InputAction.h"
 #include "GameObject/Components/Input/InputAction/Key/Key.h"
 #include "GameObject/Components/Sprite/Sprite.h"
@@ -37,20 +40,23 @@ Worm::Worm() : Character()
 
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
-    SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
+    // SquareColliderComponent = std::make_shared<TriangleCollider>();
+    // SquareColliderComponent = std::make_shared<CircleCollider>(50);
+    // SquareColliderComponent = std::make_shared<CircleCollider>();
+    // SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
+
+    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::OnCollisionEnter);
 
     DeleguateFire = std::make_shared<Deleguate>();
     DeleguateActionDone = std::make_shared<Deleguate>();
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
     RigidbodyComponent->GravityScale = 25;
-    RigidbodyComponent->GravityScale = 0;
+    // RigidbodyComponent->GravityScale = 0;
 
-    AddComponent(SquareColliderComponent);
-    AddComponent(CurrentSprite);
-    AddComponent(RigidbodyComponent);
-
-    SetWorldPosition(sf::Vector2f(400, 300));
+    AddComponent(SquareColliderComponent.get());
+    AddComponent(CurrentSprite.get());
+    AddComponent(RigidbodyComponent.get());
 
     // Instance Inputs Acitons
     IaMove = std::make_shared<MoveAction>();
@@ -68,7 +74,6 @@ Worm::Worm() : Character()
     bIsAlive = true;
     bCanMove = false;
     bCanFire = false;
-    bIsControlled = false;
 }
 
 void Worm::Start()
@@ -80,9 +85,12 @@ void Worm::Start()
 void Worm::Update(const float DeltaTime)
 {
     Character::Update(DeltaTime);
-    AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
-    AxisMoveValue = sf::Vector2f(0, 0);
+    // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
+    // AxisMoveValue = sf::Vector2f(0, 0);
     // CurrentSprite = WalkA;
+
+    // if (GetWorld()->GetCharacterControlled().get() == this)
+    //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -107,10 +115,16 @@ float Worm::TakeDamage(const float Damage)
     {
         CurrentHealth = 0;
         bIsAlive = false;
-        OnDestroy();
+        Destroy();
     }
 
     return CurrentHealth;
+}
+
+void Worm::OnCollisionEnter(GameObject *GameObjectHited)
+{
+    // SetWorldPosition(sf::Vector2f(300, 200));
+    // std::cout << "rara\n";
 }
 
 void Worm::OnDestroy()
@@ -133,9 +147,14 @@ void Worm::Move(const sf::Vector2f Value)
 {
     if (!bCanMove)
         return;
+
+    // AddWorldPosition(Value * MaxWalkSpeed * GetWorld()->GetWorldDeltaSecond());
+
     // AxisMoveValue = Value;
 
-    const sf::Vector2f Force = Value * 500.f;
+    // const sf::Vector2f Force = sf::Vector2f(Value.x, 0) * 500.f;
+    // const sf::Vector2f Force = Value * 500.f;
+    const sf::Vector2f Force = Value * 2000.f;
     RigidbodyComponent->AddForce(Force);
 }
 
@@ -145,14 +164,16 @@ void Worm::Fire()
         return;
 
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
-   FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+    // FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
 
-    sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
+    sf::Vector2f force = sf::Vector2f(1, 0) * 20000.f;
+    // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
     // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
 
-    FireGunS->AddForce(force);
-    FireGunS->SetOwner(this);
-    FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    // FireGunS->AddForce(force);
+    // FireGunS->SetOwner(this);
+    // FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    DeleguateActionDone->Broadcast();
 
     // bCanFire = false;
     // bCanMove = false;
@@ -160,7 +181,8 @@ void Worm::Fire()
 
 void Worm::Jump()
 {
-    RigidbodyComponent->AddForce(sf::Vector2f(0, -24000));
+    RigidbodyComponent->SetVelocity(sf::Vector2f(RigidbodyComponent->GetVelocity().x, 0));
+    RigidbodyComponent->AddForce(sf::Vector2f(0, -70000));
 }
 
 // PRIVATE

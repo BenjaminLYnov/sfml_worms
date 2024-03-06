@@ -6,6 +6,8 @@ class Sprite;
 class InputAction;
 class Rigidbody;
 class SquareCollider;
+class CircleCollider;
+class TriangleCollider;
 class Deleguate;
 
 class Worm : public Character
@@ -23,11 +25,12 @@ public:
 
     float TakeDamage(const float Damage) override;
 
+    // std::shared_ptr<CircleCollider> SquareColliderComponent;
     std::shared_ptr<SquareCollider> SquareColliderComponent;
+    // std::shared_ptr<TriangleCollider> SquareColliderComponent;
 
 #pragma region State
 
-    bool bIsControlled;
     bool bIsAlive;
     bool bCanFire;
     bool bCanMove;
@@ -48,6 +51,8 @@ protected:
     void SetupBindAction() override;
 
     void OnDestroy();
+
+    void OnCollisionEnter(GameObject *GameObjectHited);
 
 private:
     // Sprites Animation

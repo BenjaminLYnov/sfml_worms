@@ -39,8 +39,8 @@ void GameManager::Run()
 
         Update(Clock.restart().asSeconds());
 
-        CurrentLevel->OnCollision();
-        
+        CurrentLevel->ManageCollision();
+
         Render(*Window);
     }
 }

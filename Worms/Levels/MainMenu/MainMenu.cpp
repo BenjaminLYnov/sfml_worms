@@ -28,7 +28,7 @@ MainMenu::MainMenu()
 
     
     AnotherWorm->SetWorldPosition(sf::Vector2f(200, 200));
-    SetCharacterControlled(MainWorm.get());
+    //SetCharacterControlled(MainWorm);
 
 	MainWorm->bCanMove = true;
 	MainWorm->bCanFire = true;

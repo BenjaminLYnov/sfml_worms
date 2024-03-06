@@ -4,7 +4,10 @@
 
 // Inclusion l'entête Resources necéssaire pour instancier les sprites
 #include "Levels/MainMenu/LevelRules.h"
+#include "Levels/Party.h"
 #include "Resources/Resources.h"
+
+#include <SFML/Graphics.hpp>
 
 // #include <fstream>
 // #include <string>
@@ -74,6 +77,55 @@
 //     return true; // Retourner true si le chargement a réussi.
 // }
 
+void test() {
+     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+
+    // Crée le premier carré
+       sf::RectangleShape square1(sf::Vector2f(100.f, 100.f)); // Taille du carré
+    square1.setFillColor(sf::Color::Red);
+    square1.setPosition(380.f, 250.f); // Position initiale
+    square1.setOrigin(50.f, 50.f); // Le centre du carré
+
+    // Création du deuxième carré
+    sf::RectangleShape square2(sf::Vector2f(100.f, 100.f));
+    square2.setFillColor(sf::Color::Blue);
+    square2.setPosition(500.f, 250.f); // Position initiale
+    square2.setOrigin(50.f, 50.f); // Le centre du carré
+
+
+    window.setFramerateLimit(60);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        // Rotation des carrés
+        square1.rotate(1); // Tourne de 1 degré par frame
+        square2.rotate(-1); // Tourne de -1 degré par frame
+
+        // Vérification des collisions
+        if (square1.getGlobalBounds().intersects(square2.getGlobalBounds())) {
+            // Collision détectée, change la couleur des carrés
+            square1.setFillColor(sf::Color::Green);
+            square2.setFillColor(sf::Color::Yellow);
+        } else {
+            // Pas de collision, remet les couleurs initiales
+            square1.setFillColor(sf::Color::Red);
+            square2.setFillColor(sf::Color::Blue);
+        }
+
+        window.clear();
+        window.draw(square1);
+        window.draw(square2);
+        window.display();
+    }
+}
+
 
 int main()
 {
@@ -99,10 +151,15 @@ int main()
 
     // Add Level
     // SGameManager->AddLevel(std::make_shared<MainMenu>());
-    SGameManager->AddLevel(std::make_shared<LevelRules>());
+    // SGameManager->AddLevel(std::make_shared<LevelRules>());
+    SGameManager->AddLevel(std::make_shared<Party>(1));
+    // SGameManager->AddLevel(std::make_shared<Party>(2));
 
     // Run Game Loop
     SGameManager->Run();
+
+
+// test();
 
     return 0;
 }

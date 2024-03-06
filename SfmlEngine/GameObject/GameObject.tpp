@@ -3,13 +3,15 @@
 #include "Level/Level.h"
 
 template <typename T>
-std::shared_ptr<T> GameObject::GetComponent() const
+// std::shared_ptr<T> GameObject::GetComponent() const
+T* GameObject::GetComponent() const
 {
     for (const auto &Component : Components)
     {
         if (!Component)
             continue;
-        std::shared_ptr<T> Derived = std::dynamic_pointer_cast<T>(Component);
+        // std::shared_ptr<T> Derived = std::dynamic_pointer_cast<T>(Component);
+        T* Derived = dynamic_cast<T*>(Component);
         if (Derived)
             return Derived;
     }

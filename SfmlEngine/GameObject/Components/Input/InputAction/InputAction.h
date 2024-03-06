@@ -15,6 +15,8 @@ public:
 
     virtual void BindAction(ETriggerEvent TriggerEvent, const InputCallback &Callback);
     virtual void PollKeyEvents();
+    virtual void SetNeedKeyReleaseFirst(const bool _bNeedKeyReleaseFirst);
+    
 
 protected:
     virtual void AddKey(ActionKey NewActionKey, const bool bIsAxisKey = false, const Axis AxisType = Axis::Horizontal, const bool bNegateFlag = false);
@@ -25,6 +27,8 @@ private:
 
     // Variable pour suivre si la touche a déjà été traitée
     bool bIsKeyPressed = false;
+
+    bool bNeedKeyReleaseFirst = false;
 
     virtual void CallCallbacks(ETriggerEvent TriggerEvent, const sf::Vector2f Value = sf::Vector2f(0, 0));
 

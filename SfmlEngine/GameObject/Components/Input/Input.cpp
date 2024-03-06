@@ -20,6 +20,12 @@ void Input::PollActionsEvents()
         IA->PollKeyEvents();
 }
 
+void Input::SetNeedKeyReleaseFirst(const bool bNeedKeyReleaseFirst)
+{
+    for (const auto IA : InputActions)
+        IA->SetNeedKeyReleaseFirst(bNeedKeyReleaseFirst);
+}
+
 // PROTECTED
 
 void Input::AddInputAction(std::shared_ptr<InputAction> &NewIA)

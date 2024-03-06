@@ -12,8 +12,8 @@ GameObject::GameObject()
     WorldTransformComponent = std::make_shared<Transform>();
     RelativeTransformComponent = std::make_shared<Transform>();
 
-    AddComponent(WorldTransformComponent);
-    AddComponent(RelativeTransformComponent);
+    AddComponent(WorldTransformComponent.get());
+    AddComponent(RelativeTransformComponent.get());
 }
 
 void GameObject::Start()
@@ -40,18 +40,14 @@ void GameObject::Render(sf::RenderWindow &Window) const
     }
 }
 
-void GameObject::AddComponent(std::shared_ptr<IComponent> Component)
+// void GameObject::AddComponent(std::shared_ptr<IComponent> Component)
+void GameObject::AddComponent(IComponent* Component)
 {
     if (!Component)
         return;
     Components.push_back(Component);
     Component->SetOwner(this);
     // Component->SetOwner(shared_from_this());
-}
-
-std::vector<std::shared_ptr<IComponent>> GameObject::GetComponents()
-{
-    return Components;
 }
 
 void GameObject::AddWorldPosition(const sf::Vector2f &AmountPosition)
@@ -157,7 +153,7 @@ void GameObject::SetLevel(Level *Level)
     OwnerLevel = Level;
 }
 
-Level* GameObject::GetWorld()
+Level *GameObject::GetWorld()
 {
     return OwnerLevel;
 }
@@ -170,9 +166,11 @@ void GameObject::Destroy(GameObject *GameObjectToDestroy)
     if (!GameObjectToDestroy)
         GameObjectToDestroy = this;
 
+    if (!GameObjectToDestroy)
+        return;
+
     OwnerLevel->RemoveGameObject(GameObjectToDestroy);
 }
-
 
 // PRIVATE
 

@@ -6,7 +6,7 @@
 Character::Character() : GameObject()
 {
     InputComponent = std::make_shared<Input>();
-    AddComponent(InputComponent);
+    AddComponent(InputComponent.get());
 }
 
 void Character::Update(const float DeltaTime)
@@ -15,9 +15,9 @@ void Character::Update(const float DeltaTime)
     PerformInputMovement(DeltaTime);
 }
 
-std::shared_ptr<Input> Character::GetInputComponent()
+Input* Character::GetInputComponent()
 {
-    return InputComponent;
+    return InputComponent.get();
 }
 
 void Character::SetInputMovement(const sf::Vector2f NewInputMovement)

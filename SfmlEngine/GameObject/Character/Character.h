@@ -15,7 +15,7 @@ public:
 
     void Update(const float DeltaTime) override;
 
-    std::shared_ptr<Input> GetInputComponent();
+    Input* GetInputComponent();
 
     void SetInputMovement(const sf::Vector2f NewInputMovement);
 

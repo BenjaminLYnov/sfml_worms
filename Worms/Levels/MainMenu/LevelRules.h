@@ -13,7 +13,11 @@ public:
 
 	void SwitchCharacter();
 
-private:
-	std::vector<std::shared_ptr<Worm>> Worms;
+protected:
+	void InitPlayers();
 
-};
+private:
+	std::shared_ptr<Worm> CurrentWorm;
+
+	const int NbPlayer = 2;
+}; 

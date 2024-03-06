@@ -32,13 +32,13 @@ public:
     virtual void Render(sf::RenderWindow &Window) const;
 
     // Ajoute un composant au GameObject.
-    void AddComponent(std::shared_ptr<IComponent> Component);
+    void AddComponent(IComponent* Component);
+    // void AddComponent(std::shared_ptr<IComponent> Component);
 
     // Récupère un composant de type spécifique attaché au GameObject.
     template <typename T>
-    std::shared_ptr<T> GetComponent() const;
-
-    std::vector<std::shared_ptr<IComponent>> GetComponents();
+    T* GetComponent() const;
+    // std::shared_ptr<T> GetComponent() const;
 
     // Incrémente position monde du GameObject.
     void AddWorldPosition(const sf::Vector2f &AmountPosition);
@@ -108,7 +108,8 @@ private:
     std::string Name;
 
     // Liste des composants attachés à ce GameObject.
-    std::vector<std::shared_ptr<IComponent>> Components;
+    std::vector<IComponent*> Components;
+    // std::vector<std::shared_ptr<IComponent>> Components;
 
     // Composant Transform spécifique gérant la position, l'échelle et la rotation du GameObject.
     std::shared_ptr<Transform> WorldTransformComponent;
