@@ -1,5 +1,7 @@
 #include "Worm.h"
 #include <iostream>
+#include <cmath>
+#include "Math/Vector/Vector.h"
 
 // Inclusion des Components
 #include "GameObject/Components/Collider/SquareCollider.h"
@@ -24,6 +26,7 @@
 #include "Characters/InputActions/MoveAction.h"
 #include "Characters/InputActions/JumpAction.h"
 #include "Characters/InputActions/FireAction.h"
+#include "Characters/InputActions/AimAction.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -62,6 +65,7 @@ Worm::Worm() : Character()
     IaMove = std::make_shared<MoveAction>();
     IaJump = std::make_shared<JumpAction>();
     IaFire = std::make_shared<FireAction>();
+    IaAim = std::make_shared<AimAction>();
 
     MaxWalkSpeed = 200;
 
@@ -87,6 +91,7 @@ void Worm::Update(const float DeltaTime)
     Character::Update(DeltaTime);
     // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     // AxisMoveValue = sf::Vector2f(0, 0);
+    Worm::Move(DeltaTime);
     // CurrentSprite = WalkA;
 
     // if (GetWorld()->GetCharacterControlled().get() == this)
@@ -96,15 +101,18 @@ void Worm::Update(const float DeltaTime)
 void Worm::Render(sf::RenderWindow &Window) const
 {
     Character::Render(Window);
+    DrawAimLine(Window);
 }
 
 // PROTECTED
 
 void Worm::SetupBindAction()
 {
-    InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::OnMoveStart);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::OnMoveCompleted);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
     InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
+    InputComponent->BindAction(IaAim, ETriggerEvent::Triggered, this, &Worm::Aim);
 }
 
 float Worm::TakeDamage(const float Damage)
@@ -143,7 +151,7 @@ void Worm::InitAnimations()
     // CurrentSprite = IdleA;
 }
 
-void Worm::Move(const sf::Vector2f Value)
+void Worm::Move(float DeltaTime)
 {
     if (!bCanMove)
         return;
@@ -156,6 +164,73 @@ void Worm::Move(const sf::Vector2f Value)
     // const sf::Vector2f Force = Value * 500.f;
     const sf::Vector2f Force = Value * 2000.f;
     RigidbodyComponent->AddForce(Force);
+    if (movementTimer < 0.5f)
+    {
+        movementTimer += DeltaTime;
+    }
+    else
+    {
+        RigidbodyComponent->AddForce(MoveDirection * MaxWalkSpeed);
+    }
+}
+
+void Worm::OnMoveStart(const sf::Vector2f Value)
+{
+    bIsMoving = true;
+    bIsAiming = false;
+    MoveDirection = Value;
+    if (MoveDirection.x > 0)
+    {
+        AimDirection.x *= (bIsFacingRight ? 1.0f : -1.0f);
+        bIsFacingRight = true;
+    }
+    else if (MoveDirection.x < 0)
+    {
+        AimDirection.x *= (bIsFacingRight ? -1.0f : 1.0f);
+        bIsFacingRight = false;
+    }
+    movementTimer = 0;
+}
+
+void Worm::OnMoveCompleted()
+{
+    bIsMoving = false;
+    bIsAiming = true;
+    MoveDirection = sf::Vector2f(0, 0);
+}
+
+void Worm::Aim(const sf::Vector2f Value)
+{
+    if (!bIsAiming)
+        return;
+
+    AimAngle += 1.0f * Value.y;
+    AimAngle = std::clamp(AimAngle, MIN_AIM_ANGLE, MAX_AIM_ANGLE);
+    if (bIsFacingRight)
+    {
+        AimDirection = sf::Vector2f(cos(AimAngle * M_PI / 180), sin(AimAngle * M_PI / 180));
+    }
+    else
+    {
+        AimDirection = sf::Vector2f(-cos(AimAngle * M_PI / 180), sin(AimAngle * M_PI / 180));
+    }
+}
+
+void Worm::DrawAimLine(sf::RenderWindow &window) const
+{
+    if (!bIsAiming)
+        return;
+    // Create a line segment from worm position to aim direction
+    sf::VertexArray line(sf::Lines, 2);
+    line[0].position = GetWorldPosition();
+    line[1].position = GetWorldPosition() + AimDirection * 100.0f; // Change 100.0f to set the magnitude of the vector
+
+    // Set color of the line
+    line[0].color = sf::Color::Red;
+    line[1].color = sf::Color::Red;
+
+    // Draw the line
+    window.draw(line);
 }
 
 void Worm::Fire()
@@ -165,6 +240,7 @@ void Worm::Fire()
 
     const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
     // FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+    FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
 
     sf::Vector2f force = sf::Vector2f(1, 0) * 20000.f;
     // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
