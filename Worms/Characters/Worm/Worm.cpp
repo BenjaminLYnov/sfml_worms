@@ -91,7 +91,7 @@ void Worm::Update(const float DeltaTime)
     Character::Update(DeltaTime);
     // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     // AxisMoveValue = sf::Vector2f(0, 0);
-    Worm::Move(DeltaTime);
+    // Worm::Move(DeltaTime);
     // CurrentSprite = WalkA;
 
     // if (GetWorld()->GetCharacterControlled().get() == this)
@@ -108,6 +108,7 @@ void Worm::Render(sf::RenderWindow &Window) const
 
 void Worm::SetupBindAction()
 {
+    InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
     InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::OnMoveStart);
     InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::OnMoveCompleted);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
@@ -151,7 +152,8 @@ void Worm::InitAnimations()
     // CurrentSprite = IdleA;
 }
 
-void Worm::Move(float DeltaTime)
+// void Worm::Move(float DeltaTime)
+void Worm::Move(const sf::Vector2f Value)
 {
     if (!bCanMove)
         return;
@@ -164,14 +166,14 @@ void Worm::Move(float DeltaTime)
     // const sf::Vector2f Force = Value * 500.f;
     const sf::Vector2f Force = Value * 2000.f;
     RigidbodyComponent->AddForce(Force);
-    if (movementTimer < 0.5f)
-    {
-        movementTimer += DeltaTime;
-    }
-    else
-    {
-        RigidbodyComponent->AddForce(MoveDirection * MaxWalkSpeed);
-    }
+    // if (movementTimer < 0.5f)
+    // {
+    //     movementTimer += DeltaTime;
+    // }
+    // else
+    // {
+    //     RigidbodyComponent->AddForce(MoveDirection * MaxWalkSpeed);
+    // }
 }
 
 void Worm::OnMoveStart(const sf::Vector2f Value)
@@ -238,21 +240,17 @@ void Worm::Fire()
     if (!bCanFire)
         return;
 
-    const sf::Vector2f Location = GetWorldPosition() + sf::Vector2f(50, 0);
-    // FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+    const sf::Vector2f Location = GetWorldPosition() +  AimDirection * 50.f;
     FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+    sf::Vector2f force = AimDirection * 20000.f;
 
-    sf::Vector2f force = sf::Vector2f(1, 0) * 20000.f;
-    // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
-    // sf::Vector2f force = sf::Vector2f(0.3, -1) * 20000.f;
-
-    // FireGunS->AddForce(force);
+    FireGunS->AddForce(force);
     // FireGunS->SetOwner(this);
-    // FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
     DeleguateActionDone->Broadcast();
 
-    // bCanFire = false;
-    // bCanMove = false;
+    bCanFire = false;
+    bCanMove = false;
 }
 
 void Worm::Jump()

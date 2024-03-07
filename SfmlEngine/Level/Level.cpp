@@ -66,8 +66,10 @@ void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterContro
 
 void Level::ManageCollision()
 {
+    std::vector<std::shared_ptr<GameObject>> AllGameObjects = GameObjects;
+
     // Parcours tous les game object du level
-    for (std::shared_ptr<GameObject> GameObjectToCheckCollision : GameObjects)
+    for (std::shared_ptr<GameObject> GameObjectToCheckCollision : AllGameObjects)
     {
         if (!GameObjectToCheckCollision)
             continue;

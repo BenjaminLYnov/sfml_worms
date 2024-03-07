@@ -88,7 +88,8 @@ private:
     const float MAX_AIM_ANGLE = 85;
     const float MOVEMENT_DELAY = 0.1f;
 
-    void Move(float DeltaTime);
+    void Move(const sf::Vector2f Value);
+    // void Move(float DeltaTime);
     void DrawAimLine(sf::RenderWindow &Window) const;
     void CallDeleguateActionDone();
 };
