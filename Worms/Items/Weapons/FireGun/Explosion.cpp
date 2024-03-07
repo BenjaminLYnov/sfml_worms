@@ -15,7 +15,7 @@ Explosion::Explosion() : Weapon()
 
     Icon = std::make_shared<Sprite>();
 
-    AddComponent(SquareColliderComponent);
+    AddComponent(SquareColliderComponent.get());
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Explosion::OnCollisionStay);
 }

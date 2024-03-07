@@ -153,9 +153,9 @@ int main()
     // Add Level
     // SGameManager->AddLevel(std::make_shared<MainMenu>());
     // SGameManager->AddLevel(std::make_shared<LevelRules>());
-    // SGameManager->AddLevel(std::make_shared<Party>(1));
+    SGameManager->AddLevel(std::make_shared<Party>(1));
     // SGameManager->AddLevel(std::make_shared<Party>(2));
-    SGameManager->AddLevel(std::make_shared<GraphEdition>());
+    // SGameManager->AddLevel(std::make_shared<GraphEdition>());
 
     // Run Game Loop
     SGameManager->Run();

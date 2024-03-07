@@ -11,7 +11,7 @@ Cell::Cell(const sf::Vector2f Size) : GameObject()
     Shape->setFillColor(sf::Color::Transparent);
 
     // Définit l'épaisseur de la bordure du rectangle
-    Shape->setOutlineThickness(1);
+    Shape->setOutlineThickness(0.5);
 
     // Définit une couleur pour la bordure, par exemple, verte
     Shape->setOutlineColor(sf::Color::White);
