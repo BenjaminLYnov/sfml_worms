@@ -66,10 +66,10 @@ HitResult ICollider::TestCollision(const ICollider *Other, const bool bCheckMirr
     {
         return ColliderChecker::TestCollision(*Square, *Other->Triangle);
     }
-    // else if (Circle && Other->Triangle)
-    // {
-    //     return ColliderChecker::TestCollision(*Circle, *Other->Triangle);
-    // }
+    else if (Circle && Other->Triangle)
+    {
+        return ColliderChecker::TestCollision(*Circle, *Other->Triangle);
+    }
 
     if (bCheckMirror)
         return Other->TestCollision(this, false);
@@ -177,6 +177,7 @@ void ICollider::Overlap(ICollider *Other)
         return;
     const HitResult Hit = TestCollision(Other);
     ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
+    Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
 }
 
 void ICollider::Block(ICollider *Other)
@@ -221,9 +222,6 @@ void ICollider::Static(ICollider *Other)
     // Dégage l'autre s'il y a collision
     if (Hit.bIsOnCollision)
     {
-        if (Circle || Other->Circle)
-            return;
-
         Rigidbody *Rb = Other->GetOwner()->GetComponent<Rigidbody>();
 
         // Annuler la collision
@@ -240,12 +238,11 @@ void ICollider::Static(ICollider *Other)
             }
         }
 
-        // std::cout << Hit.Normal.x << "  " << Hit.Normal.y << "\n";
-
         Other->MoveByRigidbody(Hit);
     }
 
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
+    ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
 }
 
 void ICollider::Movable(ICollider *Other)
@@ -285,7 +282,8 @@ void ICollider::Movable(ICollider *Other)
         }
     }
 
-    ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
+    ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
+    Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
 }
 
 void ICollider::RestrictRigidbody(const sf::Vector2f Normal)
@@ -359,7 +357,6 @@ void ICollider::MoveByRigidbody(const HitResult Hit)
     {
         ObjectToPenteAngle = Vector::DotProduct(sf::Vector2f(-1, 0), Hit.Normal);
     }
-
 
     // Pente trop raide -> faire chuter l'object
     if (PenteAngle > Rb->MaxAnglePente)

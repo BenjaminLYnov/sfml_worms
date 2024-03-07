@@ -8,7 +8,6 @@ ColliderCircleTriangleChecker::ColliderCircleTriangleChecker()
 {
 }
 
-
 // Test de collision entre un cercle et un triangle
 HitResult ColliderCircleTriangleChecker::TestCollision(const sf::CircleShape &circle, const sf::ConvexShape &triangle) const
 {
@@ -16,42 +15,32 @@ HitResult ColliderCircleTriangleChecker::TestCollision(const sf::CircleShape &ci
     float radiusSquared = circle.getRadius() * circle.getRadius();
     bool bIsOnCollision = false;
 
-    bool centerInsideTriangle = true;
     for (size_t i = 0; i < 3; ++i)
     {
         sf::Vector2f pointA = triangle.getPoint(i);
         sf::Vector2f pointB = triangle.getPoint((i + 1) % 3);
 
-        // Convertir les points en coordonnées mondiales
-        pointA = triangle.getTransform().transformPoint(pointA);
-        pointB = triangle.getTransform().transformPoint(pointB);
+        // Apply rotation to the points
+        sf::Transform transform = triangle.getTransform();
+        pointA = transform.transformPoint(pointA);
+        pointB = transform.transformPoint(pointB);
 
-        // Vérification Collision Coin-Triangle
+        // Check Collision Point-Triangle
         if (distanceSquared(center, pointA) < radiusSquared || distanceSquared(center, pointB) < radiusSquared)
         {
             bIsOnCollision = true;
         }
 
-        // Vérification Collision Arête-Triangle
+        // Check Collision Edge-Triangle
         sf::Vector2f closestPoint = closestPointOnLine(pointA, pointB, center);
         if (distanceSquared(center, closestPoint) < radiusSquared)
         {
             bIsOnCollision = true;
         }
-
-        // Vérification si le centre du cercle est à l'intérieur du triangle
-        sf::Vector2f edgeNormal = pointB - pointA;
-        sf::Vector2f pointToCenter = center - pointA;
-        edgeNormal = sf::Vector2f(-edgeNormal.y, edgeNormal.x); // Normale perpendiculaire
-        if (Vector::DotProduct(edgeNormal, pointToCenter) > 0)
-        {
-            centerInsideTriangle = false;
-        }
     }
 
-    return HitResult(true);
+    return HitResult(bIsOnCollision);
 }
-
 // Calcule la distance au carré pour éviter la racine carrée (plus rapide)
 float ColliderCircleTriangleChecker::distanceSquared(const sf::Vector2f &a, const sf::Vector2f &b) const
 {

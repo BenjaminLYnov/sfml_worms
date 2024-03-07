@@ -42,12 +42,12 @@ HitResult ColliderChecker::TestCollision<SquareCollider, TriangleCollider>(const
     return Checker.TestCollision(Collider1, Collider2);
 }
 
-// template <>
-// bool ColliderChecker::TestCollision<CircleCollider, TriangleCollider>(const CircleCollider &Collider1, const TriangleCollider &Collider2)
-// {
-//     ColliderCircleTriangleChecker Checker = ColliderCircleTriangleChecker();
-//     return Checker.TestCollision(*Collider1.Shape, *Collider2.Shape);
-// }
+template <>
+HitResult ColliderChecker::TestCollision<CircleCollider, TriangleCollider>(const CircleCollider &Collider1, const TriangleCollider &Collider2)
+{
+    ColliderCircleTriangleChecker Checker = ColliderCircleTriangleChecker();
+    return Checker.TestCollision(*Collider1.Shape, *Collider2.Shape);
+}
 
 // template <>
 // sf::Vector2f ColliderChecker::GetCancelCollision<SquareCollider, CircleCollider>(const SquareCollider &Collider1, const CircleCollider &Collider2)

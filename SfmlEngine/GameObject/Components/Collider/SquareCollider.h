@@ -23,9 +23,6 @@ public:
 
     virtual void UpdatePosition() override;
 
-    //virtual void OnCollision(std::shared_ptr<ICollider> Other) override;
-
-    // bool TestCollision(std::shared_ptr<ICollider> Other);
     HitResult TestCollision(const SquareCollider &Other) const;
 
     virtual void CancelCollisionWith(const std::shared_ptr<SquareCollider> OtherCollider);

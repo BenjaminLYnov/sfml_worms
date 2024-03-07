@@ -30,7 +30,6 @@ void GameManager::Run()
 
     sf::View view(sf::FloatRect(0, 0, 800, 600));
     Window->setView(view);
-    Window->setFramerateLimit(60);
 
     // Boucle de jeu principal
     while (Window->isOpen())
@@ -84,11 +83,15 @@ void GameManager::AddLevel(std::shared_ptr<Level> NewLevel)
 
 void GameManager::InitWindow()
 {
-    Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "SFML Window");
+    // Création de la fenêtre SFML
+    Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1920, 1080), "SFML Window");
+
+    // Activer le mode plein écran
+    // Window->create(sf::VideoMode::getDesktopMode(), "SFML Fullscreen Windowed", sf::Style::Titlebar | sf::Style::Close);
 
     // Limite les FPS à 60
-    // Window->setFramerateLimit(60);
-    Window->setVerticalSyncEnabled(true);
+    Window->setFramerateLimit(60);
+    // Window->setVerticalSyncEnabled(true);
 }
 
 void GameManager::ProcessEvents()
@@ -96,27 +99,10 @@ void GameManager::ProcessEvents()
     sf::Event Event;
     while (Window->pollEvent(Event))
     {
-        if (Event.type == sf::Event::Closed)
+      if (Event.type == sf::Event::Closed)
             Window->close();
-
-        if (Event.type == sf::Event::MouseWheelScrolled)
-        {
-            if (Event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
-            {
-                // Traiter le défilement vertical
-                float delta = Event.mouseWheelScroll.delta;
-                // Faire quelque chose avec delta (positif pour le défilement vers le haut, négatif pour le bas)
-                // std::cout << delta << "\n";
-            }
-            else if (Event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
-            {
-                // Traiter le défilement horizontal (si pris en charge)
-                float delta = Event.mouseWheelScroll.delta;
-                // std::cout << delta << "\n";
-
-                // Faire quelque chose avec delta
-            }
-        }
+        else if (Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Escape)
+            Window->close();
     }
 
     if (CurrentLevel)

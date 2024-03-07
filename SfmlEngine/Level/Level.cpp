@@ -56,6 +56,7 @@ void Level::Render(sf::RenderWindow &Window) const
 }
 
 void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
+// void Level::SetCharacterControlled(Character* NewCharacterControlled)
 {
     if (!NewCharacterControlled)
         return;
@@ -117,6 +118,7 @@ float Level::GetWorldDeltaSecond() const
 }
 
 std::shared_ptr<Character> Level::GetCharacterControlled()
+// Character* Level::GetCharacterControlled()
 {
     return CharacterControlled;
 }

@@ -20,9 +20,9 @@ Party::Party(const int _NbPlayer) : NbPlayer(_NbPlayer)
 
 	// Shapes
 	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
-	Square1->SetWorldPosition(sf::Vector2f(300, 400));
-	Square1->SquareColliderComponent->SetSize(sf::Vector2f(400, 100));
-	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(600, 100));
+	Square1->SetWorldPosition(sf::Vector2f(200, 400));
+	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(400, 100));
+	Square1->SquareColliderComponent->SetSize(sf::Vector2f(600, 100));
 	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
 	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(200, 50));
 	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
