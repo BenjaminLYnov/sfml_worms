@@ -6,7 +6,6 @@ class Canvas : public UIElement
 public:
     
     Canvas(Vec2f _pos, Vec2f _size);
-    ~Canvas();
 
     void InitResources() override;
 

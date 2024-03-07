@@ -42,10 +42,9 @@ protected:
 
 public:
 
-    bool drawDebug = false;
+    bool drawDebug = true;
 
     UIElement(const Vec2f& _pos, const Vec2f& _size);
-    ~UIElement();
 
     const Vec2f GetPos() const { return pos; }
     const Vec2f GetSize() const { return size; }
@@ -68,7 +67,7 @@ public:
     float GetTotalChildrenWidth();
     float GetTotalChildrenHeight();
 
-    template <typename T> T* AddChild(T* pChild)
+    /*template <typename T> T* AddChild(T* pChild)
     {
         if (std::find(childrenList.begin(), childrenList.end(), pChild) == childrenList.end())
         {
@@ -76,7 +75,9 @@ public:
             return pChild;
         }
         return nullptr;
-    }
+    }*/
+
+    UIElement* AddChild(UIElement* pChild);
 
     void RemoveChild(UIElement* pChild);
     virtual void InitResources();

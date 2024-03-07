@@ -6,6 +6,8 @@
 #include "GameObject/Shapes/Square.h"
 #include "GameObject/Shapes/Circle.h"
 #include "GameObject/Components/Collider/SquareCollider.h"
+#include "UI/Canvas.h"
+#include "UI/UIImage.h"
 
 LevelRules::LevelRules()
 {
@@ -38,6 +40,16 @@ LevelRules::LevelRules()
 	Square1->SquareColliderComponent->SetSize(sf::Vector2f(700, 200));
 	Square1->SquareColliderComponent->SetMobility(EMobility::Stationary);
 	AddGameObject(Square1);
+
+
+	//Add a canvas
+	std::shared_ptr<Canvas> Canvas1 = std::make_shared<Canvas>(Vec2f(5, 5), Vec2f(350, 100));
+	Canvas1->InitResources();
+	AddCanvas(Canvas1);
+
+	//Image 1  WORK
+	UIImage* Image = new UIImage("Resources/spoune.png", Vec2f(1, 1), Vec2f(0.5f, 0.5f));
+	Canvas1->AddChild(Image);
 }
 
 void LevelRules::Start()

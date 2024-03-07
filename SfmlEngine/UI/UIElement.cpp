@@ -1,4 +1,5 @@
 ﻿#include "UIElement.h"
+#include <iostream>
 
 UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_size){}
 
@@ -79,6 +80,16 @@ float UIElement::GetTotalChildrenHeight()
     return totalHeight;
 }
 
+UIElement* UIElement::AddChild(UIElement* pChild)
+{
+    if (std::find(childrenList.begin(), childrenList.end(), pChild) == childrenList.end())
+    {
+        childrenList.push_back(pChild);
+        return pChild;
+    }
+    return nullptr;
+}
+
 void UIElement::UpdateLayoutList()
 {
 }
@@ -86,7 +97,11 @@ void UIElement::UpdateLayoutList()
 void UIElement::Draw(sf::RenderWindow& window)
 {
     if(drawDebug)
+    {
+        std::cout << "Drawing debug rectangle   +   " << debugRectangle.getSize().x << std::endl;
         window.draw(debugRectangle);
+    }
+        
 
     for(UIElement* child : childrenList)
         child->Draw(window);
