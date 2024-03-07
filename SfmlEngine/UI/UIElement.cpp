@@ -1,12 +1,15 @@
 ﻿#include "UIElement.h"
 #include <iostream>
 
-UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_size){}
+UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_size)
+{
+    initialRatio = _size.x / _size.y;
+}
 
 void UIElement::InitResources()
 {
     debugRectangle.setOutlineColor(sf::Color::Red);
-    debugRectangle.setOutlineThickness(2);
+    debugRectangle.setOutlineThickness(1);
     debugRectangle.setFillColor(sf::Color::Transparent);
 
     for(UIElement* child : childrenList)
@@ -32,6 +35,7 @@ const sf::FloatRect& UIElement::UpdateRect(const sf::FloatRect& parentRect)
 {
     Vec2f vPos = Vec2f(parentRect.left, parentRect.top) + Vec2f(pos.x * parentRect.width, pos.y * parentRect.height);
     Vec2f vSize = Vec2f(parentRect.width * size.x, parentRect.height * size.y);
+    
 
     renderRect.left = vPos.x;
     renderRect.top = vPos.y;
@@ -43,15 +47,6 @@ const sf::FloatRect& UIElement::UpdateRect(const sf::FloatRect& parentRect)
     {
         debugRectangle.setPosition(renderRect.left, renderRect.top);
         debugRectangle.setSize(sf::Vector2f(renderRect.width, renderRect.height));
-    }
-
-    switch(layout)
-    {
-        case UILayout::List:
-        {
-            UpdateLayoutList();
-            break;
-        }
     }
 
     for(UIElement* child : childrenList)
@@ -90,19 +85,12 @@ UIElement* UIElement::AddChild(UIElement* pChild)
     return nullptr;
 }
 
-void UIElement::UpdateLayoutList()
-{
-}
-
 void UIElement::Draw(sf::RenderWindow& window)
 {
     if(drawDebug)
     {
-        std::cout << "Drawing debug rectangle   +   " << debugRectangle.getSize().x << std::endl;
         window.draw(debugRectangle);
     }
-        
-
     for(UIElement* child : childrenList)
         child->Draw(window);
 }

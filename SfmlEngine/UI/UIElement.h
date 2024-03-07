@@ -4,25 +4,7 @@
 
 using Vec2f = sf::Vector2f;
 
-enum class UILayout
-{
-    None,
-    List
-};
 
-enum class UIDirection
-{
-    Horizontal,
-    Vertical
-};
-
-enum class UIAlignment
-{
-    None,
-    Start,
-    Center,
-    End
-};
 
 class UIElement
 {
@@ -32,13 +14,6 @@ protected:
 
     sf::FloatRect renderRect;
     std::vector<UIElement*> childrenList;
-
-    UILayout layout = UILayout::None;
-    UIDirection direction = UIDirection::Horizontal;
-    UIAlignment horizontal = UIAlignment::None;
-    UIAlignment vertical = UIAlignment::None;
-
-    void UpdateLayoutList();
 
 public:
 
@@ -54,28 +29,8 @@ public:
 
     void SetSize(const Vec2f& _size) { size = _size; }
 
-    UILayout GetLayout() const { return layout; }
-    UIDirection GetDirection() const { return direction; }
-
-    void SetLayout(UILayout _layout, UIDirection _direction){ layout = _layout; direction = _direction; }
-    void SetHorizontalAlignment(UIAlignment _align) { horizontal = _align; }
-    void SetVerticalAlignment(UIAlignment _align) { vertical = _align; }
-
-    UIAlignment GetHorizontalAlignment() const { return horizontal; }
-    UIAlignment GetVerticalAlignment() const { return vertical; }
-
     float GetTotalChildrenWidth();
     float GetTotalChildrenHeight();
-
-    /*template <typename T> T* AddChild(T* pChild)
-    {
-        if (std::find(childrenList.begin(), childrenList.end(), pChild) == childrenList.end())
-        {
-            childrenList.push_back(pChild);
-            return pChild;
-        }
-        return nullptr;
-    }*/
 
     UIElement* AddChild(UIElement* pChild);
 
@@ -86,4 +41,6 @@ public:
     virtual void Draw(sf::RenderWindow& window);
 
     sf::RectangleShape debugRectangle;
+
+    float initialRatio;
 };

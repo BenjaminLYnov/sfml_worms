@@ -10,7 +10,7 @@ public:
     virtual void Draw(sf::RenderWindow& _window) override;
 
     void SetColor(const sf::Color& _color);
-    void SetUv(const Vec2f& _start, const Vec2f& _end);
+    //void SetUv(const Vec2f& _start, const Vec2f& _end);
 
 protected:
 

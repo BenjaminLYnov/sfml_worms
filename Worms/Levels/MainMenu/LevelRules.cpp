@@ -8,6 +8,8 @@
 #include "GameObject/Components/Collider/SquareCollider.h"
 #include "UI/Canvas.h"
 #include "UI/UIImage.h"
+#include "UI/UIPanel.h"
+#include "UI/UIText.h"
 
 LevelRules::LevelRules()
 {
@@ -43,13 +45,46 @@ LevelRules::LevelRules()
 
 
 	//Add a canvas
-	std::shared_ptr<Canvas> Canvas1 = std::make_shared<Canvas>(Vec2f(5, 5), Vec2f(350, 100));
-	Canvas1->InitResources();
-	AddCanvas(Canvas1);
+	std::shared_ptr<Canvas> TopHUD = std::make_shared<Canvas>(Vec2f(20, 20), Vec2f(200, 200));
+	sf::Vector2<float> TopHudCanvasSize = TopHUD->GetSize();
+	
+	UIPanel* panel = new UIPanel(Vec2f(0.25f, 0.f), Vec2f((TopHudCanvasSize.x / 2) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 2) / TopHudCanvasSize.y));
+	UIPanel* secondPanel = new UIPanel(Vec2f(0.25f, 0.75f), Vec2f((TopHudCanvasSize.x / 2) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 2) / TopHudCanvasSize.y));
+	TopHUD->AddChild(panel);
+	TopHUD->AddChild(secondPanel);
 
-	//Image 1  WORK
-	UIImage* Image = new UIImage("Resources/spoune.png", Vec2f(1, 1), Vec2f(0.5f, 0.5f));
-	Canvas1->AddChild(Image);
+	UIPanel* leftPanel = new UIPanel(Vec2f(500, 0.25f), Vec2f((TopHudCanvasSize.x / 4) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 4) / TopHudCanvasSize.y));
+	UIPanel* middlePanel = new UIPanel(Vec2f(0.25f, 0.25f), Vec2f((TopHudCanvasSize.x / 6) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 6) / TopHudCanvasSize.y));
+	UIPanel* rightPanel = new UIPanel(Vec2f(0.25f, 0.25f), Vec2f((TopHudCanvasSize.x / 4) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 4) / TopHudCanvasSize.y));
+
+	UIPanel* leftPanel2 = new UIPanel(Vec2f(500, 0.25f), Vec2f((TopHudCanvasSize.x / 4) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 4) / TopHudCanvasSize.y));
+	UIPanel* middlePanel2 = new UIPanel(Vec2f(0.25f, 0.25f), Vec2f((TopHudCanvasSize.x / 6) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 6) / TopHudCanvasSize.y));
+	UIPanel* rightPanel2 = new UIPanel(Vec2f(0.25f, 0.25f), Vec2f((TopHudCanvasSize.x / 4) / TopHudCanvasSize.x, (TopHudCanvasSize.y / 4) / TopHudCanvasSize.y));
+
+	panel->AddChild(leftPanel);
+	panel->AddChild(middlePanel);
+	panel->AddChild(rightPanel);
+
+	secondPanel->AddChild(leftPanel2);
+	secondPanel->AddChild(middlePanel2);
+	secondPanel->AddChild(rightPanel2);
+
+	panel->SetLayout(UILayout::List, UIDirection::Horizontal);
+	panel->SetHorizontalAlignment(UIAlignment::SpaceBetween);
+	panel->SetVerticalAlignment(UIAlignment::Center);
+
+	secondPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
+	secondPanel->SetHorizontalAlignment(UIAlignment::SpaceBetween);
+	secondPanel->SetVerticalAlignment(UIAlignment::Center);
+
+	
+	std::string sTestImage = "spoune.jpg";
+	sf::Font font;
+	font.loadFromFile("arial.ttf");
+
+	
+	AddCanvas(TopHUD);
+	TopHUD->InitResources();
 }
 
 void LevelRules::Start()
