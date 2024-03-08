@@ -53,7 +53,7 @@ void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
     }
 }
 
-// private
+// PRIVATE
 
 void Explosion::InitAnimations()
 {

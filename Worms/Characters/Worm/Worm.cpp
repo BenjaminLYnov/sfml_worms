@@ -208,8 +208,7 @@ void Worm::InitAnimations()
     SwitchAnimation(IdleA);
 }
 
-// void Worm::Move(float DeltaTime)
-void Worm::Move(const sf::Vector2f Value)
+void Worm::Move(float DeltaTime)
 {
     if (bWon)
         return;

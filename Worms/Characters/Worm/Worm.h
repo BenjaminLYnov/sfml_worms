@@ -122,6 +122,9 @@ private:
 
     float movementTimer = 0;
 
+    float AimSpeed = 100;
+    float MaxWalkSpeed = 15000;
+
     float M_PI = 3.14159265358979323846;
     const float MIN_AIM_ANGLE = -82;
     const float MAX_AIM_ANGLE = 82;

@@ -29,6 +29,9 @@ private:
 
     int IndexFrame = 0;
 
+    float LifeTime = 0.7f;
+    float CurrentLifeTime = 0.0f;
+
     void InitAnimations();
 };
 
