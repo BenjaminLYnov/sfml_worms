@@ -17,7 +17,8 @@ FireGun::FireGun() : Weapon()
     SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
-    RigidbodyComponent->GravityScale = 5;
+    RigidbodyComponent->GravityScale = 10;
+    RigidbodyComponent->HorizontalDrag = 50;
 
     Icon = std::make_shared<Sprite>();
     Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
@@ -61,11 +62,11 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
+    {
         WormHited->TakeDamage(DammageAmount);
+    }
 
-    GetWorld()->SpawnGameObject<Explosion>();
-    // Explosion *Ex = GetWorld()->SpawnGameObject<Explosion>();
-
+    // GetWorld()->SpawnGameObject<Explosion>();
     Destroy();
 }
 

@@ -23,13 +23,13 @@ void GameManager::Run()
         return;
 
     // Démarre le level
+    CurrentLevel->SetWindow(Window.get());
     CurrentLevel->Start();
 
     // Instance Clock pour déterminer le Delta Time
     sf::Clock Clock;
-
-    sf::View view(sf::FloatRect(0, 0, 800, 600));
-    Window->setView(view);
+    // sf::View view(sf::FloatRect(0, 0, 800, 600));
+    // Window->setView(view);
 
     // Boucle de jeu principal
     while (Window->isOpen())
@@ -84,6 +84,7 @@ void GameManager::AddLevel(std::shared_ptr<Level> NewLevel)
 void GameManager::InitWindow()
 {
     // Création de la fenêtre SFML
+    // Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(920, 680), "SFML Window");
     Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1920, 1080), "SFML Window");
 
     // Activer le mode plein écran
@@ -99,7 +100,7 @@ void GameManager::ProcessEvents()
     sf::Event Event;
     while (Window->pollEvent(Event))
     {
-      if (Event.type == sf::Event::Closed)
+        if (Event.type == sf::Event::Closed)
             Window->close();
         else if (Event.type == sf::Event::KeyPressed && Event.key.code == sf::Keyboard::Escape)
             Window->close();

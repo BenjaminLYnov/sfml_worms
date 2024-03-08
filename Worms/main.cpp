@@ -79,52 +79,45 @@
 // }
 
 void test() {
-     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+       sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Window");
 
-    // Crée le premier carré
-       sf::RectangleShape square1(sf::Vector2f(100.f, 100.f)); // Taille du carré
-    square1.setFillColor(sf::Color::Red);
-    square1.setPosition(380.f, 250.f); // Position initiale
-    square1.setOrigin(50.f, 50.f); // Le centre du carré
+    // Création de plusieurs formes rectangulaires
+    sf::RectangleShape rectangle1(sf::Vector2f(100, 100));
+    rectangle1.setFillColor(sf::Color::Red);
+    rectangle1.setPosition(50, 50);
 
-    // Création du deuxième carré
-    sf::RectangleShape square2(sf::Vector2f(100.f, 100.f));
-    square2.setFillColor(sf::Color::Blue);
-    square2.setPosition(500.f, 250.f); // Position initiale
-    square2.setOrigin(50.f, 50.f); // Le centre du carré
+    sf::RectangleShape rectangle2(sf::Vector2f(100, 100));
+    rectangle2.setFillColor(sf::Color::Green);
+    rectangle2.setPosition(200, 50);
 
-
-    window.setFramerateLimit(60);
-
-    while (window.isOpen())
-    {
+    // Boucle principale
+    while (window.isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-        }
+            else if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    // Récupérer la position du clic
+                    sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
 
-        // Rotation des carrés
-        square1.rotate(1); // Tourne de 1 degré par frame
-        square2.rotate(-1); // Tourne de -1 degré par frame
+                std::cout << mousePosition.x << "  "  << mousePosition.y << "\n";
 
-        // Vérification des collisions
-        if (square1.getGlobalBounds().intersects(square2.getGlobalBounds())) {
-            // Collision détectée, change la couleur des carrés
-            square1.setFillColor(sf::Color::Green);
-            square2.setFillColor(sf::Color::Yellow);
-        } else {
-            // Pas de collision, remet les couleurs initiales
-            square1.setFillColor(sf::Color::Red);
-            square2.setFillColor(sf::Color::Blue);
+                    // Vérifier si la position du clic est à l'intérieur des limites globales de chaque forme
+                    if (rectangle1.getGlobalBounds().contains(mousePosition))
+                        std::cout << "Rectangle 1 cliqué !" << std::endl;
+                    else if (rectangle2.getGlobalBounds().contains(mousePosition))
+                        std::cout << "Rectangle 2 cliqué !" << std::endl;
+                }
+            }
         }
 
         window.clear();
-        window.draw(square1);
-        window.draw(square2);
+        window.draw(rectangle1);
+        window.draw(rectangle2);
         window.display();
     }
+
 }
 
 
@@ -153,11 +146,11 @@ int main()
     // Add Level
     // SGameManager->AddLevel(std::make_shared<MainMenu>());
     // SGameManager->AddLevel(std::make_shared<LevelRules>());
-    SGameManager->AddLevel(std::make_shared<Party>(1));
-    // SGameManager->AddLevel(std::make_shared<Party>(2));
+    // SGameManager->AddLevel(std::make_shared<Party>(1));
+    SGameManager->AddLevel(std::make_shared<Party>(2));
     // SGameManager->AddLevel(std::make_shared<GraphEdition>());
 
-    // Run Game Loop
+    // // Run Game Loop
     SGameManager->Run();
 
 

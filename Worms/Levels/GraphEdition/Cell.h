@@ -4,12 +4,17 @@
 #pragma once
 
 #include "GameObject/GameObject.h"
+#include "CellType.h"
 
 // Forward declaration de sf::RectangleShape
 namespace sf
 {
     class RectangleShape;
 }
+
+    
+class SquareCollider;
+class TriangleCollider;
 
 
 class Cell : public GameObject
@@ -23,10 +28,21 @@ public:
 
     void SetSize(const sf::Vector2f &NewSize);
 
-private:
+    bool IsSelected(const sf::Vector2f Position) const;
+
+    void SetCellType(const ECellType NewCellType);
+
+    void SetCollision(const bool bCollision);
 
     std::shared_ptr<sf::RectangleShape> Shape; // Représentation graphique pour le rendu
+    
+    ECellType CellType = ECellType::None;
+private:
 
+
+    std::shared_ptr<SquareCollider> SquareColliderComponent;
+    std::shared_ptr<TriangleCollider> TriangleLeftColliderComponent;
+    std::shared_ptr<TriangleCollider> TriangleRightColliderComponent;
 };
 
 #endif

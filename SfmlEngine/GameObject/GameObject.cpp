@@ -41,13 +41,25 @@ void GameObject::Render(sf::RenderWindow &Window) const
 }
 
 // void GameObject::AddComponent(std::shared_ptr<IComponent> Component)
-void GameObject::AddComponent(IComponent* Component)
+void GameObject::AddComponent(IComponent *Component)
 {
     if (!Component)
         return;
     Components.push_back(Component);
     Component->SetOwner(this);
     // Component->SetOwner(shared_from_this());
+}
+
+void GameObject::RemoveComponent(IComponent* ComponentToRemove)
+{
+    if (!ComponentToRemove)
+        return;
+
+    auto It = std::find(Components.begin(), Components.end(), ComponentToRemove);
+    if (It != Components.end()) {
+        Components.erase(It);
+        delete ComponentToRemove; // Supprimez le composant et libérez la mémoire
+    }
 }
 
 void GameObject::AddWorldPosition(const sf::Vector2f &AmountPosition)

@@ -59,6 +59,8 @@ public:
     CircleCollider* Circle;
     TriangleCollider* Triangle;
 
+    bool bEnableCollision = false;
+
 protected:
     sf::Vector2f Offset;
 
@@ -86,7 +88,6 @@ protected:
     void MoveByRigidbody(const HitResult Hit);
     void RestrictRigidbody(const sf::Vector2f Normal);
 
-    void CancelCollisionWithRigidbody(Rigidbody *Rb, ICollider *Other);
     
 private:
     virtual void CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited = nullptr);

@@ -22,9 +22,6 @@ public:
 
     // Getters pour les propriétés physiques
     sf::Vector2f GetVelocity() const;
-    sf::Vector2f GetPreviousPosition() const;
-    sf::Vector2f GetCurrentPosition() const;
-    void UpdatePreviousCurrentPosition();
 
     sf::Vector2f Gravity = sf::Vector2f(0, 5000);
     // sf::Vector2f Gravity = sf::Vector2f(0, 9.8f);
@@ -39,9 +36,6 @@ public:
 private:
     sf::Vector2f Velocity;         // Vitesse du Rigidbody
     sf::Vector2f ForceAccumulator; // Accumulateur de force pour les calculs de physique
-
-    sf::Vector2f CurrentPosition;
-    sf::Vector2f PreviousPosition;
 };
 
 #endif

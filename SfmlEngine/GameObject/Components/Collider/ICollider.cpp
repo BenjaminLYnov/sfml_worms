@@ -273,7 +273,7 @@ void ICollider::Movable(ICollider *Other)
             {
                 Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
                 RestrictRigidbody(Hit.Normal);
-                GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
+                GetOwner()->AddWorldPosition(-Hit.Normal * Hit.CancelDistance);
             }
         }
         else
@@ -295,33 +295,6 @@ void ICollider::RestrictRigidbody(const sf::Vector2f Normal)
         Rb->SetVelocity(sf::Vector2f(0, Rb->GetVelocity().y));
     if (Normal.y)
         Rb->SetVelocity(sf::Vector2f(Rb->GetVelocity().x, 0));
-}
-
-void ICollider::CancelCollisionWithRigidbody(Rigidbody *Rb, ICollider *Other)
-{
-    if (!Rb || !Other)
-        return;
-
-    // Récupère la direction du current vers la previous position
-    const sf::Vector2f Dir = Vector::GetDirection(Rb->GetCurrentPosition(), Rb->GetPreviousPosition());
-
-    if (Dir == sf::Vector2f(0, 0))
-        return;
-
-    bool bIsOnCollision = false;
-
-    int MaxNbIteration = 10;
-    int CurrentNbIteration = 0;
-
-    do
-    {
-        GetOwner()->AddWorldPosition(Dir);
-        Rb->UpdatePreviousCurrentPosition();
-        RestrictRigidbody(Dir);
-        const HitResult Hit = TestCollision(Other);
-        bIsOnCollision = Hit.bIsOnCollision;
-        CurrentNbIteration++;
-    } while (bIsOnCollision && CurrentNbIteration < MaxNbIteration);
 }
 
 void ICollider::MoveByRigidbody(const HitResult Hit)

@@ -2,12 +2,12 @@
 #define SELECTCELLACTION_H
 
 #pragma once
+#include "GameObject/Components/Input/InputAction/InputAction.h"
 
-class SelectCellAction
+class SelectCellAction : public InputAction
 {
 public:
     SelectCellAction();
-    ~SelectCellAction();
 
 private:
 

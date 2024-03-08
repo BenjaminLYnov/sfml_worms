@@ -8,21 +8,27 @@
 #include "GameObject/Components/Collider/SquareCollider.h"
 #include "GameObject/Components/Collider/CircleCollider.h"
 #include "GameObject/Components/Collider/TriangleCollider.h"
+#include "GameObject/Components/Camera/Camera.h"
 #include <SFML/Graphics/RectangleShape.hpp> // Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
-#include <SFML/Graphics/ConvexShape.hpp> // Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
+#include <SFML/Graphics/ConvexShape.hpp>	// Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
 
 #include "iostream"
 
 Party::Party(const int _NbPlayer) : NbPlayer(_NbPlayer)
+{
+}
+
+void Party::Start()
 {
 	// Instance Main Character
 	InitPlayers();
 
 	// Shapes
 	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
-	Square1->SetWorldPosition(sf::Vector2f(200, 400));
+	Square1->SetWorldPosition(sf::Vector2f(0, 400));
 	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(400, 100));
-	Square1->SquareColliderComponent->SetSize(sf::Vector2f(600, 100));
+	Square1->SquareColliderComponent->SetSize(sf::Vector2f(2000, 10));
+	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(600, 100));
 	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
 	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(200, 50));
 	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
@@ -47,7 +53,7 @@ Party::Party(const int _NbPlayer) : NbPlayer(_NbPlayer)
 	// Triangle1->TriangleColliderComponent->Shape->rotate(70);
 	Triangle1->TriangleColliderComponent->Shape->rotate(40);
 	// Triangle1->TriangleColliderComponent->Shape->rotate(120);
-	AddGameObject(Triangle1);
+	// AddGameObject(Triangle1);
 
 	std::shared_ptr<Square> Square2 = std::make_shared<Square>();
 	Square2->SetWorldPosition(sf::Vector2f(400, 340));
@@ -61,18 +67,13 @@ Party::Party(const int _NbPlayer) : NbPlayer(_NbPlayer)
 	Square3->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
 	Square3->SquareColliderComponent->SetMobility(EMobility::Static);
 	// AddGameObject(Square3);
-}
 
-void Party::Start()
-{
 	Level::Start();
 }
 
 void Party::Update(const float DeltaTime)
 {
 	Level::Update(DeltaTime);
-
-	// CurrentWorm->SquareColliderComponent->Shape->rotate(50 * DeltaTime);
 }
 
 void Party::SwitchCharacter()
@@ -98,12 +99,19 @@ void Party::SwitchCharacter()
 				NextWorm = Worms[0];
 			}
 
+			CurrentWorm->CameraComponent->SetWindow(nullptr);
+
+			const sf::Vector2f CurrentViewCenter = CurrentWorm->CameraComponent->CurrentViewCenter;
+			
 			CurrentWorm = NextWorm;
+
+			SetCharacterControlled(CurrentWorm);
 
 			CurrentWorm->bCanFire = true;
 			CurrentWorm->bCanMove = true;
-
-			SetCharacterControlled(CurrentWorm);
+			CurrentWorm->CameraComponent->SetWindow(GetWindow());
+			CurrentWorm->CameraComponent->CurrentViewCenter = CurrentViewCenter;
+			CurrentWorm->CameraComponent->bEnableLag = true;
 
 			break;
 		}
@@ -130,9 +138,8 @@ void Party::InitPlayers()
 		return;
 
 	SetCharacterControlled(CurrentWorm);
-	// CurrentWorm->SquareColliderComponent->Shape->setRotation(30);
-	// CurrentWorm->SetWorldPosition(sf::Vector2f(0, 0));
-
 	CurrentWorm->bCanFire = true;
 	CurrentWorm->bCanMove = true;
+	CurrentWorm->CameraComponent->SetWindow(GetWindow());
+	CurrentWorm->CameraComponent->bEnableLag = true;
 }

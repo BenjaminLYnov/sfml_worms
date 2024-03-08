@@ -78,9 +78,7 @@ void SquareCollider::SetSize(const sf::Vector2f &NewSize)
     if (!Shape)
         return;
     Shape->setSize(Size);
-    Shape->setOrigin(Size.x / 2, Size.y / 2);
-    Rect.width = Size.x;
-    Rect.height = Size.y;
+    Shape->setOrigin(sf::Vector2f(Size.x / 2, Size.y / 2));
 }
 
 sf::Vector2f SquareCollider::GetSize() const
@@ -195,7 +193,6 @@ bool SquareCollider::isPointInRotatedRect(const sf::Vector2f &point, const sf::R
     sf::Transform inverse = rect.getInverseTransform();
     sf::Vector2f localPoint = inverse.transformPoint(point);
     sf::FloatRect bounds = rect.getLocalBounds();
-
     return bounds.contains(localPoint);
 }
 
@@ -377,8 +374,8 @@ sf::Vector2f SquareCollider::GetVectorNormal(const sf::RectangleShape &Mover, co
         SmallestAxis = -SmallestAxis;
     }
 
-    if (Mover.getPosition().x < Obstacle.getPosition().x)
-        SmallestAxis.x = -1 * SmallestAxis.x;
+    // if (Mover.getPosition().x < Obstacle.getPosition().x)
+    //     SmallestAxis.x = -1 * SmallestAxis.x;
 
     return SmallestAxis;
 }

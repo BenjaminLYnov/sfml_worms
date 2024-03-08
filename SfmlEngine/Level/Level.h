@@ -38,6 +38,9 @@ public:
     // Effectue le rendu de tous les GameObjects du niveau
     virtual void Render(sf::RenderWindow &Window) const;
 
+    virtual void SetWindow(sf::RenderWindow *_Window);
+    virtual sf::RenderWindow *GetWindow();
+
     // Assigne le Character que le joueur contrôle dans le level
     // void SetCharacterControlled(Character* NewCharacterControlled);
     void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
@@ -45,7 +48,7 @@ public:
     void ManageCollision();
 
     void RemoveGameObject(GameObject *GameObjectToRemove);
-     
+
     float GetWorldDeltaSecond() const;
 
     std::shared_ptr<Character> GetCharacterControlled();
@@ -56,8 +59,9 @@ protected:
     // Character *CharacterControlled;
     std::shared_ptr<Character> CharacterControlled;
 
+   sf::RenderWindow *Window = nullptr;
+   
 private:
-
     float DeltaSecond;
 };
 

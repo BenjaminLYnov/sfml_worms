@@ -46,7 +46,7 @@ Worm::Worm() : Character()
     // SquareColliderComponent = std::make_shared<TriangleCollider>();
     // SquareColliderComponent = std::make_shared<CircleCollider>(50);
     // SquareColliderComponent = std::make_shared<CircleCollider>();
-    // SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
+    SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::OnCollisionEnter);
 
@@ -245,9 +245,8 @@ void Worm::Fire()
     sf::Vector2f force = AimDirection * 20000.f;
 
     FireGunS->AddForce(force);
-    // FireGunS->SetOwner(this);
     FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
-    DeleguateActionDone->Broadcast();
+    // DeleguateActionDone->Broadcast();
 
     bCanFire = false;
     bCanMove = false;
@@ -256,7 +255,7 @@ void Worm::Fire()
 void Worm::Jump()
 {
     RigidbodyComponent->SetVelocity(sf::Vector2f(RigidbodyComponent->GetVelocity().x, 0));
-    RigidbodyComponent->AddForce(sf::Vector2f(0, -70000));
+    RigidbodyComponent->AddForce(sf::Vector2f(0, -30000));
 }
 
 // PRIVATE

@@ -17,3 +17,15 @@ T* GameObject::GetComponent() const
     }
     return nullptr;
 }
+
+template <typename T>
+void GameObject::RemoveComponent()
+{
+    auto it = std::find_if(Components.begin(), Components.end(),
+                           [](IComponent* component) { return dynamic_cast<T*>(component) != nullptr; });
+
+    if (it != Components.end()) {
+        Components.erase(it);
+    }
+}
+

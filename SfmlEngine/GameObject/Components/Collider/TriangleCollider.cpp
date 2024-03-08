@@ -64,10 +64,10 @@ void TriangleCollider::SetPoints(const sf::Vector2f Point1, const sf::Vector2f P
     Shape->setPoint(2, Point3);
 
     // Calcul du centre de masse du triangle
-    sf::Vector2f Center((Point1.x + Point2.x + Point3.x) / 3, (Point1.y + Point2.y + Point3.y) / 3);
+    // sf::Vector2f Center((Point1.x + Point2.x + Point3.x) / 3, (Point1.y + Point2.y + Point3.y) / 3);
 
     // Définition de l'origine du triangle au centre de masse
-    Shape->setOrigin(Center);
+    // Shape->setOrigin(Center);
 }
 
 // Fonction pour calculer la projection d'un polygone sur un axe

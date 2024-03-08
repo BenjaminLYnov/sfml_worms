@@ -51,8 +51,6 @@ void Rigidbody::Update(const float DeltaTime)
         Velocity.x = 0;
     if (std::abs(Velocity.y) < 0.1)
         Velocity.y = 0;
-
-    UpdatePreviousCurrentPosition();
 }
 
 void Rigidbody::AddForce(const sf::Vector2f &Force)
@@ -75,18 +73,3 @@ sf::Vector2f Rigidbody::GetVelocity() const
     return Velocity;
 }
 
-sf::Vector2f Rigidbody::GetCurrentPosition() const
-{
-    return CurrentPosition;
-}
-
-sf::Vector2f Rigidbody::GetPreviousPosition() const
-{
-    return PreviousPosition;
-}
-
-void Rigidbody::UpdatePreviousCurrentPosition()
-{
-    PreviousPosition = CurrentPosition;
-    CurrentPosition = GetOwner()->GetWorldPosition();
-}

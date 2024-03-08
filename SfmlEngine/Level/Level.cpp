@@ -74,6 +74,9 @@ void Level::ManageCollision()
         if (!GameObjectToCheckCollision)
             continue;
 
+        if (!GameObjectToCheckCollision.use_count())
+            continue;
+
         // Récupère le collider du game object actuelle de la boucle
         ICollider *ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
         // std::shared_ptr<ICollider> ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
@@ -82,14 +85,19 @@ void Level::ManageCollision()
         if (!ColliderToCheck)
             continue;
 
+        if (ColliderToCheck->bEnableCollision)
+            continue;
+
         // Les parcourir tous les Game Objects en ignorant lui même
         for (std::shared_ptr<GameObject> OtherGameObject : GameObjects)
         {
-
             if (!OtherGameObject)
                 continue;
 
             if (OtherGameObject == GameObjectToCheckCollision)
+                continue;
+
+            if (!OtherGameObject.use_count())
                 continue;
 
             // Récupère le Collider de l'autre game object actuelle de la boucle
@@ -97,6 +105,9 @@ void Level::ManageCollision()
 
             // Vérifier si l'autre collider est valide
             if (!OtherCollider)
+                continue;
+
+            if (OtherCollider->bEnableCollision)
                 continue;
 
             // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)
@@ -117,6 +128,16 @@ void Level::RemoveGameObject(GameObject *GameObjectToRemove)
 float Level::GetWorldDeltaSecond() const
 {
     return DeltaSecond;
+}
+
+void Level::SetWindow(sf::RenderWindow *_Window)
+{
+    Window = _Window;
+}
+
+sf::RenderWindow *Level::GetWindow()
+{
+    return Window;
 }
 
 std::shared_ptr<Character> Level::GetCharacterControlled()
