@@ -81,9 +81,16 @@ void LevelRules::SetupUI()
 	Level::SetupUI();
 
 	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
-	std::shared_ptr<Canvas> TopCanvas = UI->CreateTopCanvas();
-	std::shared_ptr<Canvas> DownCanvas = UI->CreateDownCanvas();
-
-	AddCanvas(TopCanvas);
-	AddCanvas(DownCanvas);
+	
+	AddCanvas(UI->CreateTopCanvas());
+	AddCanvas(UI->CreateDownCanvas());
+	
+	PlayerInfos* Player1Infos = UI->GetPlayer1Infos();
+	PlayerInfos* Player2Infos = UI->GetPlayer2Infos();
+	
+	Player1Infos->UpdateName("SexyWorm");
+	Player1Infos->UpdateHealth(10);
+	
+	Player2Infos->UpdateName("SexyWorm2");
+	Player2Infos->UpdateHealth(20);
 }

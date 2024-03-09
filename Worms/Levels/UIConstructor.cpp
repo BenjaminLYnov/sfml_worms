@@ -10,8 +10,8 @@ UIConstructor::UIConstructor()
 {
 	font = sf::Font();
 	font.loadFromFile("arial.ttf");
-	player1Infos = PlayerInfos();
-	player2Infos = PlayerInfos();
+	structPlayer1Infos = new PlayerInfos();
+	structPlayer2Infos = new PlayerInfos();
 }
 
 std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
@@ -32,6 +32,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1AvatarPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
 
 	UIImage* Player1Avatar = new UIImage("Sprites/spoune.jpg", Vec2f(0, 0), Vec2f(0.4f, 1));
+	structPlayer1Infos->SetPortrait(Player1Avatar);
 	Player1AvatarPanel->AddChild(Player1Avatar);
 	
 	UIPanel* Player1Infos = new UIPanel(Vec2f(0, 0), Vec2f(0.5f, 0.8f));
@@ -39,7 +40,8 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1Infos->SetAlignment(UIAlignment::Center, UIAlignment::Center);
 	Player1AvatarPanel->AddChild(Player1Infos);
 	
-	UIText* Player1Name = new UIText("Joachim", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.4f), 20);
+	UIText* Player1Name = new UIText("Joachim", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f,0.4f), 20);
+	structPlayer1Infos->SetName(Player1Name);
 	Player1Infos->AddChild(Player1Name);
 
 	UIPanel* Player1LifePanel = new UIPanel(Vec2f(0, 0), Vec2f(1.f, 0.5f));
@@ -47,6 +49,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1LifePanel->SetAlignment(UIAlignment::Start, UIAlignment::End);
 
 	UIText* Player1Life = new UIText("100", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.5f), 20);
+	structPlayer1Infos->SetHealth(Player1Life);
 	Player1LifePanel->AddChild(Player1Life);
 
 	UIImage* Player1Heart = new UIImage("Sprites/heart.png", Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
@@ -71,9 +74,11 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player2AvatarPanel->AddChild(Player2Infos);
 
 	UIImage* Player2Avatar = new UIImage("Sprites/spoune.jpg", Vec2f(0, 0), Vec2f(0.4f, 1));
+	structPlayer2Infos->SetPortrait(Player2Avatar);
 	Player2AvatarPanel->AddChild(Player2Avatar);
 
 	UIText* Player2Name = new UIText("Frederic", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.4f), 20);
+	structPlayer2Infos->SetName(Player2Name);
 	Player2Infos->AddChild(Player2Name);
 
 	UIPanel* Player2LifePanel = new UIPanel(Vec2f(0, 0), Vec2f(1.f, 0.5f));
@@ -81,6 +86,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player2LifePanel->SetAlignment(UIAlignment::Start, UIAlignment::End);
 
 	UIText* PlayerLife = new UIText("100", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.5f), 20);
+	structPlayer2Infos->SetHealth(PlayerLife);
 	Player2LifePanel->AddChild(PlayerLife);
 
 	UIImage* Player2Heart = new UIImage("Sprites/heart.png", Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);

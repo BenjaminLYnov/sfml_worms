@@ -8,7 +8,7 @@ UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_s
 
 void UIElement::InitResources()
 {
-    drawDebug = true;
+    drawDebug = false;
     debugRectangle.setOutlineColor(sf::Color::Red);
     debugRectangle.setOutlineThickness(1);
     debugRectangle.setFillColor(sf::Color::Transparent);
