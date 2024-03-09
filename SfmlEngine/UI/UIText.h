@@ -8,6 +8,8 @@ public:
     virtual const sf::FloatRect& UpdateRect(const sf::FloatRect& _parentRect);
     virtual void InitResources() override;
     virtual void Draw(sf::RenderWindow& _window) override;
+    virtual void SetVisibility(bool _vis) override;
+    virtual void SetGreyed(bool _greyed) override;
 
     void SetText(const std::string& _text);
     void SetFont(const sf::Font& _font);
@@ -15,6 +17,7 @@ public:
 
 protected:
     std::string text;
+    sf::Color storedColor;
     sf::Color color;
     sf::Color outlineColor;
     sf::Text textObj;

@@ -16,11 +16,6 @@ void UIText::InitResources()
     SetColor(color, outlineColor);
 }
 
-sf::Vector2f round(const sf::Vector2f vector)
-{
-    return sf::Vector2f{ std::round(vector.x), std::round(vector.y) };
-}
-
 const sf::FloatRect& UIText::UpdateRect(const sf::FloatRect& _parentRect)
 {
     const sf::FloatRect& rect = UIElement::UpdateRect(_parentRect);
@@ -37,6 +32,18 @@ void UIText::Draw(sf::RenderWindow& _window)
     UIElement::Draw(_window);
 }
 
+void UIText::SetVisibility(bool _vis)
+{
+    UIElement::SetVisibility(_vis);
+    textObj.setFillColor(_vis ? storedColor : sf::Color::Transparent);
+}
+
+void UIText::SetGreyed(bool _greyed)
+{
+    UIElement::SetGreyed(_greyed);
+    SetColor(_greyed ? sf::Color(100, 100, 100) : storedColor, outlineColor);
+}
+
 void UIText::SetText(const std::string& _text)
 {
     text = _text;
@@ -50,6 +57,7 @@ void UIText::SetFont(const sf::Font& _font)
 
 void UIText::SetColor(const sf::Color& _color, const sf::Color& _outlineColor)
 {
+    storedColor = color;
     color = _color;
     outlineColor = _outlineColor;
     textObj.setOutlineColor(outlineColor);

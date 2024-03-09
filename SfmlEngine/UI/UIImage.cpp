@@ -12,10 +12,12 @@ void UIImage::InitResources()
     texture.loadFromFile(url);
     sprite.setTexture(texture);
     SetColor(color);
+    storedColor = color;
 }
 
 void UIImage::SetColor(const sf::Color& _color)
 {
+    storedColor = color;
     color = _color;
     sprite.setColor(color);
 }
@@ -44,4 +46,16 @@ void UIImage::Draw(sf::RenderWindow& _window)
 {
     _window.draw(sprite);
     UIElement::Draw(_window);
+}
+
+void UIImage::SetVisibility(bool _vis)
+{
+    UIElement::SetVisibility(_vis);
+    SetColor(_vis ? storedColor : sf::Color::Transparent);
+}
+
+void UIImage::SetGreyed(bool _greyed)
+{
+    UIElement::SetGreyed(_greyed);
+    SetColor(_greyed ? sf::Color(100, 100, 100) : storedColor);
 }

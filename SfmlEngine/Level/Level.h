@@ -41,7 +41,7 @@ public:
     // Effectue le rendu de tous les GameObjects du niveau
     virtual void Render(sf::RenderWindow &Window) const;
 
-    void SetupUI(sf::RenderWindow &Window) const;
+    virtual void SetupUI(){};
     //Effectue le rendu de l'UI du niveau
     void RenderUI(sf::RenderWindow &Window) const;
 

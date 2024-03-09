@@ -8,6 +8,7 @@ UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_s
 
 void UIElement::InitResources()
 {
+    drawDebug = true;
     debugRectangle.setOutlineColor(sf::Color::Red);
     debugRectangle.setOutlineThickness(1);
     debugRectangle.setFillColor(sf::Color::Transparent);
@@ -53,6 +54,14 @@ const sf::FloatRect& UIElement::UpdateRect(const sf::FloatRect& parentRect)
         child->UpdateRect(renderRect);
 
     return renderRect;
+}
+
+void UIElement::SetVisibility(bool _vis)
+{
+    for (auto child : childrenList)
+    {
+        child->SetVisibility(_vis);
+    }
 }
 
 float UIElement::GetTotalChildrenWidth()

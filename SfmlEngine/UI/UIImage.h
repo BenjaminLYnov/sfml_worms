@@ -8,12 +8,15 @@ public:
     virtual const sf::FloatRect& UpdateRect(const sf::FloatRect& _parentRect);
     virtual void InitResources() override;
     virtual void Draw(sf::RenderWindow& _window) override;
+    virtual void SetVisibility(bool _vis) override;
+    virtual void SetGreyed(bool _greyed) override;
 
     void SetColor(const sf::Color& _color);
     //void SetUv(const Vec2f& _start, const Vec2f& _end);
 
 protected:
 
+    sf::Color storedColor;
     sf::Color color;
     std::string url;
     sf::Sprite sprite;

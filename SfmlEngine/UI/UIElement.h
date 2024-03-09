@@ -17,7 +17,7 @@ protected:
 
 public:
 
-    bool drawDebug = true;
+    bool drawDebug;
 
     UIElement(const Vec2f& _pos, const Vec2f& _size);
 
@@ -28,6 +28,12 @@ public:
     void SetPosY(float y) { pos.y = y; }
 
     void SetSize(const Vec2f& _size) { size = _size; }
+
+    bool greyed;
+    bool hidden;
+
+    virtual void SetGreyed(bool _greyed){greyed = _greyed;}
+    virtual void SetVisibility(bool _vis);
 
     float GetTotalChildrenWidth();
     float GetTotalChildrenHeight();

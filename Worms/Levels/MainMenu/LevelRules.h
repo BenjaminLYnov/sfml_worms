@@ -13,6 +13,8 @@ public:
 
 	void SwitchCharacter();
 
+	virtual void SetupUI() override;
+
 private:
 	std::vector<std::shared_ptr<Worm>> Worms;
 

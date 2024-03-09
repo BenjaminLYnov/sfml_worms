@@ -20,7 +20,8 @@ enum class UIAlignment
     Start,
     Center,
     End,
-    SpaceBetween
+    SpaceBetween,
+    SpaceAround
 };
 
 class UIPanel : public UIElement
@@ -45,6 +46,7 @@ public:
     void SetLayout(UILayout _layout, UIDirection _direction){ layout = _layout; direction = _direction; }
     void SetHorizontalAlignment(UIAlignment _align) { horizontal = _align; }
     void SetVerticalAlignment(UIAlignment _align) { vertical = _align; }
+    void SetAlignment(UIAlignment _horizontal, UIAlignment _vertical) { horizontal = _horizontal; vertical = _vertical; }
 
     UIAlignment GetHorizontalAlignment() const { return horizontal; }
     UIAlignment GetVerticalAlignment() const { return vertical; }
