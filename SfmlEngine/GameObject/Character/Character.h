@@ -7,6 +7,7 @@
 class StateMode;
 class CharacterRun;
 class Input;
+class Camera;
 
 class Character : public GameObject
 {
@@ -15,7 +16,7 @@ public:
 
     void Update(const float DeltaTime) override;
 
-    std::shared_ptr<Input> GetInputComponent();
+    Input* GetInputComponent();
 
     void SetInputMovement(const sf::Vector2f NewInputMovement);
 
@@ -24,6 +25,8 @@ public:
     float MaxWalkSpeed = 500;
     float MinWalkSpeed = 20;
 
+    std::shared_ptr<Camera> CameraComponent;
+    
 protected:
     std::shared_ptr<StateMode> StateModeComponent;
     std::shared_ptr<Input> InputComponent;

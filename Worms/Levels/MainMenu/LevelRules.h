@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Level/Level.h"
 
 class Worm;
@@ -13,9 +13,13 @@ public:
 
 	void SwitchCharacter();
 
+protected:
+	void InitPlayers();
+
 	virtual void SetupUI() override;
 
 private:
-	std::vector<std::shared_ptr<Worm>> Worms;
+	std::shared_ptr<Worm> CurrentWorm;
 
-};
+	const int NbPlayer = 2;
+}; 

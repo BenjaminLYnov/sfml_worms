@@ -5,6 +5,9 @@
 
 #include "GameObject/GameObject.h"
 
+class CircleCollider;
+
+
 class Circle : public GameObject
 {
 public:
@@ -12,6 +15,9 @@ public:
 
     void Start() override;
     void Update(const float DeltaTime) override;
+
+    std::shared_ptr<CircleCollider> CircleColliderComponent;
+
 
 private:
 };

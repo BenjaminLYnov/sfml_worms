@@ -46,9 +46,5 @@ void IComponent::SetOwner(GameObject *Owner)
 GameObject *IComponent::GetOwner()
 // std::shared_ptr<GameObject> IComponent::GetOwner()
 {
-    // Création d'un std::shared_ptr à partir du pointeur brut
-    // std::shared_ptr<GameObject> SharedPtr(Owner);
-
-    // return SharedPtr;
     return Owner;
 }

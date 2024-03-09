@@ -8,7 +8,7 @@
 
 Level::Level()
 {
-    // Initialisation du niveau, si nécessaire
+    DeltaSecond = 0;
 }
 
 void Level::Start()
@@ -49,6 +49,7 @@ void Level::ProcessEvents()
 
 void Level::Update(const float DeltaTime)
 {
+    DeltaSecond = DeltaTime;
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Update(DeltaTime);
@@ -73,44 +74,63 @@ void Level::RenderUI(sf::RenderWindow& Window) const
     }
 }
 
-void Level::SetCharacterControlled(Character *NewCharacterControlled)
+void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
+// void Level::SetCharacterControlled(Character* NewCharacterControlled)
 {
     if (!NewCharacterControlled)
         return;
     CharacterControlled = NewCharacterControlled;
-    // std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
+    CharacterControlled->GetInputComponent()->SetNeedKeyReleaseFirst(true);
 }
 
-void Level::OnCollision()
+void Level::ManageCollision()
 {
+    std::vector<std::shared_ptr<GameObject>> AllGameObjects = GameObjects;
+
     // Parcours tous les game object du level
-    for (std::shared_ptr<GameObject> GameObjectToCheckCollision : GameObjects)
+    for (std::shared_ptr<GameObject> GameObjectToCheckCollision : AllGameObjects)
     {
         if (!GameObjectToCheckCollision)
             continue;
 
+        if (!GameObjectToCheckCollision.use_count())
+            continue;
+
         // Récupère le collider du game object actuelle de la boucle
-        std::shared_ptr<ICollider> ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
+        ICollider *ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
+        // std::shared_ptr<ICollider> ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
 
         // Vérifier si le collider est valide
         if (!ColliderToCheck)
             continue;
 
+        if (ColliderToCheck->bEnableCollision)
+            continue;
+
         // Les parcourir tous les Game Objects en ignorant lui même
         for (std::shared_ptr<GameObject> OtherGameObject : GameObjects)
         {
+            if (!OtherGameObject)
+                continue;
+
             if (OtherGameObject == GameObjectToCheckCollision)
                 continue;
 
+            if (!OtherGameObject.use_count())
+                continue;
+
             // Récupère le Collider de l'autre game object actuelle de la boucle
-            std::shared_ptr<ICollider> OtherCollider = OtherGameObject->GetComponent<ICollider>();
+            ICollider *OtherCollider = OtherGameObject->GetComponent<ICollider>();
 
             // Vérifier si l'autre collider est valide
             if (!OtherCollider)
                 continue;
 
+            if (OtherCollider->bEnableCollision)
+                continue;
+
             // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)
-            ColliderToCheck->OnCollision(OtherCollider);
+            ColliderToCheck->ManageCollision(OtherCollider);
         }
     }
 }
@@ -118,10 +138,31 @@ void Level::OnCollision()
 void Level::RemoveGameObject(GameObject *GameObjectToRemove)
 {
     // Utiliser std::remove_if pour trouver et supprimer l'élément
-    // GameObjects.erase(std::remove_if(GameObjects.begin(), GameObjects.end(),
-    //                                  [GameObjectToRemove](const std::shared_ptr<GameObject> &ptr)
-    //                                  { return ptr.get() == GameObjectToRemove; }),
-    //                   GameObjects.end());
+    GameObjects.erase(std::remove_if(GameObjects.begin(), GameObjects.end(),
+                                     [GameObjectToRemove](const std::shared_ptr<GameObject> &ptr)
+                                     { return ptr.get() == GameObjectToRemove; }),
+                      GameObjects.end());
+}
+
+float Level::GetWorldDeltaSecond() const
+{
+    return DeltaSecond;
+}
+
+void Level::SetWindow(sf::RenderWindow *_Window)
+{
+    Window = _Window;
+}
+
+sf::RenderWindow *Level::GetWindow()
+{
+    return Window;
+}
+
+std::shared_ptr<Character> Level::GetCharacterControlled()
+// Character* Level::GetCharacterControlled()
+{
+    return CharacterControlled;
 }
 
 // PRIVATE

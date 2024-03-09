@@ -27,7 +27,7 @@ public:
     std::vector<std::shared_ptr<GameObject>> GetAllGameObjects();
 
     template <typename T>
-    std::vector<T *> GetAllGameObjectByClass();
+    std::vector<std::shared_ptr<T>> GetAllGameObjectByClass();
 
     template <typename T>
     T *SpawnGameObject(const sf::Vector2f Location = sf::Vector2f(0, 0), const sf::Vector2f Scale = sf::Vector2f(1, 1), const float Rotation = 0.f);
@@ -45,19 +45,32 @@ public:
     //Effectue le rendu de l'UI du niveau
     void RenderUI(sf::RenderWindow &Window) const;
 
-    // Assigne le Character que le joueur contrôle dans le level
-    void SetCharacterControlled(Character *NewCharacterControlled);
+    virtual void SetWindow(sf::RenderWindow *_Window);
+    virtual sf::RenderWindow *GetWindow();
 
-    void OnCollision();
+    // Assigne le Character que le joueur contrôle dans le level
+    // void SetCharacterControlled(Character* NewCharacterControlled);
+    void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
+
+    void ManageCollision();
 
     void RemoveGameObject(GameObject *GameObjectToRemove);
 
+    float GetWorldDeltaSecond() const;
+
+    std::shared_ptr<Character> GetCharacterControlled();
+    // Character* GetCharacterControlled();
+
 protected:
     std::vector<std::shared_ptr<GameObject>> GameObjects;
+    // Character *CharacterControlled;
+    std::shared_ptr<Character> CharacterControlled;
     std::vector<std::shared_ptr<Canvas>> Canvases;
-    Character *CharacterControlled;
 
+   sf::RenderWindow *Window = nullptr;
+   
 private:
+    float DeltaSecond;
 };
 
 #include "Level.tpp"

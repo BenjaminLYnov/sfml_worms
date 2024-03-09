@@ -1,14 +1,18 @@
 #include "Vector.h"
 #include <cmath>
-
+#include <iostream>
 #define PI 3.14159265358979323846 /* pi */
 
 void Vector::Normalized(sf::Vector2f &Vec)
 {
-	if (Vec.y != 0 || Vec.x != 0)
+	// Calculer la longueur du vecteur
+	float length = std::sqrt(Vec.x * Vec.x + Vec.y * Vec.y);
+
+	// Assurer que la longueur n'est pas nulle pour éviter la division par zéro
+	if (length != 0)
 	{
-		float norme = std::sqrt(Vec.x * Vec.x + Vec.y * Vec.y);
-		Vec = Vec / norme;
+		// Normaliser le vecteur en divisant chaque composante par sa longueur
+		Vec = sf::Vector2f(Vec.x / length, Vec.y / length);
 	}
 }
 
@@ -17,6 +21,41 @@ sf::Vector2f Vector::GetDirection(sf::Vector2f VecStart, sf::Vector2f VecEnd)
 	sf::Vector2f Direction = (VecEnd - VecStart);
 	Normalized(Direction);
 	return Direction;
+}
+
+sf::Vector2f Vector::GetDirectionVector(const float &Degrees)
+{
+	// Convertir l'angle en radians
+	float Radians = Degrees * 3.14159265358979323846 / 180.0;
+
+	// Calculer les composantes x et y du vecteur direction
+	float X = std::cos(Radians);
+	float Y = std::sin(Radians);
+
+	return sf::Vector2f(X, Y);
+}
+
+sf::Vector2f Vector::AdjustVectorLength(const sf::Vector2f &Vector, const float &NewLength)
+{
+	// Normaliser le vecteur direction
+	sf::Vector2f NormalizedVector = Vector / std::sqrt(Vector.x * Vector.x + Vector.y * Vector.y);
+
+	// Multiplier le vecteur normalisé par la nouvelle longueur
+	return NormalizedVector * NewLength;
+}
+
+sf::Vector2f Vector::RotateVector(const sf::Vector2f &Vector, const float &Degrees)
+{
+	// Convertir l'angle en radians
+	float Radians = Degrees * 3.14159265358979323846 / 180.0;
+
+	// Calculer les composantes x et y du vecteur après la rotation
+	float newX = Vector.x * std::cos(Radians) - Vector.y * std::sin(Radians);
+	float newY = Vector.x * std::sin(Radians) + Vector.y * std::cos(Radians);
+
+	sf::Vector2f NewVector = sf::Vector2f(newX, newY);
+	// Normalized(NewVector);
+	return NewVector;
 }
 
 float Vector::GetDistance(sf::Vector2f Vec1, sf::Vector2f Vec2)
@@ -36,6 +75,11 @@ float Vector::DotProduct(sf::Vector2f Vec1, sf::Vector2f Vec2)
 	deg = acos(deg) * 180 / PI;
 
 	return deg;
+}
+
+float Vector::CrossProduct(const sf::Vector2f &u, const sf::Vector2f &v)
+{
+	return u.x * v.y - u.y * v.x;
 }
 
 bool Vector::IsColineaire(sf::Vector2f Vec1, sf::Vector2f Vec2)

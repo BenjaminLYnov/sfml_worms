@@ -1,7 +1,7 @@
 #include "Level.h"
 
 template <typename T>
-std::vector<T*> Level::GetAllGameObjectByClass()
+std::vector<std::shared_ptr<T>> Level::GetAllGameObjectByClass()
 {
     static_assert(std::is_base_of<GameObject, T>::value, "T must be derived from GameObject");
 

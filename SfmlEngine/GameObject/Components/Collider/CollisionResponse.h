@@ -1,6 +1,7 @@
 #pragma once
 
-enum class ECollisionResponse {
+enum class ECollisionResponse
+{
     Ignore,
     Overlap,
     Block

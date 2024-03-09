@@ -7,6 +7,7 @@
 #include "iostream"
 #include "Deleguate.h"
 #include "Characters/Worm/Worm.h"
+#include "Explosion.h"
 
 FireGun::FireGun() : Weapon()
 {
@@ -16,12 +17,14 @@ FireGun::FireGun() : Weapon()
     SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
+    RigidbodyComponent->GravityScale = 10;
+    RigidbodyComponent->HorizontalDrag = 50;
 
     Icon = std::make_shared<Sprite>();
     Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
 
-    AddComponent(SquareColliderComponent);
-    AddComponent(RigidbodyComponent);
+    AddComponent(SquareColliderComponent.get());
+    AddComponent(RigidbodyComponent.get());
     // AddComponent(Icon);
     // AddComponent(Animation);
 
@@ -59,8 +62,11 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
+    {
         WormHited->TakeDamage(DammageAmount);
+    }
 
+    // GetWorld()->SpawnGameObject<Explosion>();
     Destroy();
 }
 

@@ -9,9 +9,15 @@
 #include "ColliderCallback.h"
 #include "Mobility.h"
 #include "CollisionResponse.h"
+#include <memory>
+#include "HitResult.h"
 
 class Transform;
 class GameObject;
+class SquareCollider;
+class CircleCollider;
+class TriangleCollider;
+class Rigidbody;
 
 class ICollider : public IComponent
 {
@@ -25,10 +31,11 @@ public:
     virtual void Start() override = 0;
     virtual void Update(const float DeltaTime) override = 0;
     virtual void Render(sf::RenderWindow &Window) override = 0;
+    virtual void CancelCollision(ICollider *Other) = 0;
 
     // Méthodes spécifiques à ICollider.
-    virtual void OnCollision(std::shared_ptr<ICollider> Other) = 0;
-    virtual bool IsOnCollision(std::shared_ptr<ICollider> Other) = 0; // Pour tester une collision
+    void ManageCollision(ICollider *Other);
+    HitResult TestCollision(const ICollider *Other, const bool bCheckMirror = true) const;
 
     void SetOffset(const sf::Vector2f &NewOffset);
     // void SetRelativeRotation(float rotation);
@@ -36,8 +43,6 @@ public:
     sf::Vector2f GetOffset() const;
     // sf::Vector2f GetRelativeScale() const;
     // float GetRelativeRotation() const;
-
-    void SetWasOnCollision(bool _isOnCollision);
 
     void SetMobility(const EMobility NewMobility);
     EMobility GetMobility() const;
@@ -47,6 +52,14 @@ public:
 
     template <typename T, typename Method>
     void AddCallback(ECollisionEvent CollisionEvent, T *Obj, Method MethodToBind);
+
+    void InitCollider();
+
+    SquareCollider* Square;
+    CircleCollider* Circle;
+    TriangleCollider* Triangle;
+
+    bool bEnableCollision = false;
 
 protected:
     sf::Vector2f Offset;
@@ -58,7 +71,7 @@ protected:
 
     std::map<ECollisionEvent, std::vector<ColliderCallback>> Callbacks;
 
-    void ManageCollisionResponses(GameObject *GameObjectHited, const bool bIsOnCollision);
+    void ManageCollisionCallbacks(GameObject *GameObjectHited, const bool bIsOnCollision);
 
     bool HasGameObject(GameObject *GameObjectToCheck) const;
     void AddGameObject(GameObject *GameObjectToAdd);
@@ -66,6 +79,16 @@ protected:
 
     std::vector<GameObject *> GameObjects;
 
+    void Overlap(ICollider *Other);
+    void Block(ICollider *Other);
+
+    void Static(ICollider *Other);
+    void Movable(ICollider *Other);
+
+    void MoveByRigidbody(const HitResult Hit);
+    void RestrictRigidbody(const sf::Vector2f Normal);
+
+    
 private:
     virtual void CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited = nullptr);
 };

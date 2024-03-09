@@ -10,8 +10,8 @@ Particle::Particle()
     RigidbodyComponent = std::make_shared<Rigidbody>();
     
 
-    AddComponent(SquareColliderComponent);
-    AddComponent(RigidbodyComponent);
+    AddComponent(SquareColliderComponent.get());
+    AddComponent(RigidbodyComponent.get());
 
     SetWorldPosition(sf::Vector2f(500, 10));
     SetName("Particule Test");

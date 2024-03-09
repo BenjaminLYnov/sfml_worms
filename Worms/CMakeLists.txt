@@ -6,12 +6,16 @@ file(GLOB_RECURSE WORMS_SOURCES
     *.h
 )
 
-add_executable(Worms ${WORMS_SOURCES} "Characters/InputActions/JumpAction.cpp" "Characters/InputActions/JumpAction.h" )
+add_executable(Worms ${WORMS_SOURCES})
 
 # Ajoutez le chemin vers les entêtes
 target_include_directories(Worms PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/)
 
+# Lier la bibliothèque SfmlEngine
 target_link_libraries(Worms PRIVATE SfmlEngine)
+
+# Inclure le chemin d'inclusion des bibliothèques externe
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 
 # Organisez l'architecture virtuelle pour refléter la structure des fichiers
 foreach(_source IN ITEMS ${WORMS_SOURCES})

@@ -15,6 +15,14 @@ void InputAction::PollKeyEvents()
     const bool KeyPressed = KeyIsPressed();
     const sf::Vector2f InputValue = GetInputValue();
 
+    if (bNeedKeyReleaseFirst)
+    {
+        if (KeyPressed)
+            return;
+
+        bNeedKeyReleaseFirst = false;
+    }
+
     // On Started
     if (KeyPressed && !bIsKeyPressed)
     {
@@ -32,6 +40,11 @@ void InputAction::PollKeyEvents()
         bIsKeyPressed = false;
         CallCallbacks(ETriggerEvent::Completed, InputValue);
     }
+}
+
+void InputAction::SetNeedKeyReleaseFirst(const bool _bNeedKeyReleaseFirst)
+{
+    bNeedKeyReleaseFirst = _bNeedKeyReleaseFirst;
 }
 
 ////////////////////////////////////////////////////

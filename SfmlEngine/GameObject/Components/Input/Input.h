@@ -17,6 +17,7 @@ public:
     virtual void Update(const float DeltaTime) override;
 
     virtual void PollActionsEvents();
+    virtual void SetNeedKeyReleaseFirst(const bool bNeedKeyReleaseFirst);
 
     // Template pour accepter n'importe quel type de classe et méthode membre
     template <typename T, typename Method>
