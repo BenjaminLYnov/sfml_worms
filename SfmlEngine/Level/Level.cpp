@@ -56,13 +56,16 @@ void Level::Render(sf::RenderWindow &Window) const
             Go->Render(Window);
 }
 
-void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
+// void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
 // void Level::SetCharacterControlled(Character* NewCharacterControlled)
+Character* Level::SetCharacterControlled(Character *NewCharacterControlled)
 {
     if (!NewCharacterControlled)
-        return;
+        return nullptr;
     CharacterControlled = NewCharacterControlled;
     CharacterControlled->GetInputComponent()->SetNeedKeyReleaseFirst(true);
+    return CharacterControlled;
+    // std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
 }
 
 void Level::ManageCollision()

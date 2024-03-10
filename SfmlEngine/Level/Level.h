@@ -15,7 +15,8 @@ namespace sf
 class Level
 {
 public:
-    Level();
+	virtual ~Level() = default;
+	Level();
 
     virtual void Start();
 
@@ -39,12 +40,12 @@ public:
     // Effectue le rendu de tous les GameObjects du niveau
     virtual void Render(sf::RenderWindow &Window) const;
 
-    virtual void SetWindow(sf::RenderWindow *_Window);
-    virtual sf::RenderWindow *GetWindow();
+    // Assigne le Character que le joueur contrôle dans le level
+    Character* SetCharacterControlled(Character *NewCharacterControlled);
 
     // Assigne le Character que le joueur contrôle dans le level
     // void SetCharacterControlled(Character* NewCharacterControlled);
-    void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
+    // void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
 
     void ManageCollision();
 

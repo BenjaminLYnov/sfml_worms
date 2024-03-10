@@ -60,6 +60,9 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     if (GameObjectHited == GetOwner())
         return;
 
+    std::cout << "FireGun::OnCollisionEnter" << std::endl;
+
+
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
     {

@@ -38,6 +38,7 @@ public:
     bool bIsAiming;
 
 #pragma endregion State
+    int CurrentHealth;
 
 protected:
     std::shared_ptr<Rigidbody> RigidbodyComponent;
@@ -55,6 +56,7 @@ protected:
 #pragma endregion
 
     void SetupBindAction() override;
+
 
     void OnDestroy();
 
