@@ -14,7 +14,8 @@ namespace sf
 class Level
 {
 public:
-    Level();
+	virtual ~Level() = default;
+	Level();
 
     virtual void Start();
 
@@ -39,7 +40,7 @@ public:
     virtual void Render(sf::RenderWindow &Window) const;
 
     // Assigne le Character que le joueur contrôle dans le level
-    void SetCharacterControlled(Character *NewCharacterControlled);
+    Character* SetCharacterControlled(Character *NewCharacterControlled);
 
     void OnCollision();
 

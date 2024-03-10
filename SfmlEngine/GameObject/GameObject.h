@@ -103,7 +103,7 @@ public:
 protected:
 
 private:
-    Level *OwnerLevel; // Pointeur vers le levle propriétaire.
+    Level *OwnerLevel; // Pointeur vers le level propriétaire.
 
     std::string Name;
 

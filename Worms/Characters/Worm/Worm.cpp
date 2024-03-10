@@ -44,7 +44,7 @@ Worm::Worm() : Character()
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
     RigidbodyComponent->GravityScale = 25;
-    RigidbodyComponent->GravityScale = 0;
+    //RigidbodyComponent->GravityScale = 0;
 
     AddComponent(SquareColliderComponent);
     AddComponent(CurrentSprite);
@@ -107,7 +107,7 @@ float Worm::TakeDamage(const float Damage)
     {
         CurrentHealth = 0;
         bIsAlive = false;
-        OnDestroy();
+        Destroy();
     }
 
     return CurrentHealth;

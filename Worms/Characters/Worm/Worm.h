@@ -33,6 +33,7 @@ public:
     bool bCanMove;
 
 #pragma endregion State
+    int CurrentHealth;
 
 protected:
     std::shared_ptr<Rigidbody> RigidbodyComponent;
@@ -46,6 +47,7 @@ protected:
 
 #pragma endregion
     void SetupBindAction() override;
+
 
     void OnDestroy();
 
@@ -62,7 +64,6 @@ private:
     std::shared_ptr<InputAction> IaFire;
 
     int MaxHealth;
-    int CurrentHealth;
 
     void CallDeleguateActionDone();
 };

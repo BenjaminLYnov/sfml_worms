@@ -54,11 +54,12 @@ void Level::Render(sf::RenderWindow &Window) const
             Go->Render(Window);
 }
 
-void Level::SetCharacterControlled(Character *NewCharacterControlled)
+Character* Level::SetCharacterControlled(Character *NewCharacterControlled)
 {
     if (!NewCharacterControlled)
-        return;
+        return nullptr;
     CharacterControlled = NewCharacterControlled;
+    return CharacterControlled;
     // std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
 }
 
