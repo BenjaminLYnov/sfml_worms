@@ -6,7 +6,8 @@
 
 GameManager::GameManager()
 {
-    // Initialisation supplémentaire si nécessaire
+    // Instance la fenêtre de jeu
+    InitWindow();
 }
 
 void GameManager::Run()
@@ -15,21 +16,17 @@ void GameManager::Run()
     if (!CurrentLevel)
         return;
 
-    // Instance la fenêtre de jeu
-    InitWindow();
-
     // Vérifier si le fenêtre de jeu a bien été instancié
     if (!Window)
         return;
 
     // Démarre le level
     CurrentLevel->SetWindow(Window.get());
+    CurrentLevel->GM = this;
     CurrentLevel->Start();
 
     // Instance Clock pour déterminer le Delta Time
     sf::Clock Clock;
-    // sf::View view(sf::FloatRect(0, 0, 800, 600));
-    // Window->setView(view);
 
     // Boucle de jeu principal
     while (Window->isOpen())
@@ -44,55 +41,57 @@ void GameManager::Run()
     }
 }
 
-void GameManager::AddLevel(std::shared_ptr<Level> NewLevel)
+void GameManager::AddLevel(const std::string LevelName, std::shared_ptr<Level> NewLevel)
 {
-    if (!NewLevel)
+    if (!NewLevel || LevelName == "")
         return;
-
     if (!CurrentLevel)
         CurrentLevel = NewLevel;
 
-    Levels.push_back(NewLevel);
+    if (HasLevel(LevelName))
+        return;
+
+    Levels.insert({LevelName, NewLevel});
 }
 
-// void GameManager::SaveGame(const std::string& filename, const GameData& data) {
-//     std::ofstream outFile(filename);
-//     if (!outFile) {
-//         std::cerr << "Impossible d'ouvrir le fichier pour la sauvegarde." << std::endl;
-//         return;
-//     }
+void GameManager::LoadLevel(const std::string LevelName)
+{
+    // Level not found
+    if (!HasLevel(LevelName))
+    {
+        std::cout << "Load Level " << LevelName << " Failed\n";
+        return;
+    }
 
-//     outFile << data.ToJson().dump(4);
-// }
+    CurrentLevel = Levels[LevelName];
 
-// bool GameManager::LoadGame(const std::string& filename, GameData& data) {
-//     std::ifstream inFile(filename);
-//     if (!inFile) {
-//         std::cerr << "Impossible d'ouvrir le fichier pour charger les données." << std::endl;
-//         return false;
-//     }
+    if (!Window)
+        return;
 
-//     nlohmann::json jsonData;
-//     inFile >> jsonData;
-//     data = GameData::FromJson(jsonData);
+    CurrentLevel->SetWindow(Window.get());
+    CurrentLevel->GM = this;
+    CurrentLevel->Start();
+}
 
-//     return true;
-// }
+void GameManager::SetStartLevel(const std::string LevelName)
+{
+    if (!HasLevel(LevelName))
+        return;
+    CurrentLevel = Levels[LevelName];
+}
 
 // PRIVATE
 
 void GameManager::InitWindow()
 {
     // Création de la fenêtre SFML
-    // Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(920, 680), "SFML Window");
-    Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(1920, 1080), "SFML Window");
+    Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(920, 680), "SFML Window");
 
     // Activer le mode plein écran
     // Window->create(sf::VideoMode::getDesktopMode(), "SFML Fullscreen Windowed", sf::Style::Titlebar | sf::Style::Close);
 
     // Limite les FPS à 60
     Window->setFramerateLimit(60);
-    // Window->setVerticalSyncEnabled(true);
 }
 
 void GameManager::ProcessEvents()
@@ -117,7 +116,7 @@ void GameManager::Update(const float DeltaTime)
     CurrentLevel->Update(DeltaTime);
 }
 
-void GameManager::Render(sf::RenderWindow &Window)
+void GameManager::Render(sf::RenderWindow &Window) const
 {
     // Rendu des objets
     if (!CurrentLevel)
@@ -125,4 +124,11 @@ void GameManager::Render(sf::RenderWindow &Window)
     Window.clear();
     CurrentLevel->Render(Window);
     Window.display();
+}
+
+bool GameManager::HasLevel(const std::string LevelName) const
+{
+    if (Levels.find(LevelName) == Levels.end())
+        return false;
+    return true;
 }

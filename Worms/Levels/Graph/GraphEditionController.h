@@ -30,6 +30,8 @@ protected:
     virtual void SelectCell();
     virtual void SwitchCellType();
     virtual void SaveGraph();
+    virtual void LoadGraph();
+    virtual void LoadParty();
 
 private:
     std::shared_ptr<InputAction> IaMoveViewport;
@@ -37,6 +39,8 @@ private:
     std::shared_ptr<InputAction> IaSelectCell;
     std::shared_ptr<InputAction> IaSwitchCellType;
     std::shared_ptr<InputAction> IaSaveGraph;
+    std::shared_ptr<InputAction> IaLoadGraph;
+    std::shared_ptr<InputAction> IaLoadParty;
 
     ECellType CellType = ECellType::Square;
 

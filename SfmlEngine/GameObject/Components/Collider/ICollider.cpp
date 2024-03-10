@@ -222,6 +222,11 @@ void ICollider::Static(ICollider *Other)
     // Dégage l'autre s'il y a collision
     if (Hit.bIsOnCollision)
     {
+        // std::cout << Hit.CancelDistance << "\n";
+
+        // std::cout << Hit.CancelDistance << "  " << Hit.Normal.x << "  " << Hit.Normal.y << "\n";
+        // std::cout << Hit.Normal.x << "  " << Hit.Normal.y << "\n";
+
         Rigidbody *Rb = Other->GetOwner()->GetComponent<Rigidbody>();
 
         // Annuler la collision
@@ -238,7 +243,7 @@ void ICollider::Static(ICollider *Other)
             }
         }
 
-        Other->MoveByRigidbody(Hit);
+        Other-> MoveByRigidbody(Hit);
     }
 
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
@@ -334,17 +339,31 @@ void ICollider::MoveByRigidbody(const HitResult Hit)
     // Pente trop raide -> faire chuter l'object
     if (PenteAngle > Rb->MaxAnglePente)
     {
-        RestrictRigidbody(Hit.Normal);
+        // RestrictRigidbody(Hit.Normal);
 
-        if (Hit.Normal.y > 0)
-        {
-            GetOwner()->AddWorldPosition(sf::Vector2f(0, 1) * Hit.CancelDistance);
-            return;
-        }
+        // if (Hit.Normal.y > 0)
+        // {
+        //     GetOwner()->AddWorldPosition(sf::Vector2f(0, 1) * Hit.CancelDistance);
+        //     return;
+        // }
 
-        sf::Vector2f PenteDownDirection = Hit.Normal;
-        PenteDownDirection.y = std::abs(PenteDownDirection.y);
-        GetOwner()->AddWorldPosition(PenteDownDirection * Hit.CancelDistance);
+        // const sf::Vector2f PenteDownDirection1 = Vector::RotateVector(Hit.Normal, 90);
+        // const sf::Vector2f PenteDownDirection2 = Vector::RotateVector(Hit.Normal, -90);
+        // sf::Vector2f PenteDownDirection;
+
+        // if (PenteDownDirection1.y > PenteDownDirection2.y)
+        //     PenteDownDirection = PenteDownDirection2;
+        // else
+        //     PenteDownDirection = PenteDownDirection1;
+
+        // PenteDownDirection.y = std::abs(PenteDownDirection.y);
+        GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
+        // GetOwner()->AddWorldPosition(PenteDownDirection * Hit.CancelDistance);
+        // Rb->AddForce(PenteDownDirection);
+        // Rb->AddForce(sf::Vector2f(Hit.Normal.x, 0));
+        // std::cout << Rb->GetVelocity().x << " " << Rb->GetVelocity().y << "\n";
+
+        // Rb->AddForce(Hit.Normal * 5000.f);
     }
     else
     {

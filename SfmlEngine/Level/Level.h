@@ -4,6 +4,7 @@
 #include "GameObject/GameObject.h"
 
 class Character;
+class GameManager;
 
 // Forward declaration de sf::RenderWindow
 namespace sf
@@ -51,18 +52,21 @@ public:
 
     float GetWorldDeltaSecond() const;
 
+    GameManager *GM = nullptr;
+
     std::shared_ptr<Character> GetCharacterControlled();
     // Character* GetCharacterControlled();
 
-protected:
     std::vector<std::shared_ptr<GameObject>> GameObjects;
+protected:
+
     // Character *CharacterControlled;
     std::shared_ptr<Character> CharacterControlled;
 
    sf::RenderWindow *Window = nullptr;
    
 private:
-    float DeltaSecond;
+    float DeltaSecond = 0;
 };
 
 #include "Level.tpp"

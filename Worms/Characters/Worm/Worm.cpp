@@ -54,8 +54,9 @@ Worm::Worm() : Character()
     DeleguateActionDone = std::make_shared<Deleguate>();
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
-    RigidbodyComponent->GravityScale = 25;
-    // RigidbodyComponent->GravityScale = 0;
+    // RigidbodyComponent->GravityScale = 25;
+    RigidbodyComponent->GravityScale = 20;
+    // RigidbodyComponent->GravityScale = 5;
 
     AddComponent(SquareColliderComponent.get());
     AddComponent(CurrentSprite.get());
@@ -88,6 +89,9 @@ void Worm::Start()
 
 void Worm::Update(const float DeltaTime)
 {
+    // if (GetWorld()->GetCharacterControlled().get() == this)
+    //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
+
     Character::Update(DeltaTime);
     // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     // AxisMoveValue = sf::Vector2f(0, 0);
@@ -96,6 +100,8 @@ void Worm::Update(const float DeltaTime)
 
     // if (GetWorld()->GetCharacterControlled().get() == this)
     //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
+
+
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -164,7 +170,7 @@ void Worm::Move(const sf::Vector2f Value)
 
     // const sf::Vector2f Force = sf::Vector2f(Value.x, 0) * 500.f;
     // const sf::Vector2f Force = Value * 500.f;
-    const sf::Vector2f Force = Value * 2000.f;
+    const sf::Vector2f Force = Value * 1000.f;
     RigidbodyComponent->AddForce(Force);
     // if (movementTimer < 0.5f)
     // {
@@ -255,7 +261,7 @@ void Worm::Fire()
 void Worm::Jump()
 {
     RigidbodyComponent->SetVelocity(sf::Vector2f(RigidbodyComponent->GetVelocity().x, 0));
-    RigidbodyComponent->AddForce(sf::Vector2f(0, -30000));
+    RigidbodyComponent->AddForce(sf::Vector2f(0, -50000));
 }
 
 // PRIVATE

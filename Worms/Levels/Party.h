@@ -6,11 +6,12 @@
 #include "Level/Level.h"
 
 class Worm;
+class Graph;
 
 class Party : public Level
 {
 public:
-    Party(const int _NbPlayer = 2);
+    Party();
 
     void Start() override;
     void Update(const float DeltaTime) override;
@@ -19,11 +20,14 @@ public:
 
 protected:
     void InitPlayers();
+    virtual void SpawnWorm(std::shared_ptr<Worm> WormToSpawn);
 
 private:
-    std::shared_ptr<Worm> CurrentWorm;
+    const int NbPlayer = 2;
 
-    int NbPlayer;
+    std::shared_ptr<Worm> CurrentWorm;
+    std::shared_ptr<Graph> G;
+
 };
 
 #endif

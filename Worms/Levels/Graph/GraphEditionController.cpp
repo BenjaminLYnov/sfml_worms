@@ -13,11 +13,15 @@
 #include "./InputActions/SelectCellAction.h"
 #include "./InputActions/SwitchCellTypeAction.h"
 #include "./InputActions/SaveGraphAction.h"
+#include "./InputActions/LoadGraphAction.h"
+#include "./InputActions/LoadPartyAction.h"
 
 #include "GameObject/Components/Camera/Camera.h"
+#include "GameManager/GameManager.h"
 
 #include "Cell.h"
 #include "Level/Level.h"
+#include "Graph.h"
 
 GraphEditionController::GraphEditionController() : Character()
 {
@@ -27,6 +31,8 @@ GraphEditionController::GraphEditionController() : Character()
     IaSelectCell = std::make_shared<SelectCellAction>();
     IaSwitchCellType = std::make_shared<SwitchCellTypeAction>();
     IaSaveGraph = std::make_shared<SaveGraphAction>();
+    IaLoadGraph = std::make_shared<LoadGraphAction>();
+    IaLoadParty = std::make_shared<LoadPartyAction>();
 
     SetupBindAction();
 
@@ -64,6 +70,8 @@ void GraphEditionController::SetupBindAction()
     InputComponent->BindAction(IaSelectCell, ETriggerEvent::Triggered, this, &GraphEditionController::SelectCell);
     InputComponent->BindAction(IaSwitchCellType, ETriggerEvent::Started, this, &GraphEditionController::SwitchCellType);
     InputComponent->BindAction(IaSaveGraph, ETriggerEvent::Started, this, &GraphEditionController::SaveGraph);
+    InputComponent->BindAction(IaLoadGraph, ETriggerEvent::Started, this, &GraphEditionController::LoadGraph);
+    InputComponent->BindAction(IaLoadParty, ETriggerEvent::Started, this, &GraphEditionController::LoadParty);
 }
 
 void GraphEditionController::MoveViewport(const sf::Vector2f Value)
@@ -84,6 +92,10 @@ void GraphEditionController::SelectCell()
     Cell *CellHited = GE->GetCellByPosition(WorldMouseLocation);
     if (!CellHited)
         return;
+
+    if (CellHited->CellType == ECellType::None && CellType != ECellType::None && GE->G->GetCellUnoneCount() > GE->MaxCellUnone)
+        return;
+
     CellHited->SetCellType(CellType);
 }
 
@@ -109,5 +121,15 @@ void GraphEditionController::SwitchCellType()
 void GraphEditionController::SaveGraph()
 {
     GE->SaveGraph();
+}
 
+void GraphEditionController::LoadGraph()
+{
+    GE->G->LoadGraph();
+}
+
+void GraphEditionController::LoadParty()
+{
+    SaveGraph();
+    GE->GM->LoadLevel("Party");
 }

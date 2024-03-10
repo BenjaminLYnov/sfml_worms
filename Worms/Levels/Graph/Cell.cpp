@@ -3,6 +3,8 @@
 #include <iostream>
 #include "GameObject/Components/Collider/SquareCollider.h"
 #include "GameObject/Components/Collider/TriangleCollider.h"
+#include "GameObject/GameObject.h"
+#include "Items/Weapons/Weapon.h"
 
 Cell::Cell(const sf::Vector2f Size) : GameObject()
 {
@@ -10,19 +12,25 @@ Cell::Cell(const sf::Vector2f Size) : GameObject()
     TriangleLeftColliderComponent = std::make_shared<TriangleCollider>();
     TriangleRightColliderComponent = std::make_shared<TriangleCollider>();
 
+    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Cell::OnCollisionEnter);
+
+    SquareColliderComponent->SetMobility(EMobility::Static);
+    TriangleLeftColliderComponent->SetMobility(EMobility::Static);
+    TriangleRightColliderComponent->SetMobility(EMobility::Static);
+
     Shape = std::make_shared<sf::RectangleShape>();
     SetSize(Size);
 
     // Définit la couleur de remplissage du rectangle en transparent
     Shape->setFillColor(sf::Color::Transparent);
-    // Shape->setFillColor(sf::Color::Green);
+    // Shape->setFillColor(sf::Color::White);
 
     // Définit l'épaisseur de la bordure du rectangle
     Shape->setOutlineThickness(0.5);
 
     // Définit une couleur pour la bordure, par exemple, verte
-    Shape->setOutlineColor(sf::Color::Red);
-    // Shape->setOutlineColor(sf::Color::White);
+    // Shape->setOutlineColor(sf::Color::Red);
+    Shape->setOutlineColor(sf::Color::Black);
 }
 
 void Cell::Start()
@@ -94,4 +102,12 @@ void Cell::SetCellType(const ECellType NewCellType)
     default:
         break;
     }
+}
+
+// PROTECTED
+
+void Cell::OnCollisionEnter(GameObject *GameObjectHited)
+{
+    if (dynamic_cast<Weapon *>(GameObjectHited))
+        Destroy();
 }

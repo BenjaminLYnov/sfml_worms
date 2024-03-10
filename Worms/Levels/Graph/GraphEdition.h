@@ -7,6 +7,7 @@
 class GraphEditionController;
 class Cell;
 class GraphData;
+class Graph;
 
 class GraphEdition : public Level
 {
@@ -16,20 +17,19 @@ public:
     void Start() override;
     void Update(const float DeltaTime) override;
 
-    void Rara();
 
     Cell *GetCellByPosition(const sf::Vector2f Position);
     
     void SaveGraph();
+
+    const float MaxCellUnone = 400;
+    std::shared_ptr<Graph> G;
     
-    std::vector<std::shared_ptr<Cell>> Cells;
 protected:
 private:
     std::shared_ptr<GraphEditionController> GEController;
-
-    Cell* AddCell(const sf::Vector2f Position = sf::Vector2f(0, 0), const sf::Vector2f Size = sf::Vector2f(10, 10));
-
     std::shared_ptr<GraphData> GD;
+    
 
 };
 

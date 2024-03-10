@@ -59,7 +59,7 @@ public:
     CircleCollider* Circle;
     TriangleCollider* Triangle;
 
-    bool bEnableCollision = false;
+    bool bEnableCollision = true;
 
 protected:
     sf::Vector2f Offset;

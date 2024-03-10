@@ -5,6 +5,7 @@
 #include "GameObject/Components/Collider/ICollider.h"
 #include "GameObject/Components/Collider/SquareCollider.h"
 #include "iostream"
+#include "GameManager/GameManager.h"
 
 Level::Level()
 {
@@ -79,17 +80,18 @@ void Level::ManageCollision()
 
         // Récupère le collider du game object actuelle de la boucle
         ICollider *ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
-        // std::shared_ptr<ICollider> ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
 
         // Vérifier si le collider est valide
         if (!ColliderToCheck)
             continue;
 
-        if (ColliderToCheck->bEnableCollision)
+        if (!ColliderToCheck->bEnableCollision)
             continue;
 
         // Les parcourir tous les Game Objects en ignorant lui même
-        for (std::shared_ptr<GameObject> OtherGameObject : GameObjects)
+        std::vector<std::shared_ptr<GameObject>> AnotherAllGameObjects = GameObjects;
+
+        for (std::shared_ptr<GameObject> OtherGameObject : AnotherAllGameObjects)
         {
             if (!OtherGameObject)
                 continue;
@@ -107,7 +109,7 @@ void Level::ManageCollision()
             if (!OtherCollider)
                 continue;
 
-            if (OtherCollider->bEnableCollision)
+            if (!OtherCollider->bEnableCollision)
                 continue;
 
             // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)

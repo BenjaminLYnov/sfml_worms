@@ -12,10 +12,9 @@ namespace sf
     class RectangleShape;
 }
 
-    
 class SquareCollider;
 class TriangleCollider;
-
+class GameObject;
 
 class Cell : public GameObject
 {
@@ -35,11 +34,13 @@ public:
     void SetCollision(const bool bCollision);
 
     std::shared_ptr<sf::RectangleShape> Shape; // Représentation graphique pour le rendu
-    
+
     ECellType CellType = ECellType::None;
+
+protected:
+    void OnCollisionEnter(GameObject *GameObjectHited);
+
 private:
-
-
     std::shared_ptr<SquareCollider> SquareColliderComponent;
     std::shared_ptr<TriangleCollider> TriangleLeftColliderComponent;
     std::shared_ptr<TriangleCollider> TriangleRightColliderComponent;

@@ -11,64 +11,32 @@
 #include "GameObject/Components/Camera/Camera.h"
 #include <SFML/Graphics/RectangleShape.hpp> // Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
 #include <SFML/Graphics/ConvexShape.hpp>	// Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
-
+#include "Levels/Graph/Graph.h"
+#include "Levels/Graph/Cell.h"
+#include "GameManager/GameManager.h"
 #include "iostream"
 
-Party::Party(const int _NbPlayer) : NbPlayer(_NbPlayer)
+Party::Party()
 {
 }
 
 void Party::Start()
 {
+	GameObjects.clear();
+
+    CurrentWorm.reset();
+
+	G = std::make_shared<Graph>();
+	G->World = this;
+	G->Init();
+	G->EnableCellsCollision(true);
+
 	// Instance Main Character
 	InitPlayers();
 
-	// Shapes
-	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
-	Square1->SetWorldPosition(sf::Vector2f(0, 400));
-	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(400, 100));
-	Square1->SquareColliderComponent->SetSize(sf::Vector2f(2000, 10));
-	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(600, 100));
-	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
-	// Square1->SquareColliderComponent->SetSize(sf::Vector2f(200, 50));
-	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
-	// Square1->SquareColliderComponent->Shape->setRotation(-70);
-	// Square1->SquareColliderComponent->Shape->setRotation(10);
-	AddGameObject(Square1);
-
-	std::shared_ptr<Circle> Circle1 = std::make_shared<Circle>();
-	Circle1->SetWorldPosition(sf::Vector2f(400, 400));
-	// Circle1->CircleColliderComponent->SetSize(sf::Vector2f(800, 100));
-	// Circle1->CircleColliderComponent->SetSize(sf::Vector2f(50, 50));
-	// Circle1->CircleColliderComponent->SetRadius(50);
-	Circle1->CircleColliderComponent->SetMobility(EMobility::Static);
-	// AddGameObject(Circle1);
-
-	std::shared_ptr<Triangle> Triangle1 = std::make_shared<Triangle>();
-	Triangle1->SetWorldPosition(sf::Vector2f(400, 400));
-	// Triangle1->TriangleColliderComponent->SetSize(sf::Vector2f(800, 100));
-	// Triangle1->TriangleColliderComponent->SetSize(sf::Vector2f(50, 50));
-	Triangle1->TriangleColliderComponent->SetMobility(EMobility::Static);
-	Triangle1->TriangleColliderComponent->SetPoints(sf::Vector2f(0, 0), sf::Vector2f(300, 0), sf::Vector2f(150, 200));
-	// Triangle1->TriangleColliderComponent->Shape->rotate(70);
-	Triangle1->TriangleColliderComponent->Shape->rotate(40);
-	// Triangle1->TriangleColliderComponent->Shape->rotate(120);
-	// AddGameObject(Triangle1);
-
-	std::shared_ptr<Square> Square2 = std::make_shared<Square>();
-	Square2->SetWorldPosition(sf::Vector2f(400, 340));
-	// Square2->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
-	Square2->SquareColliderComponent->SetSize(sf::Vector2f(20, 20));
-	Square2->SquareColliderComponent->SetMobility(EMobility::Static);
-	// AddGameObject(Square2);
-
-	std::shared_ptr<Square> Square3 = std::make_shared<Square>();
-	Square3->SetWorldPosition(sf::Vector2f(0, 300));
-	Square3->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
-	Square3->SquareColliderComponent->SetMobility(EMobility::Static);
-	// AddGameObject(Square3);
-
 	Level::Start();
+
+	// std::cout << G->Cells[G->Cells.size() - 1]->GetWorldPosition().x << "\n";
 }
 
 void Party::Update(const float DeltaTime)
@@ -102,7 +70,7 @@ void Party::SwitchCharacter()
 			CurrentWorm->CameraComponent->SetWindow(nullptr);
 
 			const sf::Vector2f CurrentViewCenter = CurrentWorm->CameraComponent->CurrentViewCenter;
-			
+
 			CurrentWorm = NextWorm;
 
 			SetCharacterControlled(CurrentWorm);
@@ -116,6 +84,8 @@ void Party::SwitchCharacter()
 			break;
 		}
 	}
+
+	GM->LoadLevel("GraphEdition");
 }
 
 // PROTECTED
@@ -135,11 +105,19 @@ void Party::InitPlayers()
 	}
 
 	if (!CurrentWorm)
+	{
+		std::cout << "toto\n";
 		return;
+	}
 
 	SetCharacterControlled(CurrentWorm);
 	CurrentWorm->bCanFire = true;
 	CurrentWorm->bCanMove = true;
 	CurrentWorm->CameraComponent->SetWindow(GetWindow());
 	CurrentWorm->CameraComponent->bEnableLag = true;
+
+}
+
+void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
+{
 }
