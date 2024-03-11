@@ -41,6 +41,7 @@
 
 // Weapon
 #include "Items/Weapons/Projectiles/CannonBall.h"
+#include "Items/Weapons/Projectiles/FragmentationBall.h"
 
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"
