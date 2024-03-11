@@ -1,106 +1,201 @@
-﻿#include "LevelRules.h"
+﻿// #include "LevelRules.h"
 
-#include "Deleguate.h"
-#include "Characters/Worm/Worm.h"
+// #include "Deleguate.h"
+// #include "Characters/Worm/Team.h"
+// #include "Characters/Worm/Worm.h"
 
-#include "GameObject/Shapes/Square.h"
-#include "GameObject/Shapes/Circle.h"
-#include "GameObject/Components/Collider/SquareCollider.h"
+// #include "GameObject/Shapes/Square.h"
+// #include "GameObject/Shapes/Circle.h"
+// #include "GameObject/Components/Collider/SquareCollider.h"
+// #include "Math/Random/RandomNumber.h"
 
-#include "iostream"
+// #include "iostream"
 
-LevelRules::LevelRules()
-{
-	// Instance Main Character
-	InitPlayers();
+// LevelRules::LevelRules()
+// {
+// 	// Instance Main Character
+// 	/*std::shared_ptr<Worm> MainWorm = std::make_shared<Worm>();
+// 	std::shared_ptr<Worm> AnotherWorm = std::make_shared<Worm>();*/
 
-	// Shapes
-	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
-	Square1->SetWorldPosition(sf::Vector2f(400, 400));
-	Square1->SquareColliderComponent->SetSize(sf::Vector2f(800, 100));
-	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
-	AddGameObject(Square1);
+// 	//create two teams
+// 	for(int i = 0; i < NbTeams; i++)
+// 	{
+// 		std::shared_ptr<Team> Team1 = std::make_shared<Team>();
+// 		Teams.push_back(Team1);
+// 	}
 
-	std::shared_ptr<Square> Square2 = std::make_shared<Square>();
-	Square2->SetWorldPosition(sf::Vector2f(400, 250));
-	Square2->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
-	Square2->SquareColliderComponent->SetMobility(EMobility::Static);
-	// AddGameObject(Square2);
+//  	//add the worms to the teams
+// 	for(auto &Team : Teams)
+// 	{
+// 		for(int i = 0; i < NbWormsInTeam; i++)
+// 		{
+// 			std::shared_ptr<Worm> WormCharacter = std::make_shared<Worm>();
+// 			Team->Worms.push_back(WormCharacter);
+// 			WormCharacter->DeleguateActionDone->AddCallback(this, &LevelRules::SwitchCharacter);
+// 		}
+// 	}
 
-	std::shared_ptr<Square> Square3 = std::make_shared<Square>();
-	Square3->SetWorldPosition(sf::Vector2f(0, 300));
-	Square3->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
-	Square3->SquareColliderComponent->SetMobility(EMobility::Static);
-	// AddGameObject(Square3);
-}
+// 	for(auto &Team : Teams)
+// 	{
+// 		for(auto &Worm : Team->Worms)
+// 		{
+// 			AddGameObject(Worm);
+// 			//set random position
+// 			const float RandomNumberX = RandomNumber::RandomFloat(0,1000);
+// 			const float RandomNumberY = RandomNumber::RandomFloat(0,1000);
+// 			Worm->SetWorldPosition(sf::Vector2f(RandomNumberX, RandomNumberY));
+			
+// 			//Worm->SetWorldPosition(sf::Vector2f(rand() % 1000, rand() % 1000));
+// 		}
+// 	}
 
-void LevelRules::Start()
-{
-	Level::Start();
-}
+// 	//get random worm in random team
+// 	CurrentTeamIndex = RandomNumber::RandomInt(0,NbTeams - 1);
+// 	Team* thisTeam = Teams[CurrentTeamIndex].get();
+// 	Character* thisWorms = SetCharacterControlled(thisTeam->Worms[RandomNumber::RandomInt(0,NbWormsInTeam - 1)].get());
 
-void LevelRules::Update(const float DeltaTime)
-{
-	Level::Update(DeltaTime);
-}
+// 	Worm* thisWorm = dynamic_cast<Worm*>(thisWorms);
 
-void LevelRules::SwitchCharacter()
-{
-	if (!CurrentWorm)
-		return;
+// 	thisWorm->bIsControlled = true;
+// 	thisWorm->bCanFire = true;
+// 	thisWorm->bCanMove = true;	
 
-	// Récupère tous les worms du level
-	std::vector<std::shared_ptr<Worm>> Worms = GetAllGameObjectByClass<Worm>();
+// 	/*Worms.push_back(MainWorm);
+// 	Worms.push_back(AnotherWorm);
 
-	for (size_t i = 0; i < Worms.size(); i++)
-	{
-		if (CurrentWorm == Worms[i])
-		{
+// 	MainWorm->SetName("p1");*/
 
-			std::shared_ptr<Worm> NextWorm;
-			if (i + 1 < Worms.size())
-			{
-				NextWorm = Worms[i + 1];
-			}
-			else
-			{
-				NextWorm = Worms[0];
-			}
+// 	/*MainWorm->DeleguateActionDone->AddCallback(this, &LevelRules::SwitchCharacter);
+// 	AnotherWorm->DeleguateActionDone->AddCallback(this, &LevelRules::SwitchCharacter);*/
 
-			CurrentWorm = NextWorm;
+// 	/*AnotherWorm->SetName("p2");
 
-			CurrentWorm->bCanFire = true;
-			CurrentWorm->bCanMove = true;
+// 	AddGameObject(MainWorm);
+// 	AddGameObject(AnotherWorm);
+
+// 	AnotherWorm->SetWorldPosition(sf::Vector2f(200, 200));*/
+
+// 	/*SetCharacterControlled(MainWorm.get());
+// 	MainWorm->bIsControlled = true;
+// 	MainWorm->bCanFire = true;
+// 	MainWorm->bCanMove = true;*/
+
+// 	// Shapes
+// 	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
+// 	Square1->SetWorldPosition(sf::Vector2f(400, 400));
+// 	Square1->SquareColliderComponent->SetSize(sf::Vector2f(800, 100));
+// 	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
+// 	AddGameObject(Square1);
+
+// 	InitGrid();
+// }
+
+// void LevelRules::Start()
+// {
+// 	Level::Start();
+// }
+
+// void LevelRules::Update(const float DeltaTime)
+// {
+// 	Level::Update(DeltaTime);
+// }
+
+// void LevelRules::InitGrid()
+// {
+// 	// Grid
+// 	for (int col = 0; col < 10; col++)
+// 	{
+// 		for (int row = 0; row < 10; row++)
+// 		{
+// 			std::shared_ptr<Square> Square1 = std::make_shared<Square>();
+// 			Square1->SetWorldPosition(sf::Vector2f(100 * col, 100 * row));
+// 			Square1->SquareColliderComponent->SetSize(sf::Vector2f(100, 100));
+// 			Square1->SquareColliderComponent->SetMobility(EMobility::Stationary);
+// 			AddGameObject(Square1);
+// 		}
+
+// 	}
+
+// }
+
+// void LevelRules::SwitchCharacter()
+// {
+// 	////get next worm in the other team
+// 	const Team* thisTeam = Teams[CurrentTeamIndex].get();
+
+// 	const std::shared_ptr<Worm> actualWorm = thisTeam->LastWorm;
+// 	actualWorm->bIsControlled = false;
+// 	actualWorm->bCanFire = false;
+// 	actualWorm->bCanMove = false;
+
+// 	if(CurrentTeamIndex == Teams.size() - 1)
+// 	{
+// 		CurrentTeamIndex = 0;
+// 	}
+// 	else
+// 	{
+// 		CurrentTeamIndex++;
+// 	}
+
+// 	const std::shared_ptr<Worm> nextWorm = Teams[CurrentTeamIndex]->GetNextWorm();
+// 	Character* thisWorms = SetCharacterControlled(nextWorm.get());
+
+// 	Worm* thisWorm = dynamic_cast<Worm*>(thisWorms);
+
+// 	thisWorm->bIsControlled = true;
+// 	thisWorm->bCanFire = true;
+// 	thisWorm->bCanMove = true;
 
 
-			SetCharacterControlled(CurrentWorm);
+// 	/*for (auto &Worm : Worms)
+// 	{
+// 		if (CurrentWorm == Worms[i])
+// 		{
 
-			break;
-		}
-	}
-}
+// 			std::shared_ptr<Worm> NextWorm;
+// 			if (i + 1 < Worms.size())
+// 			{
+// 				NextWorm = Worms[i + 1];
+// 			}
+// 			else
+// 			{
+// 				NextWorm = Worms[0];
+// 			}
 
-// PROTECTED
+// 			CurrentWorm = NextWorm;
 
-void LevelRules::InitPlayers()
-{
-	for (int i = 0; i < NbPlayer; i++)
-	{
-		std::shared_ptr<Worm> NewWorm = std::make_shared<Worm>();
-		NewWorm->SetName("Worm" + i);
-		NewWorm->DeleguateActionDone->AddCallback(this, &LevelRules::SwitchCharacter);
-		AddGameObject(NewWorm);
-		NewWorm->SetWorldPosition(sf::Vector2f(100 * i, 300));
+// 			CurrentWorm->bCanFire = true;
+// 			CurrentWorm->bCanMove = true;
 
-		if (!CurrentWorm)
-			CurrentWorm = NewWorm;
-	}
 
-	if (!CurrentWorm)
-		return;
+// 			SetCharacterControlled(CurrentWorm);
 
-	SetCharacterControlled(CurrentWorm);
+// 			break;
+// 		}
+// 	}*/
+// }
 
-	CurrentWorm->bCanFire = true;
-	CurrentWorm->bCanMove = true;
-}
+// // PROTECTED
+
+// void LevelRules::InitPlayers()
+// {
+// 	for (int i = 0; i < NbPlayer; i++)
+// 	{
+// 		std::shared_ptr<Worm> NewWorm = std::make_shared<Worm>();
+// 		NewWorm->SetName("Worm" + i);
+// 		NewWorm->DeleguateActionDone->AddCallback(this, &LevelRules::SwitchCharacter);
+// 		AddGameObject(NewWorm);
+// 		NewWorm->SetWorldPosition(sf::Vector2f(100 * i, 300));
+
+// 		if (!CurrentWorm)
+// 			CurrentWorm = NewWorm;
+// 	}
+
+// 	if (!CurrentWorm)
+// 		return;
+
+// 	SetCharacterControlled(CurrentWorm);
+
+// 	CurrentWorm->bCanFire = true;
+// 	CurrentWorm->bCanMove = true;
+// }

@@ -38,8 +38,6 @@ sf::Vector2f Key::GetAxisValue(const Joystick &Button)
         break;
     }
 
-    // std::cout << AxisValue.x << "   " << AxisValue.y << "\n";
-
     return AxisValue;
 }
 

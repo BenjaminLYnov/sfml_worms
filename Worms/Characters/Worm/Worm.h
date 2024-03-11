@@ -9,6 +9,8 @@ class SquareCollider;
 class CircleCollider;
 class TriangleCollider;
 class Deleguate;
+class Text;
+class Team;
 
 class Worm : public Character
 {
@@ -23,11 +25,18 @@ public:
     void Update(const float DeltaTime) override;
     void Render(sf::RenderWindow &Window) const override;
 
+    void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
     float TakeDamage(const float Damage) override;
 
-    // std::shared_ptr<CircleCollider> SquareColliderComponent;
     std::shared_ptr<SquareCollider> SquareColliderComponent;
-    // std::shared_ptr<TriangleCollider> SquareColliderComponent;
+
+    std::shared_ptr<Text> TextName;
+    std::shared_ptr<Text> TextHp;
+
+    std::shared_ptr<Team> Team;
+
+    float SpeedMoveView = 500;
+    float SpeedZoom = 0.5;
 
 #pragma region State
 
@@ -38,6 +47,7 @@ public:
     bool bIsAiming;
 
 #pragma endregion State
+    int CurrentHealth;
 
 protected:
     std::shared_ptr<Rigidbody> RigidbodyComponent;
@@ -46,17 +56,22 @@ protected:
 
 #pragma region InputAction
 
+
     virtual void OnMoveStart(const sf::Vector2f Value);
     virtual void OnMoveCompleted();
     virtual void Aim(const sf::Vector2f Value);
     virtual void Jump();
     virtual void Fire();
+    virtual void MoveViewport(const sf::Vector2f Value);
+    virtual void ZoomViewport(const sf::Vector2f Value);
+    virtual void ResetViewport();
+    virtual void RestartParty();
+    virtual void LoadGraphEdition();
+
 
 #pragma endregion
 
     void SetupBindAction() override;
-
-    void OnDestroy();
 
     void OnCollisionEnter(GameObject *GameObjectHited);
 
@@ -72,9 +87,13 @@ private:
     std::shared_ptr<InputAction> IaJump;
     std::shared_ptr<InputAction> IaFire;
     std::shared_ptr<InputAction> IaAim;
+    std::shared_ptr<InputAction> IaMoveViewport;
+    std::shared_ptr<InputAction> IaZoomViewport;
+    std::shared_ptr<InputAction> IaResetViewport;
+    std::shared_ptr<InputAction> IaRestartParty;
+    std::shared_ptr<InputAction> IaLoadGraphEdition;
 
     int MaxHealth;
-    int CurrentHealth;
     bool bIsFacingRight;
 
     sf::Vector2f MoveDirection;
@@ -89,7 +108,6 @@ private:
     const float MOVEMENT_DELAY = 0.1f;
 
     void Move(const sf::Vector2f Value);
-    // void Move(float DeltaTime);
     void DrawAimLine(sf::RenderWindow &Window) const;
     void CallDeleguateActionDone();
 };

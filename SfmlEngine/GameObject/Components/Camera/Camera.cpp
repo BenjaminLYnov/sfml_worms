@@ -46,9 +46,14 @@ void Camera::SetFollowOwner(const bool bVal)
     bFollowOwner = bVal;
 }
 
-void Camera::SetViewCenter(const sf::Vector2f NewViewCenter)
+void Camera::SetTargetViewCenter(const sf::Vector2f NewViewCenter)
 {
     TargetViewCenter = NewViewCenter;
+}
+
+void Camera::SetCurrentViewCenter(const sf::Vector2f NewViewCenter)
+{
+    CurrentViewCenter = NewViewCenter;
 }
 
 void Camera::SetZoom(const float _Zoom)
@@ -71,18 +76,23 @@ void Camera::MoveView(const sf::Vector2f Move)
     TargetViewCenter += Move;
 }
 
+void Camera::ResetViewport()
+{
+    Offset = sf::Vector2f(0, 0);
+}
+
 // PROTECTED
 
 void Camera::UpdateViewport(const float DeltaTime)
 {
     if (!bEnableLag)
     {
-        CurrentViewCenter = TargetViewCenter;
+        CurrentViewCenter = TargetViewCenter + Offset;
     }
     else
     {
         float Alpha = LagSpeed * DeltaTime;
-        CurrentViewCenter = Interpolate(CurrentViewCenter, TargetViewCenter, Alpha);
+        CurrentViewCenter = Interpolate(CurrentViewCenter, TargetViewCenter + Offset, Alpha);
     }
 
     Viewport->setCenter(CurrentViewCenter);

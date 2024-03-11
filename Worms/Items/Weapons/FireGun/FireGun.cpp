@@ -57,6 +57,7 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 {
     if (!GameObjectHited)
         return;
+
     if (GameObjectHited == GetOwner())
         return;
 
@@ -72,6 +73,6 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 
 void FireGun::Destroy(GameObject *GameObjectToDestroy)
 {
-    DeleguateOnDestroy->Broadcast();
     GameObject::Destroy();
+    DeleguateOnDestroy->Broadcast();
 }

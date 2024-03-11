@@ -19,19 +19,23 @@ public:
     virtual void Start() override;
     virtual void Update(const float DeltaTime) override;
 
-    void SetWindow(sf::RenderWindow *_Window);
+    void SetWindow(sf::RenderWindow *_Window = nullptr);
     void SetEnabled(const bool bEnable);
     void SetFollowOwner(const bool bVal);
-    void SetViewCenter(const sf::Vector2f NewViewCenter);
+    void SetTargetViewCenter(const sf::Vector2f NewViewCenter);
+    void SetCurrentViewCenter(const sf::Vector2f NewViewCenter);
+    
     void SetZoom(const float _Zoom);
     float GetZoom() const;
     void AddZoom(const float Val);
+    void ResetViewport();
 
     void MoveView(const sf::Vector2f Move);
 
     // Position initiale de la vue
     sf::Vector2f TargetViewCenter = sf::Vector2f(0, 0);
     sf::Vector2f CurrentViewCenter = sf::Vector2f(0, 0);
+    sf::Vector2f Offset = sf::Vector2f(0, 0);
 
     // Lag
     bool bEnableLag = false;

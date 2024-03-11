@@ -35,7 +35,6 @@ void TriangleCollider::Update(const float DeltaTime)
 
     const sf::Vector2f NewPos = GetOwner()->GetWorldPosition() + GetOwner()->GetRelativePosition() + Offset;
     Shape->setPosition(NewPos);
-    // Shape->rotate(30 * DeltaTime);
 }
 
 void TriangleCollider::Render(sf::RenderWindow &Window)
@@ -63,11 +62,17 @@ void TriangleCollider::SetPoints(const sf::Vector2f Point1, const sf::Vector2f P
     Shape->setPoint(1, Point2);
     Shape->setPoint(2, Point3);
 
-    // Calcul du centre de masse du triangle
-    // sf::Vector2f Center((Point1.x + Point2.x + Point3.x) / 3, (Point1.y + Point2.y + Point3.y) / 3);
+    // Calculer la largeur du triangle
+    float Width = Point1.x;
+    if (Point2.x > Width)
+        Width = Point2.x;
+    if (Point2.x > Width)
+        Width = Point2.x;
 
-    // Définition de l'origine du triangle au centre de masse
-    // Shape->setOrigin(Center);
+    if (Width != 0)
+        Width /= 2;
+
+    Shape->setOrigin(sf::Vector2f(Width, Width));
 }
 
 // Fonction pour calculer la projection d'un polygone sur un axe

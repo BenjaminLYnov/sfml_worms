@@ -4,6 +4,7 @@
 #include "GameObject/GameObject.h"
 
 class Character;
+class GameManager;
 
 // Forward declaration de sf::RenderWindow
 namespace sf
@@ -14,6 +15,7 @@ namespace sf
 class Level
 {
 public:
+    virtual ~Level() = default;
     Level();
 
     virtual void Start();
@@ -38,12 +40,13 @@ public:
     // Effectue le rendu de tous les GameObjects du niveau
     virtual void Render(sf::RenderWindow &Window) const;
 
-    virtual void SetWindow(sf::RenderWindow *_Window);
-    virtual sf::RenderWindow *GetWindow();
+    void SetWindow(sf::RenderWindow *_Window);
+
+    sf::RenderWindow *GetWindow();
 
     // Assigne le Character que le joueur contrôle dans le level
     // void SetCharacterControlled(Character* NewCharacterControlled);
-    void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled);
+    void SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled = std::shared_ptr<Character>());
 
     void ManageCollision();
 
@@ -51,18 +54,21 @@ public:
 
     float GetWorldDeltaSecond() const;
 
+    GameManager *GM = nullptr;
+
     std::shared_ptr<Character> GetCharacterControlled();
     // Character* GetCharacterControlled();
 
-protected:
     std::vector<std::shared_ptr<GameObject>> GameObjects;
+
+protected:
     // Character *CharacterControlled;
     std::shared_ptr<Character> CharacterControlled;
 
-   sf::RenderWindow *Window = nullptr;
-   
+    sf::RenderWindow *Window = nullptr;
+
 private:
-    float DeltaSecond;
+    float DeltaSecond = 0;
 };
 
 #include "Level.tpp"
