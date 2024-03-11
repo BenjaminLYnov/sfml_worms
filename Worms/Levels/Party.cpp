@@ -13,6 +13,7 @@
 #include <SFML/Graphics/ConvexShape.hpp>	// Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
 
 #include "iostream"
+#include "UIConstructor.h"
 
 Party::Party(const int _NbPlayer) : NbPlayer(_NbPlayer)
 {
@@ -68,6 +69,7 @@ void Party::Start()
 	Square3->SquareColliderComponent->SetMobility(EMobility::Static);
 	// AddGameObject(Square3);
 
+	Party::SetupUI();
 	Level::Start();
 }
 
@@ -142,4 +144,23 @@ void Party::InitPlayers()
 	CurrentWorm->bCanMove = true;
 	CurrentWorm->CameraComponent->SetWindow(GetWindow());
 	CurrentWorm->CameraComponent->bEnableLag = true;
+}
+
+void Party::SetupUI()
+{
+	Level::SetupUI();
+
+	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
+
+	AddCanvas(UI->CreateTopCanvas());
+	AddCanvas(UI->CreateDownCanvas());
+
+	PlayerInfos *Player1Infos = UI->GetPlayer1Infos();
+	PlayerInfos *Player2Infos = UI->GetPlayer2Infos();
+
+	Player1Infos->UpdateName("SexyWorm");
+	Player1Infos->UpdateHealth(10);
+
+	Player2Infos->UpdateName("SexyWorm2");
+	Player2Infos->UpdateHealth(20);
 }

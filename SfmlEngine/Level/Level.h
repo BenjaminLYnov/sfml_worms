@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "GameObject/GameObject.h"
+#include "UI/Canvas.h"
 
 class Character;
 
@@ -21,6 +22,8 @@ public:
     // Ajoute un GameObject au niveau
     void AddGameObject(std::shared_ptr<GameObject> GameObject);
 
+    void AddCanvas(std::shared_ptr<Canvas> Canvas);
+
     std::vector<std::shared_ptr<GameObject>> GetAllGameObjects();
 
     template <typename T>
@@ -37,6 +40,10 @@ public:
 
     // Effectue le rendu de tous les GameObjects du niveau
     virtual void Render(sf::RenderWindow &Window) const;
+
+    virtual void SetupUI(){};
+    //Effectue le rendu de l'UI du niveau
+    void RenderUI(sf::RenderWindow &Window) const;
 
     virtual void SetWindow(sf::RenderWindow *_Window);
     virtual sf::RenderWindow *GetWindow();
@@ -58,6 +65,7 @@ protected:
     std::vector<std::shared_ptr<GameObject>> GameObjects;
     // Character *CharacterControlled;
     std::shared_ptr<Character> CharacterControlled;
+    std::vector<std::shared_ptr<Canvas>> Canvases;
 
    sf::RenderWindow *Window = nullptr;
    

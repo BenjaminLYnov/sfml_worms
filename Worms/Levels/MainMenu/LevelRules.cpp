@@ -1,11 +1,16 @@
-﻿#include "LevelRules.h"
+#include "LevelRules.h"
+
+#include <iostream>
 
 #include "Deleguate.h"
+#include "../../../build/Worms/UIConstructor.h"
 #include "Characters/Worm/Worm.h"
 
 #include "GameObject/Shapes/Square.h"
 #include "GameObject/Shapes/Circle.h"
 #include "GameObject/Components/Collider/SquareCollider.h"
+#include "Levels/UIConstructor.h"
+#include "UI/Canvas.h"
 
 #include "iostream"
 
@@ -17,6 +22,11 @@ LevelRules::LevelRules()
 	// Shapes
 	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
 	Square1->SetWorldPosition(sf::Vector2f(400, 400));
+	Square1->SquareColliderComponent->SetSize(sf::Vector2f(700, 200));
+	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
+	AddGameObject(Square1);
+
+	
 	Square1->SquareColliderComponent->SetSize(sf::Vector2f(800, 100));
 	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
 	AddGameObject(Square1);
@@ -32,6 +42,8 @@ LevelRules::LevelRules()
 	Square3->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
 	Square3->SquareColliderComponent->SetMobility(EMobility::Static);
 	// AddGameObject(Square3);
+
+	LevelRules::SetupUI();
 }
 
 void LevelRules::Start()
@@ -78,6 +90,25 @@ void LevelRules::SwitchCharacter()
 			break;
 		}
 	}
+}
+
+void LevelRules::SetupUI()
+{
+	Level::SetupUI();
+
+	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
+	
+	AddCanvas(UI->CreateTopCanvas());
+	AddCanvas(UI->CreateDownCanvas());
+	
+	PlayerInfos* Player1Infos = UI->GetPlayer1Infos();
+	PlayerInfos* Player2Infos = UI->GetPlayer2Infos();
+	
+	Player1Infos->UpdateName("SexyWorm");
+	Player1Infos->UpdateHealth(10);
+	
+	Player2Infos->UpdateName("SexyWorm2");
+	Player2Infos->UpdateHealth(20);
 }
 
 // PROTECTED

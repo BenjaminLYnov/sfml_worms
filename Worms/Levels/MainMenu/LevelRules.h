@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Level/Level.h"
 
 class Worm;
@@ -15,6 +15,8 @@ public:
 
 protected:
 	void InitPlayers();
+
+	virtual void SetupUI() override;
 
 private:
 	std::shared_ptr<Worm> CurrentWorm;
