@@ -176,8 +176,8 @@ void ICollider::Overlap(ICollider *Other)
     if (Other->GetCollisionResponse() == ECollisionResponse::Ignore)
         return;
     const HitResult Hit = TestCollision(Other);
-    ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
+    ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
 }
 
 void ICollider::Block(ICollider *Other)

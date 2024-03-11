@@ -40,7 +40,7 @@
 #include <SFML/System/Vector2.hpp>
 
 // Weapon
-#include "Items/Weapons/FireGun/FireGun.h"
+#include "Items/Weapons/Projectiles/CannonBall.h"
 
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"

@@ -14,9 +14,12 @@ class Explosion : public Weapon
 {
 public:
     Explosion();
+    std::shared_ptr<Deleguate> DeleguateOnDestroy;
 
     virtual void Start() override;
     virtual void Update(const float DeltaTime) override;
+
+    void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
 
 protected:
     virtual void OnCollisionEnter(GameObject *GameObjectHited);

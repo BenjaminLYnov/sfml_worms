@@ -44,13 +44,19 @@ void Explosion::Update(const float DeltaTime)
 
 void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    if (!GameObjectHited)
+    if (!GameObjectHited || GameObjectHited == GetOwner())
         return;
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
     {
         WormHited->TakeDamage(DammageAmount);
     }
+}
+
+void Explosion::Destroy(GameObject *GameObjectToDestroy)
+{
+    DeleguateOnDestroy->Broadcast();
+    Item::Destroy(GameObjectToDestroy);
 }
 
 // PRIVATE

@@ -1,10 +1,10 @@
-#ifndef FIREGUN_H
-#define FIREGUN_H
+#ifndef IPROJECTILE_H
+#define IPROJECTILE_H
 
 #pragma once
 
 #include "../Weapon.h"
-#include <SFML/System/Vector2.hpp> // Inclusion nécessaire pour sf::Vector2f en raison de sa nature en tant que type de template spécialisé
+#include <SFML/System/Vector2.hpp>
 
 class SquareCollider;
 class GameObject;
@@ -12,10 +12,10 @@ class Rigidbody;
 class Deleguate;
 class FireGunAnimation;
 
-class FireGun : public Weapon
+class IProjectile : public Weapon
 {
 public:
-    FireGun();
+    IProjectile();
 
     std::shared_ptr<Deleguate> DeleguateOnDestroy;
 
@@ -24,21 +24,19 @@ public:
 
     virtual void AddForce(const sf::Vector2f &Force);
 
-
     void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
 
 protected:
+    float LifeTime;
+    float DammageAmount;
+
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
 
 private:
     std::shared_ptr<SquareCollider> SquareColliderComponent;
     std::shared_ptr<Rigidbody> RigidbodyComponent;
-
-    float LifeTime = 7.0f;
-
     std::shared_ptr<FireGunAnimation> FireGunA;
     float FireGunSpriteScale = 0.4f;
-
 };
 
 #endif
