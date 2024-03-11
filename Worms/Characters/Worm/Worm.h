@@ -96,7 +96,7 @@ private:
     std::shared_ptr<InputAction> IaLoadGraphEdition;
 
     // Weapon
-    FireGun *FireGunS = nullptr;
+    std::shared_ptr<FireGun> FireGunS = nullptr;
 
     int MaxHealth;
     bool bIsFacingRight;

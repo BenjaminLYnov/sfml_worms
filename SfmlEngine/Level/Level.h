@@ -29,7 +29,7 @@ public:
     std::vector<std::shared_ptr<T>> GetAllGameObjectByClass();
 
     template <typename T>
-    T *SpawnGameObject(const sf::Vector2f Location = sf::Vector2f(0, 0), const sf::Vector2f Scale = sf::Vector2f(1, 1), const float Rotation = 0.f);
+    std::shared_ptr<T> SpawnGameObject(const sf::Vector2f Location = sf::Vector2f(0, 0), const sf::Vector2f Scale = sf::Vector2f(1, 1), const float Rotation = 0.f);
 
     // Gestionnaires d'événements
     virtual void ProcessEvents();

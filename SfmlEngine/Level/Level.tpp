@@ -20,7 +20,7 @@ std::vector<std::shared_ptr<T>> Level::GetAllGameObjectByClass()
 }
 
 template <typename T>
-T *Level::SpawnGameObject(const sf::Vector2f Location, const sf::Vector2f Scale, const float Rotation)
+std::shared_ptr<T> Level::SpawnGameObject(const sf::Vector2f Location, const sf::Vector2f Scale, const float Rotation)
 {
     static_assert(std::is_base_of<GameObject, T>::value, "T must be derived from GameObject");
 
@@ -37,5 +37,5 @@ T *Level::SpawnGameObject(const sf::Vector2f Location, const sf::Vector2f Scale,
     AddGameObject(NewGameObject);
 
     // Return le nouveau GameObject
-    return NewGameObject.get();
+    return NewGameObject;
 }
