@@ -17,8 +17,6 @@ public:
 
     void SwitchCharacter();
 
-    virtual void SetupUI() override;
-
 protected:
     void InitPlayers();
 

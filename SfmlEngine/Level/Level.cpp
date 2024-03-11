@@ -26,13 +26,6 @@ void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
     GameObject->SetLevel(this);
 }
 
-void Level::AddCanvas(std::shared_ptr<Canvas> Canvas)
-{
-    if(!Canvas)
-        return;
-    Canvases.push_back(Canvas);
-}
-
 std::vector<std::shared_ptr<GameObject>> Level::GetAllGameObjects()
 {
     return GameObjects;
@@ -60,18 +53,6 @@ void Level::Render(sf::RenderWindow &Window) const
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Render(Window);
-}
-
-void Level::RenderUI(sf::RenderWindow& Window) const
-{
-    for (std::shared_ptr<Canvas> canva : Canvases)
-    {
-        if (canva)
-        {
-            canva->UpdateRect(Window.getView().getViewport());
-            canva->Draw(Window);
-        }
-    }
 }
 
 void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)

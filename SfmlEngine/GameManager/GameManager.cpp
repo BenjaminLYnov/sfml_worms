@@ -124,6 +124,5 @@ void GameManager::Render(sf::RenderWindow &Window)
         return;
     Window.clear();
     CurrentLevel->Render(Window);
-    CurrentLevel->RenderUI(Window);
     Window.display();
 }
