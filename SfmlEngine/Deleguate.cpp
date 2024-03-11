@@ -2,6 +2,6 @@
 
 void Deleguate::Broadcast()
 {
-    for (auto &callback : Callbacks)
-        callback(); // Exécution du callback
+    for (auto &CallbackToCall : Callbacks)
+        CallbackToCall();
 }

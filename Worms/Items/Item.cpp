@@ -16,8 +16,6 @@ void Item::Update(const float DeltaTime)
 
 void Item::SetOwner(GameObject *_Owner)
 {
-    if (!_Owner)
-        return;
     Owner = _Owner;
 }
 

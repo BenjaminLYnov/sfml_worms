@@ -60,6 +60,7 @@ Worm::Worm() : Character()
     bIsAlive = true;
     bCanMove = false;
     bCanFire = false;
+    bCanJump = true;
 
     // Instance Animations
     InitAnimations();
@@ -67,11 +68,7 @@ Worm::Worm() : Character()
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
     SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
-
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::OnCollisionEnter);
-
-    DeleguateFire = std::make_shared<Deleguate>();
-    DeleguateActionDone = std::make_shared<Deleguate>();
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
     RigidbodyComponent->GravityScale = 20;
@@ -103,6 +100,9 @@ Worm::Worm() : Character()
     IaResetViewport = std::make_shared<ResetViewCenter>();
     IaLoadGraphEdition = std::make_shared<LoadGraphEditionAction>();
     IaRestartParty = std::make_shared<RestartPartyAction>();
+
+    DeleguateFire = std::make_shared<Deleguate>();
+    DeleguateActionDone = std::make_shared<Deleguate>();
 }
 
 void Worm::Start()
@@ -138,7 +138,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
     if (Team)
         Team->RemoveWorm(this);
-    CallDeleguateActionDone();
+    if (FireGunS)
+        FireGunS->SetOwner();
     GameObject::Destroy();
 }
 
@@ -150,12 +151,18 @@ float Worm::TakeDamage(const float Damage)
     {
         CurrentHealth = 0;
         bIsAlive = false;
+
         Destroy();
     }
 
     TextHp->SetString(std::to_string(CurrentHealth) + "/" + std::to_string(MaxHealth));
 
     return CurrentHealth;
+}
+
+void Worm::CallDeleguateActionDone()
+{
+    DeleguateActionDone->Broadcast();
 }
 
 // PROTECTED
@@ -198,6 +205,9 @@ void Worm::Move(const sf::Vector2f Value)
     if (!bCanMove)
         return;
 
+    if (RigidbodyComponent->GetVelocity().y != 0)
+        return;
+
     // AddWorldPosition(Value * MaxWalkSpeed * GetWorld()->GetWorldDeltaSecond());
 
     // AxisMoveValue = Value;
@@ -238,7 +248,6 @@ void Worm::OnMoveCompleted()
 {
     bIsMoving = false;
     bIsAiming = true;
-    MoveDirection = sf::Vector2f(0, 0);
 }
 
 void Worm::Aim(const sf::Vector2f Value)
@@ -280,22 +289,30 @@ void Worm::Fire()
     if (!bCanFire)
         return;
 
+    if (RigidbodyComponent->GetVelocity().y != 0)
+        return;
+
     const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
-    FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+    FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
+    FireGunS->SetOwner(this);
     sf::Vector2f force = AimDirection * 20000.f;
 
     FireGunS->AddForce(force);
     FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
-    // DeleguateActionDone->Broadcast();
 
     bCanFire = false;
     bCanMove = false;
+    bCanJump = false;
 }
 
 void Worm::Jump()
 {
-    RigidbodyComponent->SetVelocity(sf::Vector2f(RigidbodyComponent->GetVelocity().x, 0));
-    RigidbodyComponent->AddForce(sf::Vector2f(0, -50000));
+    if (!bCanJump)
+        return;
+    if (RigidbodyComponent->GetVelocity().y != 0)
+        return;
+    RigidbodyComponent->ResetVelocity();
+    RigidbodyComponent->AddForce(sf::Vector2f(JumpForce.x * (bIsFacingRight ? 1.0f : -1.0f), JumpForce.y));
 }
 
 void Worm::MoveViewport(const sf::Vector2f Value)
@@ -321,11 +338,4 @@ void Worm::RestartParty()
 void Worm::LoadGraphEdition()
 {
     GetWorld()->GM->LoadLevel("GraphEdition");
-}
-
-// PRIVATE
-
-void Worm::CallDeleguateActionDone()
-{
-    DeleguateActionDone->Broadcast();
 }

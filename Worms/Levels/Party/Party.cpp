@@ -9,6 +9,7 @@
 #include "GameObject/Components/Collider/SquareCollider.h"
 #include "GameObject/Components/Collider/CircleCollider.h"
 #include "GameObject/Components/Collider/TriangleCollider.h"
+#include "GameObject/Components/Rigidbody/Rigidbody.h"
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"
 #include <SFML/Graphics/RectangleShape.hpp> // Assurez-vous d'inclure la bonne bibliothèque pour les formes SFML
@@ -50,6 +51,8 @@ void Party::Start()
 void Party::Update(const float DeltaTime)
 {
 	Level::Update(DeltaTime);
+
+
 }
 
 // PROTECTED
@@ -145,6 +148,7 @@ void Party::UpdateCurrentWorm(std::shared_ptr<Worm> NewWorm)
 	CurrentWorm = NewWorm;
 	CurrentWorm->bCanFire = true;
 	CurrentWorm->bCanMove = true;
+	CurrentWorm->bCanJump = true;
 	CurrentWorm->CameraComponent->ResetViewport();
 	CurrentWorm->CameraComponent->SetWindow(GetWindow());
 	CurrentWorm->CameraComponent->SetCurrentViewCenter(CurrentViewCenter);

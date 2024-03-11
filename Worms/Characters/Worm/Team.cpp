@@ -102,7 +102,6 @@ void Team::RemoveWorm(Worm *WormToRemove)
 			if ((*it) == CurrentWorm && Worms.size() > 1)
 			{
 				CurrentWorm = GetPreviousWorm();
-				std::cout << CurrentWorm->GetName() << "\n";
 			}
 
 			// Supprimer le Worm du tableau
