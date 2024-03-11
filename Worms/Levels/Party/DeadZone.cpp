@@ -18,7 +18,10 @@ void DeadZone::Start()
 // PRIVATE
 void DeadZone::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    Worm* W = dynamic_cast<Worm *>(GameObjectHited);
+    Worm *W = dynamic_cast<Worm *>(GameObjectHited);
     if (W)
+    {
+        W->CallDeleguateActionDone();
         W->Destroy();
+    }
 }

@@ -8,6 +8,7 @@
 #include "Deleguate.h"
 #include "Characters/Worm/Worm.h"
 #include "Explosion.h"
+#include "Levels/Party/DeadZone.h"
 
 FireGun::FireGun() : Weapon()
 {
@@ -58,8 +59,12 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     if (!GameObjectHited)
         return;
 
-    if (GameObjectHited == GetOwner())
-        return;
+    // DeadZone *DZ = dynamic_cast<DeadZone *>(GameObjectHited);
+    // if (DZ)
+    // {
+    //     GameObject::Destroy();
+    //     return;
+    // }
 
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
@@ -73,6 +78,10 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 
 void FireGun::Destroy(GameObject *GameObjectToDestroy)
 {
+    if (GetOwner())
+    {
+        std::cout << "toto\n";
+        DeleguateOnDestroy->Broadcast();
+    }
     GameObject::Destroy();
-    DeleguateOnDestroy->Broadcast();
 }

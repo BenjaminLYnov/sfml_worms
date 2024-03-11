@@ -11,6 +11,7 @@ class TriangleCollider;
 class Deleguate;
 class Text;
 class Team;
+class FireGun;
 
 class Worm : public Character
 {
@@ -28,6 +29,8 @@ public:
     void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
     float TakeDamage(const float Damage) override;
 
+    void CallDeleguateActionDone();
+
     std::shared_ptr<SquareCollider> SquareColliderComponent;
 
     std::shared_ptr<Text> TextName;
@@ -44,18 +47,18 @@ public:
     bool bIsMoving;
     bool bCanFire;
     bool bCanMove;
+    bool bCanJump;
     bool bIsAiming;
 
 #pragma endregion State
     int CurrentHealth;
 
-protected:
     std::shared_ptr<Rigidbody> RigidbodyComponent;
 
+protected:
     void InitAnimations();
 
 #pragma region InputAction
-
 
     virtual void OnMoveStart(const sf::Vector2f Value);
     virtual void OnMoveCompleted();
@@ -67,7 +70,6 @@ protected:
     virtual void ResetViewport();
     virtual void RestartParty();
     virtual void LoadGraphEdition();
-
 
 #pragma endregion
 
@@ -93,13 +95,20 @@ private:
     std::shared_ptr<InputAction> IaRestartParty;
     std::shared_ptr<InputAction> IaLoadGraphEdition;
 
+    // Weapon
+    FireGun *FireGunS = nullptr;
+
     int MaxHealth;
     bool bIsFacingRight;
 
-    sf::Vector2f MoveDirection;
+    sf::Vector2f JumpForce = sf::Vector2f(40000, -70000);
+
+    sf::Vector2f MoveDirection = sf::Vector2f(1, 0);
+    ;
 
     float AimAngle = 0;
     sf::Vector2f AimDirection = sf::Vector2f(1, 0);
+
     float movementTimer = 0;
 
     float M_PI = 3.14159265358979323846;
@@ -109,5 +118,4 @@ private:
 
     void Move(const sf::Vector2f Value);
     void DrawAimLine(sf::RenderWindow &Window) const;
-    void CallDeleguateActionDone();
 };

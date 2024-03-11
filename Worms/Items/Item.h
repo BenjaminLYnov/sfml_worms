@@ -18,7 +18,7 @@ public:
     virtual void Update(const float DeltaTime) override;
 
     virtual GameObject* GetOwner();
-    virtual void SetOwner(GameObject* _Owner);
+    virtual void SetOwner(GameObject* _Owner = nullptr);
     
 protected:
     std::shared_ptr<Sprite> Animation;
