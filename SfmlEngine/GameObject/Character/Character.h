@@ -4,7 +4,6 @@
 #include "./Animations/CharacterRun.h"
 #include "GameObject/Components/Input/Input.h"
 
-class StateMode;
 class CharacterRun;
 class Input;
 class Camera;
@@ -28,7 +27,6 @@ public:
     std::shared_ptr<Camera> CameraComponent;
     
 protected:
-    std::shared_ptr<StateMode> StateModeComponent;
     std::shared_ptr<Input> InputComponent;
 
     std::vector<std::shared_ptr<CharacterRun>> CharacterRun;

@@ -40,7 +40,6 @@ void GraphEdition::SaveGraph()
 
     GD->CellTypes = CellTypes;
     GD->SaveGraph();
-    GM->LoadLevel("Party");
 }
 
 Cell *GraphEdition::GetCellByPosition(const sf::Vector2f Position)

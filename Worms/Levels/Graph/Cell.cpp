@@ -22,7 +22,8 @@ Cell::Cell(const sf::Vector2f Size) : GameObject()
     SetSize(Size);
 
     // Définit la couleur de remplissage du rectangle en transparent
-    Shape->setFillColor(sf::Color::Transparent);
+    // Shape->setFillColor(sf::Color::Transparent);
+    Shape->setFillColor(sf::Color::Blue);
     // Shape->setFillColor(sf::Color::White);
 
     // Définit l'épaisseur de la bordure du rectangle
@@ -108,6 +109,6 @@ void Cell::SetCellType(const ECellType NewCellType)
 
 void Cell::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    if (dynamic_cast<Weapon *>(GameObjectHited))
-        Destroy();
+    // if (dynamic_cast<Weapon *>(GameObjectHited))
+    //     Destroy();
 }

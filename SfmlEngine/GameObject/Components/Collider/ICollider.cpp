@@ -243,7 +243,7 @@ void ICollider::Static(ICollider *Other)
             }
         }
 
-        Other-> MoveByRigidbody(Hit);
+        Other->MoveByRigidbody(Hit);
     }
 
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
@@ -322,6 +322,7 @@ void ICollider::MoveByRigidbody(const HitResult Hit)
     if (PenteAngle == 0)
     {
         GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
+        RestrictRigidbody(sf::Vector2f(0, 1));
         return;
     }
 
@@ -335,6 +336,9 @@ void ICollider::MoveByRigidbody(const HitResult Hit)
     {
         ObjectToPenteAngle = Vector::DotProduct(sf::Vector2f(-1, 0), Hit.Normal);
     }
+
+    if (PenteAngle <= Rb->MaxAnglePente)
+        RestrictRigidbody(sf::Vector2f(0, 1));
 
     // Pente trop raide -> faire chuter l'object
     if (PenteAngle > Rb->MaxAnglePente)
@@ -367,6 +371,7 @@ void ICollider::MoveByRigidbody(const HitResult Hit)
     }
     else
     {
+
         GetOwner()->AddWorldPosition(sf::Vector2f(0, -1) * Hit.CancelDistance);
 
         // Si l'angle est inférieur à 90 degree, c'est une pente descendante

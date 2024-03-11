@@ -85,13 +85,17 @@ void GameManager::SetStartLevel(const std::string LevelName)
 void GameManager::InitWindow()
 {
     // Création de la fenêtre SFML
+    // Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(920, 680), "SFML Window");
     Window = std::make_unique<sf::RenderWindow>(sf::VideoMode(920, 680), "SFML Window");
 
     // Activer le mode plein écran
-    // Window->create(sf::VideoMode::getDesktopMode(), "SFML Fullscreen Windowed", sf::Style::Titlebar | sf::Style::Close);
+    Window->create(sf::VideoMode::getDesktopMode(), "SFML Fullscreen Windowed", sf::Style::Titlebar | sf::Style::Close);
 
     // Limite les FPS à 60
     Window->setFramerateLimit(60);
+
+    // Désactiver la gestion automatique des événements de fenêtre
+    Window->setActive(false);
 }
 
 void GameManager::ProcessEvents()

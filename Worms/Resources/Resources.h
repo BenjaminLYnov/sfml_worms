@@ -2902,4 +2902,10 @@ extern unsigned int wwmnlnkd_size;
 extern unsigned char wwmnlnku_data[];
 extern unsigned int wwmnlnku_size;
 
+extern unsigned char arial_data[];
+extern unsigned int arial_size;
+
+extern unsigned char Arrow_Hit_DamageAdd_WeakHit_data[];
+extern unsigned int Arrow_Hit_DamageAdd_WeakHit_size;
+
 #endif // RESOURCES_H

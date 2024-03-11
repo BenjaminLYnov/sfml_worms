@@ -56,63 +56,38 @@ void Level::Render(sf::RenderWindow &Window) const
             Go->Render(Window);
 }
 
-// void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
+void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
 // void Level::SetCharacterControlled(Character* NewCharacterControlled)
-Character* Level::SetCharacterControlled(Character *NewCharacterControlled)
 {
-    if (!NewCharacterControlled)
-        return nullptr;
     CharacterControlled = NewCharacterControlled;
-    CharacterControlled->GetInputComponent()->SetNeedKeyReleaseFirst(true);
-    return CharacterControlled;
-    // std::cout << "Character controlled: " << CharacterControlled->GetName() << std::endl;
+    if (CharacterControlled)
+        CharacterControlled->GetInputComponent()->SetNeedKeyReleaseFirst(true);
 }
 
 void Level::ManageCollision()
 {
     std::vector<std::shared_ptr<GameObject>> AllGameObjects = GameObjects;
 
-    // Parcours tous les game object du level
-    for (std::shared_ptr<GameObject> GameObjectToCheckCollision : AllGameObjects)
+    for (size_t i = 0; i < AllGameObjects.size(); ++i)
     {
-        if (!GameObjectToCheckCollision)
-            continue;
-
-        if (!GameObjectToCheckCollision.use_count())
-            continue;
-
-        // Récupère le collider du game object actuelle de la boucle
-        ICollider *ColliderToCheck = GameObjectToCheckCollision->GetComponent<ICollider>();
-
-        // Vérifier si le collider est valide
-        if (!ColliderToCheck)
-            continue;
-
-        if (!ColliderToCheck->bEnableCollision)
-            continue;
-
-        // Les parcourir tous les Game Objects en ignorant lui même
-        std::vector<std::shared_ptr<GameObject>> AnotherAllGameObjects = GameObjects;
-
-        for (std::shared_ptr<GameObject> OtherGameObject : AnotherAllGameObjects)
+        for (size_t j = i + 1; j < AllGameObjects.size(); ++j)
         {
-            if (!OtherGameObject)
+            if (!AllGameObjects[i])
                 continue;
 
-            if (OtherGameObject == GameObjectToCheckCollision)
+            if (!AllGameObjects[j])
                 continue;
 
-            if (!OtherGameObject.use_count())
+            // Récupère le collider du game object actuelle de la boucle
+            ICollider *ColliderToCheck = AllGameObjects[i]->GetComponent<ICollider>();
+
+            if (!ColliderToCheck)
                 continue;
 
             // Récupère le Collider de l'autre game object actuelle de la boucle
-            ICollider *OtherCollider = OtherGameObject->GetComponent<ICollider>();
+            ICollider *OtherCollider = AllGameObjects[j]->GetComponent<ICollider>();
 
-            // Vérifier si l'autre collider est valide
             if (!OtherCollider)
-                continue;
-
-            if (!OtherCollider->bEnableCollision)
                 continue;
 
             // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)

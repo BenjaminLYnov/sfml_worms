@@ -57,11 +57,9 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 {
     if (!GameObjectHited)
         return;
+
     if (GameObjectHited == GetOwner())
         return;
-
-    std::cout << "FireGun::OnCollisionEnter" << std::endl;
-
 
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
@@ -75,6 +73,6 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 
 void FireGun::Destroy(GameObject *GameObjectToDestroy)
 {
-    DeleguateOnDestroy->Broadcast();
     GameObject::Destroy();
+    DeleguateOnDestroy->Broadcast();
 }

@@ -51,6 +51,8 @@ void Rigidbody::Update(const float DeltaTime)
         Velocity.x = 0;
     if (std::abs(Velocity.y) < 0.1)
         Velocity.y = 0;
+
+
 }
 
 void Rigidbody::AddForce(const sf::Vector2f &Force)

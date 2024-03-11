@@ -8,14 +8,14 @@
 
 // Include les Inputs Action
 #include "GameObject/Components/Input/TriggerEvent.h"
-#include "./InputActions/MoveViewportAction.h"
-#include "./InputActions/ZoomViewportAction.h"
 #include "./InputActions/SelectCellAction.h"
 #include "./InputActions/SwitchCellTypeAction.h"
 #include "./InputActions/SaveGraphAction.h"
 #include "./InputActions/LoadGraphAction.h"
 #include "./InputActions/LoadPartyAction.h"
-
+#include "./InputActions/SetCellTypeToNoneAction.h"
+#include "Characters/InputActions/ZoomViewportAction.h"
+#include "Characters/InputActions/MoveViewportAction.h"
 #include "GameObject/Components/Camera/Camera.h"
 #include "GameManager/GameManager.h"
 
@@ -33,6 +33,7 @@ GraphEditionController::GraphEditionController() : Character()
     IaSaveGraph = std::make_shared<SaveGraphAction>();
     IaLoadGraph = std::make_shared<LoadGraphAction>();
     IaLoadParty = std::make_shared<LoadPartyAction>();
+    IaSetCellTypeToNone = std::make_shared<SetCellTypeToNoneAction>();
 
     SetupBindAction();
 
@@ -72,6 +73,7 @@ void GraphEditionController::SetupBindAction()
     InputComponent->BindAction(IaSaveGraph, ETriggerEvent::Started, this, &GraphEditionController::SaveGraph);
     InputComponent->BindAction(IaLoadGraph, ETriggerEvent::Started, this, &GraphEditionController::LoadGraph);
     InputComponent->BindAction(IaLoadParty, ETriggerEvent::Started, this, &GraphEditionController::LoadParty);
+    InputComponent->BindAction(IaSetCellTypeToNone, ETriggerEvent::Triggered, this, &GraphEditionController::SetCellTypeToNone);
 }
 
 void GraphEditionController::MoveViewport(const sf::Vector2f Value)
@@ -86,10 +88,7 @@ void GraphEditionController::ZoomViewport(const sf::Vector2f Value)
 
 void GraphEditionController::SelectCell()
 {
-    sf::Vector2i MouseLocation = sf::Mouse::getPosition(*GetWorld()->GetWindow());
-    sf::Vector2f WorldMouseLocation = GetWorld()->GetWindow()->mapPixelToCoords(MouseLocation);
-
-    Cell *CellHited = GE->GetCellByPosition(WorldMouseLocation);
+    Cell *CellHited = GetCellByMousePosition();
     if (!CellHited)
         return;
 
@@ -97,6 +96,14 @@ void GraphEditionController::SelectCell()
         return;
 
     CellHited->SetCellType(CellType);
+}
+
+void GraphEditionController::SetCellTypeToNone()
+{
+    Cell *CellHited = GetCellByMousePosition();
+    if (!CellHited)
+        return;
+    CellHited->SetCellType(ECellType::None);
 }
 
 void GraphEditionController::SwitchCellType()
@@ -132,4 +139,14 @@ void GraphEditionController::LoadParty()
 {
     SaveGraph();
     GE->GM->LoadLevel("Party");
+}
+
+// PRIVATE
+
+Cell *GraphEditionController::GetCellByMousePosition()
+{
+    sf::Vector2i MouseLocation = sf::Mouse::getPosition(*GetWorld()->GetWindow());
+    sf::Vector2f WorldMouseLocation = GetWorld()->GetWindow()->mapPixelToCoords(MouseLocation);
+    Cell *CellHited = GE->GetCellByPosition(WorldMouseLocation);
+    return CellHited;
 }

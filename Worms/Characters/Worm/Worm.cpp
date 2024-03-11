@@ -27,6 +27,12 @@
 #include "Characters/InputActions/JumpAction.h"
 #include "Characters/InputActions/FireAction.h"
 #include "Characters/InputActions/AimAction.h"
+#include "Characters/InputActions/ZoomViewportAction.h"
+#include "Characters/InputActions/ResetViewCenter.h"
+#include "Characters/InputActions/MoveViewportAction.h"
+#include "Characters/InputActions/MoveViewportAction.h"
+#include "Characters/InputActions/LoadGraphEditionAction.h"
+#include "Characters/InputActions/RestartPartyAction.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -34,18 +40,32 @@
 // Weapon
 #include "Items/Weapons/FireGun/FireGun.h"
 
+#include "GameObject/Components/Ui/Text.h"
+#include "GameObject/Components/Camera/Camera.h"
+
 #include "Deleguate.h"
+#include "Team.h"
+
+#include "Level/Level.h"
+#include "GameManager/GameManager.h"
 
 Worm::Worm() : Character()
 {
+    MaxWalkSpeed = 200;
+
+    // MaxHealth = 30;
+    MaxHealth = 1;
+    // MaxHealth = 100;
+    CurrentHealth = MaxHealth;
+    bIsAlive = true;
+    bCanMove = false;
+    bCanFire = false;
+
     // Instance Animations
     InitAnimations();
 
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
-    // SquareColliderComponent = std::make_shared<TriangleCollider>();
-    // SquareColliderComponent = std::make_shared<CircleCollider>(50);
-    // SquareColliderComponent = std::make_shared<CircleCollider>();
     SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::OnCollisionEnter);
@@ -54,10 +74,21 @@ Worm::Worm() : Character()
     DeleguateActionDone = std::make_shared<Deleguate>();
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
-    // RigidbodyComponent->GravityScale = 25;
     RigidbodyComponent->GravityScale = 20;
-    // RigidbodyComponent->GravityScale = 5;
 
+    TextName = std::make_shared<Text>(arial_data, arial_size);
+    TextName->SetCharacterSize(10);
+    TextName->SetFillColor(sf::Color::Red);
+    TextName->Offset = sf::Vector2f(0, -100);
+
+    TextHp = std::make_shared<Text>(arial_data, arial_size);
+    TextHp->SetCharacterSize(10);
+    TextHp->SetFillColor(sf::Color::Red);
+    TextHp->Offset = sf::Vector2f(0, -50);
+    TextHp->SetString(std::to_string(CurrentHealth) + "/" + std::to_string(MaxHealth));
+
+    AddComponent(TextName.get());
+    AddComponent(TextHp.get());
     AddComponent(SquareColliderComponent.get());
     AddComponent(CurrentSprite.get());
     AddComponent(RigidbodyComponent.get());
@@ -67,18 +98,11 @@ Worm::Worm() : Character()
     IaJump = std::make_shared<JumpAction>();
     IaFire = std::make_shared<FireAction>();
     IaAim = std::make_shared<AimAction>();
-
-    MaxWalkSpeed = 200;
-
-    // std::cout << SquareColliderComponent->HasLayer(Layers::ALL);
-    // std::cout << SquareColliderComponent->HasLayer(Layers::STATIC);
-
-    MaxHealth = 30;
-    // MaxHealth = 100;
-    CurrentHealth = MaxHealth;
-    bIsAlive = true;
-    bCanMove = false;
-    bCanFire = false;
+    IaMoveViewport = std::make_shared<MoveViewportAction>();
+    IaZoomViewport = std::make_shared<ZoomViewportAction>();
+    IaResetViewport = std::make_shared<ResetViewCenter>();
+    IaLoadGraphEdition = std::make_shared<LoadGraphEditionAction>();
+    IaRestartParty = std::make_shared<RestartPartyAction>();
 }
 
 void Worm::Start()
@@ -93,6 +117,8 @@ void Worm::Update(const float DeltaTime)
     //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
 
     Character::Update(DeltaTime);
+
+    TextName->SetString(GetName());
     // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     // AxisMoveValue = sf::Vector2f(0, 0);
     // Worm::Move(DeltaTime);
@@ -100,8 +126,6 @@ void Worm::Update(const float DeltaTime)
 
     // if (GetWorld()->GetCharacterControlled().get() == this)
     //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
-
-
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -110,16 +134,12 @@ void Worm::Render(sf::RenderWindow &Window) const
     DrawAimLine(Window);
 }
 
-// PROTECTED
-
-void Worm::SetupBindAction()
+void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
-    InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
-    InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::OnMoveStart);
-    InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::OnMoveCompleted);
-    InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
-    InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
-    InputComponent->BindAction(IaAim, ETriggerEvent::Triggered, this, &Worm::Aim);
+    if (Team)
+        Team->RemoveWorm(this);
+    CallDeleguateActionDone();
+    GameObject::Destroy();
 }
 
 float Worm::TakeDamage(const float Damage)
@@ -133,18 +153,32 @@ float Worm::TakeDamage(const float Damage)
         Destroy();
     }
 
+    TextHp->SetString(std::to_string(CurrentHealth) + "/" + std::to_string(MaxHealth));
+
     return CurrentHealth;
+}
+
+// PROTECTED
+
+void Worm::SetupBindAction()
+{
+    InputComponent->BindAction(IaMove, ETriggerEvent::Triggered, this, &Worm::Move);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::OnMoveStart);
+    InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::OnMoveCompleted);
+    InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
+    InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
+    InputComponent->BindAction(IaAim, ETriggerEvent::Triggered, this, &Worm::Aim);
+    InputComponent->BindAction(IaMoveViewport, ETriggerEvent::Triggered, this, &Worm::MoveViewport);
+    InputComponent->BindAction(IaZoomViewport, ETriggerEvent::Triggered, this, &Worm::ZoomViewport);
+    InputComponent->BindAction(IaResetViewport, ETriggerEvent::Triggered, this, &Worm::ResetViewport);
+    InputComponent->BindAction(IaRestartParty, ETriggerEvent::Started, this, &Worm::RestartParty);
+    InputComponent->BindAction(IaLoadGraphEdition, ETriggerEvent::Started, this, &Worm::LoadGraphEdition);
 }
 
 void Worm::OnCollisionEnter(GameObject *GameObjectHited)
 {
     // SetWorldPosition(sf::Vector2f(300, 200));
     // std::cout << "rara\n";
-}
-
-void Worm::OnDestroy()
-{
-    std::cout << "Worm Destroyed\n";
 }
 
 void Worm::InitAnimations()
@@ -246,7 +280,7 @@ void Worm::Fire()
     if (!bCanFire)
         return;
 
-    const sf::Vector2f Location = GetWorldPosition() +  AimDirection * 50.f;
+    const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
     FireGun *FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
     sf::Vector2f force = AimDirection * 20000.f;
 
@@ -262,6 +296,31 @@ void Worm::Jump()
 {
     RigidbodyComponent->SetVelocity(sf::Vector2f(RigidbodyComponent->GetVelocity().x, 0));
     RigidbodyComponent->AddForce(sf::Vector2f(0, -50000));
+}
+
+void Worm::MoveViewport(const sf::Vector2f Value)
+{
+    CameraComponent->Offset += (Value * SpeedMoveView * GetWorld()->GetWorldDeltaSecond());
+}
+
+void Worm::ZoomViewport(const sf::Vector2f Value)
+{
+    CameraComponent->SetZoom(CameraComponent->GetZoom() + Value.x * SpeedZoom * GetWorld()->GetWorldDeltaSecond());
+}
+
+void Worm::ResetViewport()
+{
+    CameraComponent->ResetViewport();
+}
+
+void Worm::RestartParty()
+{
+    GetWorld()->GM->LoadLevel("Party");
+}
+
+void Worm::LoadGraphEdition()
+{
+    GetWorld()->GM->LoadLevel("GraphEdition");
 }
 
 // PRIVATE
