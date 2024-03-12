@@ -55,8 +55,7 @@ void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
 
 void Explosion::Destroy(GameObject *GameObjectToDestroy)
 {
-    DeleguateOnDestroy->Broadcast();
-    Item::Destroy(GameObjectToDestroy);
+    GameObject::Destroy(GameObjectToDestroy);
 }
 
 // PRIVATE

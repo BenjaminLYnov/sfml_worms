@@ -8,6 +8,7 @@
 #include "Deleguate.h"
 #include "Characters/Worm/Worm.h"
 #include "Explosion.h"
+#include "FireGunAnimation.h"
 #include "FragmentationBall.h"
 #include "BallFragment.h"
 
@@ -21,6 +22,9 @@ FragmentationBall::FragmentationBall()
     RigidbodyComponent->GravityScale = 10;
     RigidbodyComponent->HorizontalDrag = 50;
 
+    Icon = std::make_shared<Sprite>();
+    // Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
+
     AddComponent(SquareColliderComponent.get());
     AddComponent(RigidbodyComponent.get());
     // AddComponent(Icon);
@@ -29,6 +33,9 @@ FragmentationBall::FragmentationBall()
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FragmentationBall::OnCollisionEnter);
 
     DeleguateOnDestroy = std::make_shared<Deleguate>();
+
+    std::shared_ptr<Sprite> FireGunA = std::make_shared<FireGunAnimation>();
+    SwitchAnimation(FireGunA);
 }
 
 void FragmentationBall::Start()
@@ -61,13 +68,15 @@ void FragmentationBall::OnCollisionEnter(GameObject *GameObjectHited)
     // Spawn 5 explosive fragments in random directions
     for (int i = 0; i < 5; i++)
     {
-        BallFragment *Fragment = GetWorld()->SpawnGameObject<BallFragment>(GetWorldPosition());
-        Fragment->AddForce(sf::Vector2f(rand() % 1000, rand() % 1000));
+        std::shared_ptr<BallFragment> Fragment =
+            GetWorld()->SpawnGameObject<BallFragment>(GetWorldPosition() + sf::Vector2f(-50 + i * 10, -50));
+        Fragment->SetOwner(GetOwner());
+        Fragment->AddForce(sf::Vector2f(0, -1000));
     }
+    Destroy();
 }
 
 void FragmentationBall::Destroy(GameObject *GameObjectToDestroy)
 {
-    DeleguateOnDestroy->Broadcast();
-    IProjectile::Destroy(GameObjectToDestroy);
+    GameObject::Destroy(GameObjectToDestroy);
 }

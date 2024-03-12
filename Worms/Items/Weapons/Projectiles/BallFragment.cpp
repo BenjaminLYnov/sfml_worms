@@ -2,6 +2,7 @@
 #include "Resources/Resources.h"
 #include "GameObject/Components/Sprite/Sprite.h"
 #include "GameObject/Components/Collider/SquareCollider.h"
+#include "GameObject/Components/Collider/CircleCollider.h"
 #include "GameObject/Components/Rigidbody/Rigidbody.h"
 #include "GameObject/GameObject.h"
 #include "iostream"
@@ -56,15 +57,19 @@ void BallFragment::OnCollisionEnter(GameObject *GameObjectHited)
     IProjectile::OnCollisionEnter(GameObjectHited);
     if (!GameObjectHited || GameObjectHited == GetOwner())
         return;
-
+    BallFragment *BallFragmentHitted = dynamic_cast<BallFragment *>(GameObjectHited);
+    if (BallFragmentHitted)
+    {
+        return;
+    }
     // Spawn small explosion
-    Explosion *explosion = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
-    explosion->GetComponent<SquareCollider>()->SetSize(sf::Vector2f(50, 50));
+    std::shared_ptr<Explosion> Exp = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
+    Exp->GetComponent<CircleCollider>()->SetRadius(15);
+    Exp->SetOwner(GetOwner());
     Destroy();
 }
 
 void BallFragment::Destroy(GameObject *GameObjectToDestroy)
 {
-    DeleguateOnDestroy->Broadcast();
-    IProjectile::Destroy(GameObjectToDestroy);
+    GameObject::Destroy(GameObjectToDestroy);
 }

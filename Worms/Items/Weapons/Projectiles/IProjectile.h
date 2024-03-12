@@ -29,14 +29,14 @@ public:
 protected:
     float LifeTime;
     float DammageAmount;
+    float FireGunSpriteScale = 0.4f;
+    std::shared_ptr<FireGunAnimation> FireGunA;
 
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
 
 private:
     std::shared_ptr<SquareCollider> SquareColliderComponent;
     std::shared_ptr<Rigidbody> RigidbodyComponent;
-    std::shared_ptr<FireGunAnimation> FireGunA;
-    float FireGunSpriteScale = 0.4f;
 };
 
 #endif

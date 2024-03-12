@@ -147,8 +147,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
     if (Team)
         Team->RemoveWorm(this);
-    if (FireGunS)
-        FireGunS->SetOwner();
+    if (FragmentationBallS)
+        FragmentationBallS->SetOwner();
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();
@@ -209,7 +209,7 @@ void Worm::InitAnimations()
     SwitchAnimation(IdleA);
 }
 
-void Worm::Move(float DeltaTime)
+void Worm::Move(const sf::Vector2f Value)
 {
     if (bWon)
         return;
@@ -319,12 +319,12 @@ void Worm::Fire()
         return;
 
     const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
-    FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
-    FireGunS->SetOwner(this);
+    FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
+    FragmentationBallS->SetOwner(this);
     sf::Vector2f force = AimDirection * 20000.f;
 
-    FireGunS->AddForce(force);
-    FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    FragmentationBallS->AddForce(force);
+    FragmentationBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 
     if (!bWon)
     {

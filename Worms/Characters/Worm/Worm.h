@@ -11,7 +11,8 @@ class TriangleCollider;
 class Deleguate;
 class Text;
 class Team;
-class FireGun;
+class CannonBall;
+class FragmentationBall;
 
 // Animations
 class IdleAnimation;
@@ -107,7 +108,7 @@ private:
     std::shared_ptr<InputAction> IaLoadGraphEdition;
 
     // Weapon
-    std::shared_ptr<FireGun> FireGunS = nullptr;
+    std::shared_ptr<FragmentationBall> FragmentationBallS = nullptr;
 
     int MaxHealth;
     bool bIsFacingRight;
