@@ -11,6 +11,7 @@ class Team;
 class DeadZone;
 class Text;
 class Sound;
+class ProgressBar;
 
 namespace sf
 {
@@ -35,13 +36,14 @@ private:
     const int NbTeam = 2;
     bool bGameIsOver = false;
 
+    std::shared_ptr<ProgressBar> ProgressBarElement;
     std::shared_ptr<Text> TextEndParty;
 
     std::shared_ptr<Sound> SoundWin;
     std::shared_ptr<Sound> SoundMatchNull;
 
-	std::vector<std::shared_ptr<Team>> Teams;
-	std::shared_ptr<DeadZone> DZ;
+    std::vector<std::shared_ptr<Team>> Teams;
+    std::shared_ptr<DeadZone> DZ;
 
     std::shared_ptr<Worm> CurrentWorm;
     std::shared_ptr<Team> CurrentTeam;
@@ -52,7 +54,6 @@ private:
     std::shared_ptr<Team> GetNextTeam();
     bool AllTeamAreDead() const;
     bool GameIsOver();
-
 };
 
 #endif

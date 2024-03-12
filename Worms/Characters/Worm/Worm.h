@@ -45,6 +45,8 @@ public:
     void SetWinAnimation();
     void CallDeleguateActionDone();
 
+    float GetShootForce();
+
     std::shared_ptr<SquareCollider> SquareColliderComponent;
 
     std::shared_ptr<Text> TextName;
