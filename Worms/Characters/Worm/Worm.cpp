@@ -120,8 +120,6 @@ void Worm::Start()
 
 void Worm::Update(const float DeltaTime)
 {
-    // if (GetWorld()->GetCharacterControlled().get() == this)
-    // std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
 
     if (!bWon && !bIsAiming && RigidbodyComponent->GetVelocity().y == 0 && std::abs(RigidbodyComponent->GetVelocity().x) <= 1)
     {
@@ -129,9 +127,6 @@ void Worm::Update(const float DeltaTime)
     }
 
     TextName->SetString(GetName());
-    // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
-    // AxisMoveValue = sf::Vector2f(0, 0);
-    // Worm::Move(DeltaTime);
 
     if (bIsFacingRight)
         AnimationComponent->SetScale(sf::Vector2f(-1, 1));
@@ -160,9 +155,6 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 float Worm::TakeDamage(const float Damage)
 {
     CurrentHealth -= Damage;
-
-    // if (FireGunS)
-    //     FireGunS->SetOwner();
 
     if (ExplosionS)
         ExplosionS->SetOwner();
@@ -338,13 +330,10 @@ void Worm::OnFireTriggered()
     {
         ShootForce = ShootForceMax;
     }
-
-    std::cout << ShootForce << "\n";
 }
 
 void Worm::OnFireCompleted()
 {
-    std::cout << "ShootForce: " << ShootForce << "\n";
     if (bWon)
         return;
 

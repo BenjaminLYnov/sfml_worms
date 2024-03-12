@@ -60,7 +60,13 @@ void Party::Start()
 
 	Level::Start();
 
-	// std::cout << G->Cells[G->Cells.size() - 1]->GetWorldPosition().x << "\n";
+	std::vector<std::shared_ptr<Worm>> Worms = GetAllGameObjectByClass<Worm>();
+	for (int i = 0; i < Worms.size(); i++)
+	{
+		if (!Worms[i])
+			continue;
+		SpawnWorm(Worms[i]);
+	}
 }
 
 void Party::Update(const float DeltaTime)
@@ -121,6 +127,53 @@ void Party::InitTeams()
 
 void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
 {
+	if (!WormToSpawn)
+		return;
+
+	HitResult Hit;
+	const int MaxIteration = 1000;
+	int CurrentIteration = 0;
+	do
+	{
+		const float MinPositionX = G->Cells[0]->GetWorldPosition().x;
+		const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x;
+		const float MinPositionY = G->Cells[0]->GetWorldPosition().y;
+		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y -  100;
+
+		const float PosX = RandomNumber::RandomFloat(MinPositionX, MaxPositionX);
+		const float PosY = RandomNumber::RandomFloat(MinPositionY, MaxPositionY);
+		const sf::Vector2f Position = sf::Vector2f(PosX, PosY);
+		WormToSpawn->SetWorldPosition(Position);
+
+		std::shared_ptr<ICollider> Collider = std::dynamic_pointer_cast<ICollider>(WormToSpawn->SquareColliderComponent);
+
+		if (!Collider)
+			return;
+
+		for (std::shared_ptr<GameObject> Go : GameObjects)
+		{
+			if (!Go)
+				continue;
+
+			if (Go != WormToSpawn)
+				continue;
+
+			ICollider *ColliderToCheck = Go->GetComponent<ICollider>();
+
+			if (!ColliderToCheck)
+				continue;
+
+			if (!ColliderToCheck->bEnableCollision)
+				continue;
+
+			Hit = Collider->TestCollision(ColliderToCheck);
+
+			if (Hit.bIsOnCollision)
+				break;
+		}
+		CurrentIteration++;
+
+	} while (Hit.bIsOnCollision && CurrentIteration <= MaxIteration);
 }
 
 void Party::SwitchCharacter()

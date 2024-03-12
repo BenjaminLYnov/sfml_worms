@@ -55,9 +55,9 @@ public:
 
     void InitCollider();
 
-    SquareCollider* Square;
-    CircleCollider* Circle;
-    TriangleCollider* Triangle;
+    SquareCollider *Square = nullptr;
+    CircleCollider *Circle = nullptr;
+    TriangleCollider *Triangle = nullptr;
 
     bool bEnableCollision = true;
 
@@ -88,7 +88,6 @@ protected:
     void MoveByRigidbody(const HitResult Hit);
     void RestrictRigidbody(const sf::Vector2f Normal);
 
-    
 private:
     virtual void CallCallbacks(ECollisionEvent CollisionEvent, GameObject *GameObjectHited = nullptr);
 };
