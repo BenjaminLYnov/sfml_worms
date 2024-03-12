@@ -8,6 +8,7 @@
 #include "iostream"
 #include "Deleguate.h"
 #include "Characters/Worm/Worm.h"
+#include "Levels/Graph/Cell.h"
 #include "Explosion.h"
 #include "BallFragment.h"
 
@@ -57,13 +58,16 @@ void BallFragment::OnCollisionEnter(GameObject *GameObjectHited)
     IProjectile::OnCollisionEnter(GameObjectHited);
     if (!GameObjectHited || GameObjectHited == GetOwner())
         return;
-    BallFragment *BallFragmentHitted = dynamic_cast<BallFragment *>(GameObjectHited);
-    if (BallFragmentHitted)
+    Cell *C = dynamic_cast<Cell *>(GameObjectHited);
+    Worm *W = dynamic_cast<Worm *>(GameObjectHited);
+    if (!C && !W)
     {
         return;
     }
+
     // Spawn small explosion
-    std::shared_ptr<Explosion> Exp = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
+    std::shared_ptr<Explosion>
+        Exp = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
     Exp->GetComponent<CircleCollider>()->SetRadius(15);
     Exp->SetOwner(GetOwner());
     Destroy();
