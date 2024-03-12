@@ -85,6 +85,8 @@ protected:
     virtual void OnMoveCompleted();
     virtual void Aim(const sf::Vector2f Value);
     virtual void Jump();
+    virtual void OnFireTriggered();
+    virtual void OnFireCompleted();
     virtual void Fire();
     virtual void MoveViewport(const sf::Vector2f Value);
     virtual void ZoomViewport(const sf::Vector2f Value);
@@ -126,7 +128,12 @@ private:
     sf::Vector2f JumpForce = sf::Vector2f(40000, -70000);
 
     sf::Vector2f MoveDirection = sf::Vector2f(1, 0);
-    ;
+
+    float ShootForce;
+    float ShootForceTimerMax = 1.0f;
+    float ShootForceMax = 20000;
+    float ShootForceMin = 1000;
+    float ShootForceTimer = 0;
 
     float AimAngle = 0;
     sf::Vector2f AimDirection = sf::Vector2f(1, 0);
