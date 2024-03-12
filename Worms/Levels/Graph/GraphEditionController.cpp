@@ -14,8 +14,8 @@
 #include "./InputActions/LoadGraphAction.h"
 #include "./InputActions/LoadPartyAction.h"
 #include "./InputActions/SetCellTypeToNoneAction.h"
+#include "./InputActions/GraphMoveViewportAction.h"
 #include "Characters/InputActions/ZoomViewportAction.h"
-#include "Characters/InputActions/MoveViewportAction.h"
 #include "GameObject/Components/Camera/Camera.h"
 #include "GameManager/GameManager.h"
 
@@ -26,7 +26,7 @@
 GraphEditionController::GraphEditionController() : Character()
 {
     // Instance Inputs Acitons
-    IaMoveViewport = std::make_shared<MoveViewportAction>();
+    IaMoveViewport = std::make_shared<GraphMoveViewportAction>();
     IaZoomViewport = std::make_shared<ZoomViewportAction>();
     IaSelectCell = std::make_shared<SelectCellAction>();
     IaSwitchCellType = std::make_shared<SwitchCellTypeAction>();
@@ -39,6 +39,7 @@ GraphEditionController::GraphEditionController() : Character()
 
     CameraComponent->bEnableLag = true;
     CameraComponent->SetFollowOwner(false);
+    AddComponent(CameraComponent.get());
 }
 
 void GraphEditionController::Start()

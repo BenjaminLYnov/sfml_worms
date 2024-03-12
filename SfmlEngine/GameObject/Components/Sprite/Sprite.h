@@ -36,6 +36,7 @@ public:
     void SetOriginToCenter();
     void ResetAnimation();
     void SetScale(const sf::Vector2f Scale);
+    void SetRotation(const float Rotation);
 
     // Méthode pour définir la position du sprite.
     void SetOffset(const sf::Vector2f &NewPosition);

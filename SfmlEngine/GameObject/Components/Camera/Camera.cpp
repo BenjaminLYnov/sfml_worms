@@ -28,6 +28,7 @@ void Camera::Update(const float DeltaTime)
 
     if (bFollowOwner)
         FollowOwner(DeltaTime);
+
     UpdateViewport(DeltaTime);
 }
 
@@ -73,12 +74,20 @@ float Camera::GetZoom() const
 
 void Camera::MoveView(const sf::Vector2f Move)
 {
+
     TargetViewCenter += Move;
 }
 
 void Camera::ResetViewport()
 {
     Offset = sf::Vector2f(0, 0);
+}
+
+sf::Vector2f Camera::GetViewportCenter() const
+{
+    if (!Viewport)
+        return sf::Vector2f(0, 0);
+    return Viewport->getCenter();
 }
 
 // PROTECTED

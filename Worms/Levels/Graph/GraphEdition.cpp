@@ -13,12 +13,13 @@ GraphEdition::GraphEdition() : Level()
     GD = std::make_shared<GraphData>();
 
     GEController = std::make_shared<GraphEditionController>();
-    AddGameObject(GEController);
 }
 
 void GraphEdition::Start()
 {
 	GameObjects.clear();
+
+    AddGameObject(GEController);
 
     SetCharacterControlled(GEController);
     GEController->SetGraphEditionLevel(this);
@@ -54,7 +55,6 @@ Cell *GraphEdition::GetCellByPosition(const sf::Vector2f Position)
         if (!CurrentCell->Shape)
             continue;
         if (CurrentCell->Shape->getGlobalBounds().contains(Position))
-        // if (CurrentCell->IsSelected(Position))
         {
             return CurrentCell.get();
         }

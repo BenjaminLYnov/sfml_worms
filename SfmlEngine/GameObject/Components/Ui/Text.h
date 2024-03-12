@@ -28,6 +28,7 @@ public:
     void SetString(const std::string Value);
     void SetCharacterSize(const int Value);
     void SetFillColor(const sf::Color &Color);
+    void SetWorldPosition(const sf::Vector2f Position);
 
     sf::Vector2f Offset;
     

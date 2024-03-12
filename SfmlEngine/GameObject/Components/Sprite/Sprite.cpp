@@ -92,6 +92,13 @@ void Sprite::SetScale(const sf::Vector2f Scale)
     SfmlSprite->setScale(Scale);
 }
 
+void Sprite::SetRotation(const float Rotation)
+{
+    if (!SfmlSprite)
+        return;
+    SfmlSprite->setRotation(Rotation);
+}
+
 sf::Vector2f Sprite::GetPosition() const
 {
     if (!SfmlSprite)

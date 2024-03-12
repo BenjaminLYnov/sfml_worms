@@ -10,6 +10,7 @@ class SquareCollider;
 class GameObject;
 class Rigidbody;
 class Deleguate;
+class FireGunAnimation;
 
 class FireGun : public Weapon
 {
@@ -23,7 +24,6 @@ public:
 
     virtual void AddForce(const sf::Vector2f &Force);
 
-    float DammageAmount = 10.0f;
 
     void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
 
@@ -35,6 +35,9 @@ private:
     std::shared_ptr<Rigidbody> RigidbodyComponent;
 
     float LifeTime = 7.0f;
+
+    std::shared_ptr<FireGunAnimation> FireGunA;
+    float FireGunSpriteScale = 0.4f;
 
 };
 

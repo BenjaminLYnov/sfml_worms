@@ -20,6 +20,9 @@
 #include "iostream"
 #include "Math/Random/RandomNumber.h"
 #include "DeadZone.h"
+#include "GameObject/Components/Ui/Text.h"
+#include "Resources/Resources.h"
+#include <SFML/Graphics/RenderWindow.hpp>
 
 Party::Party()
 {
@@ -28,9 +31,12 @@ Party::Party()
 void Party::Start()
 {
 	GameObjects.clear();
-
 	CurrentWorm.reset();
 	CurrentTeam.reset();
+
+	TextEndParty = std::make_shared<Text>(arial_data, arial_size);
+	TextEndParty->SetCharacterSize(50);
+	TextEndParty->SetFillColor(sf::Color::Red);
 
 	G = std::make_shared<Graph>();
 	G->World = this;
@@ -51,6 +57,20 @@ void Party::Start()
 void Party::Update(const float DeltaTime)
 {
 	Level::Update(DeltaTime);
+
+	if (CurrentWorm)
+	{
+		if (CurrentWorm->CameraComponent)
+		{
+			TextEndParty->SetWorldPosition(CurrentWorm->CameraComponent->CurrentViewCenter);
+		}
+	}
+}
+
+void Party::Render(sf::RenderWindow &Window) const
+{
+	Level::Render(Window);
+	TextEndParty->Render(Window);
 }
 
 // PROTECTED
@@ -72,6 +92,7 @@ void Party::InitTeams()
 			const float RandomNumberX = RandomNumber::RandomFloat(0, 1000);
 			W->SetWorldPosition(sf::Vector2f(RandomNumberX, 0));
 			W->DeleguateActionDone->AddCallback(this, &Party::SwitchCharacter);
+			W->DeleguateDeath->AddCallback(this, &Party::GameIsOver);
 			W->Team = NewTeam;
 
 			AddGameObject(W);
@@ -98,40 +119,8 @@ void Party::SwitchCharacter()
 	if (!CurrentTeam || !CurrentWorm)
 		return;
 
-	if (Teams.size() == 0)
+	if (GameIsOver())
 		return;
-
-	// Vérifier si tous les worms sont mort
-	if (AllTeamAreDead())
-	{
-		std::string WinMessage = "Match null !";
-		std::cout << WinMessage << "\n";
-		return;
-	}
-
-	// Vérifier si une team n'a plus aucun worm
-	for (int i = 0; i < Teams.size(); i++)
-	{
-		if (Teams[i]->GetWorms().size() == 0)
-		{
-
-			std::shared_ptr WinTeam = Teams[(i + 1) % Teams.size()];
-			std::string WinMessage = WinTeam->GetName() + " a gagné la partie !";
-
-			for (int i = 0; i <WinTeam->GetWorms().size(); i++)
-			{
-				if (WinTeam->GetWorms()[i])
-				{
-					WinTeam->GetWorms()[i]->SetWinAnimation();
-				}
-			}
-
-			UpdateCurrentWorm(WinTeam->GetCurrentWorm());
-
-			std::cout << WinMessage << "\n";
-			return;
-		}
-	}
 
 	CurrentTeam = GetNextTeam();
 	CurrentTeam->UpdateToNextWorm();
@@ -194,4 +183,42 @@ bool Party::AllTeamAreDead() const
 			return false;
 	}
 	return true;
+}
+
+bool Party::GameIsOver()
+{
+	if (Teams.size() == 0)
+		return true;
+
+	// Vérifier si tous les worms sont mort
+	if (AllTeamAreDead())
+	{
+		std::string WinMessage = "Match null !";
+		TextEndParty->SetString(WinMessage);
+		return true;
+	}
+
+	// Vérifier si une team n'a plus aucun worm
+	for (int i = 0; i < Teams.size(); i++)
+	{
+		if (Teams[i]->GetWorms().size() == 0)
+		{
+			std::shared_ptr WinTeam = Teams[(i + 1) % Teams.size()];
+			std::string WinMessage = WinTeam->GetName() + " a gagned la partie !";
+
+			for (int i = 0; i < WinTeam->GetWorms().size(); i++)
+			{
+				if (WinTeam->GetWorms()[i])
+				{
+					WinTeam->GetWorms()[i]->SetWinAnimation();
+				}
+			}
+
+			UpdateCurrentWorm(WinTeam->GetCurrentWorm());
+
+			TextEndParty->SetString(WinMessage);
+			return true;
+		}
+	}
+	return false;
 }

@@ -26,6 +26,7 @@ class Worm : public Character
 public:
     std::shared_ptr<Deleguate> DeleguateFire;
     std::shared_ptr<Deleguate> DeleguateActionDone;
+    std::shared_ptr<Deleguate> DeleguateDeath;
 
     Worm();
 

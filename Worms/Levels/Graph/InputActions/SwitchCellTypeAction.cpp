@@ -3,5 +3,5 @@
 
 SwitchCellTypeAction::SwitchCellTypeAction()
 {
-    AddKey(Key::Keyboard::R);
+    AddKey(Key::Keyboard::B);
 }

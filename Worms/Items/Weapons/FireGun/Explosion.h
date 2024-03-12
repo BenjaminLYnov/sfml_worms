@@ -6,7 +6,7 @@
 #include "../Weapon.h"
 #include <SFML/Graphics.hpp>
 
-class SquareCollider;
+class CircleCollider;
 class GameObject;
 class Deleguate;
 
@@ -19,10 +19,15 @@ public:
     virtual void Update(const float DeltaTime) override;
 
 protected:
-    virtual void OnCollisionStay(GameObject *GameObjectHited);
+    virtual void OnCollisionEnter(GameObject *GameObjectHited);
+
+    float CircleRadius = 30;
+    float DammageAmount = 10.0f;
 
 private:
-    std::shared_ptr<SquareCollider> SquareColliderComponent;
+    std::shared_ptr<CircleCollider> CircleColliderComponent;
+
+    int IndexFrame = 0;
 
     void InitAnimations();
 };
