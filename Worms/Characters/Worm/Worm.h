@@ -132,7 +132,7 @@ private:
 
     float ShootForce;
     float ShootForceTimerMax = 1.0f;
-    float ShootForceMax = 20000;
+    float ShootForceMax = 100000;
     float ShootForceMin = 1000;
     float ShootForceTimer = 0;
 

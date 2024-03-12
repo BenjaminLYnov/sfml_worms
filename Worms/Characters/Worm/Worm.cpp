@@ -319,7 +319,6 @@ void Worm::DrawAimLine(sf::RenderWindow &window) const
 
 void Worm::OnFireTriggered()
 {
-    std::cout << "OnFireTriggered\n";
     if (bWon)
         return;
 
@@ -339,12 +338,12 @@ void Worm::OnFireTriggered()
     {
         ShootForce = ShootForceMax;
     }
+
+    std::cout << ShootForce << "\n";
 }
 
 void Worm::OnFireCompleted()
 {
-
-    std::cout << "OnFireCompleted\n";
     std::cout << "ShootForce: " << ShootForce << "\n";
     if (bWon)
         return;
@@ -385,7 +384,7 @@ void Worm::Fire()
 
     CannonBallS = GetWorld()->SpawnGameObject<CannonBall>(Location);
     CannonBallS->SetOwner(this);
-    CannonBallS->AddForce(AimDirection * 20000.f);
+    CannonBallS->AddForce(AimDirection * ShootForce);
     CannonBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 
     if (!bWon)

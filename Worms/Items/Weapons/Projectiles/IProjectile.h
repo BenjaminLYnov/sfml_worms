@@ -27,7 +27,7 @@ public:
     void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
 
 protected:
-    float LifeTime = 5.0f;
+    float LifeTime = 4.0f;
     float DammageAmount;
 
     float FireGunSpriteScale = 0.4f;
