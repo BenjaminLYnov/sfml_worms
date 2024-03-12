@@ -3,14 +3,17 @@
 #include "GraphData.h"
 #include "Level/Level.h"
 #include <iostream>
+#include "GameObject/Components/Sprite/Sprite.h"
+#include "Resources/Resources.h"
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 Graph::Graph()
 {
     GD = std::make_shared<GraphData>();
-}
 
-Graph::~Graph()
-{
+    TextureTileGround = std::make_shared<sf::Texture>();
+    TextureTileGround->loadFromMemory(tile_ground_data, tile_ground_size);
 }
 
 void Graph::Init()
@@ -28,7 +31,10 @@ void Graph::Init()
         {
             std::shared_ptr<Cell> NewCell = AddCell(sf::Vector2f(Size.y * Col, Size.x * Line), Size);
             if (NewCell)
+            {
                 NewCell->SetName("Cell " + std::to_string(Line) + " " + std::to_string(Col));
+                NewCell->AnimationComponent->SetTexture(TextureTileGround);
+            }
         }
     }
     LoadGraph();

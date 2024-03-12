@@ -16,6 +16,9 @@ void AnimatedSprite::SetAnimationSpeed(const float Speed)
 
 void AnimatedSprite::AddAnimationFrame(const sf::IntRect &Frame)
 {
+    if (!SfmlSprite)
+        return;
+        
     Frames.push_back(Frame);
 
     if (Frames.size() == 1)
@@ -32,7 +35,7 @@ void AnimatedSprite::Update(const float DeltaTime)
 
     if (bStopAtLastFrame)
     {
-        if (CurrentFrame == Frames.size() - 1)
+        if (IsOnLastFrame())
             return;
     }
 
@@ -72,6 +75,9 @@ void AnimatedSprite::PauseAnimation()
 
 void AnimatedSprite::SetFrameAt(const int IndexFrame)
 {
+    if (!SfmlSprite)
+        return;
+
     if (IndexFrame < 0)
         return;
 
@@ -86,4 +92,9 @@ void AnimatedSprite::SetFrameAt(const int IndexFrame)
 void AnimatedSprite::SetStopAtLastFrame(const bool bStop)
 {
     bStopAtLastFrame = bStop;
+}
+
+bool AnimatedSprite::IsOnLastFrame() const
+{
+    return CurrentFrame == Frames.size() - 1;
 }

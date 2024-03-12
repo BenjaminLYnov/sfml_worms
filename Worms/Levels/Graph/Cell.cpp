@@ -5,6 +5,7 @@
 #include "GameObject/Components/Collider/TriangleCollider.h"
 #include "GameObject/GameObject.h"
 #include "Items/Weapons/Weapon.h"
+#include "GameObject/Components/Sprite/Sprite.h"
 
 Cell::Cell(const sf::Vector2f Size) : GameObject()
 {
@@ -48,10 +49,9 @@ void Cell::Update(const float DeltaTime)
 
 void Cell::Render(sf::RenderWindow &Window) const
 {
-    GameObject::Render(Window);
-
-    if (Shape && CellType == ECellType::None)
+       if (Shape)
         Window.draw(*Shape);
+    GameObject::Render(Window);
 }
 
 void Cell::SetSize(const sf::Vector2f &NewSize)
@@ -91,16 +91,26 @@ void Cell::SetCellType(const ECellType NewCellType)
     case ECellType::Square:
         AddComponent(SquareColliderComponent.get());
         SquareColliderComponent->Start();
+        AnimationComponent->SetAnimationFrame(sf::IntRect(40, 403, 333, 333));
+        AnimationComponent->SetScale(sf::Vector2f(0.3, 0.3));
+        AnimationComponent->SetRotation(0);
         break;
     case ECellType::TriangleLeft:
         AddComponent(TriangleLeftColliderComponent.get());
         TriangleLeftColliderComponent->Start();
+        AnimationComponent->SetAnimationFrame(sf::IntRect(638, 424, 111, 111));
+        AnimationComponent->SetScale(sf::Vector2f(0.8, 0.8));
+        AnimationComponent->SetRotation(180);
         break;
     case ECellType::TriangleRight:
         AddComponent(TriangleRightColliderComponent.get());
         TriangleRightColliderComponent->Start();
+        AnimationComponent->SetAnimationFrame(sf::IntRect(800, 424, 111, 111));
+        AnimationComponent->SetRotation(180);
+        AnimationComponent->SetScale(sf::Vector2f(0.8, 0.8));
         break;
     default:
+        AnimationComponent->SetAnimationFrame();
         break;
     }
 }

@@ -45,7 +45,7 @@ void Level::Update(const float DeltaTime)
 {
     DeltaSecond = DeltaTime;
     for (std::shared_ptr<GameObject> Go : GameObjects)
-        if (Go)
+        if (Go != nullptr)
             Go->Update(DeltaTime);
 }
 
@@ -57,7 +57,6 @@ void Level::Render(sf::RenderWindow &Window) const
 }
 
 void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
-// void Level::SetCharacterControlled(Character* NewCharacterControlled)
 {
     CharacterControlled = NewCharacterControlled;
     if (CharacterControlled)
@@ -70,24 +69,30 @@ void Level::ManageCollision()
 
     for (size_t i = 0; i < AllGameObjects.size(); ++i)
     {
+        if (!AllGameObjects[i])
+            continue;
+
+        // Récupère le collider du game object actuelle de la boucle
+        ICollider *ColliderToCheck = AllGameObjects[i]->GetComponent<ICollider>();
+
+        if (!ColliderToCheck)
+            continue;
+
+        if (!ColliderToCheck->bEnableCollision)
+            continue;
+
         for (size_t j = i + 1; j < AllGameObjects.size(); ++j)
         {
-            if (!AllGameObjects[i])
-                continue;
-
             if (!AllGameObjects[j])
-                continue;
-
-            // Récupère le collider du game object actuelle de la boucle
-            ICollider *ColliderToCheck = AllGameObjects[i]->GetComponent<ICollider>();
-
-            if (!ColliderToCheck)
                 continue;
 
             // Récupère le Collider de l'autre game object actuelle de la boucle
             ICollider *OtherCollider = AllGameObjects[j]->GetComponent<ICollider>();
 
             if (!OtherCollider)
+                continue;
+
+            if (!OtherCollider->bEnableCollision)
                 continue;
 
             // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)

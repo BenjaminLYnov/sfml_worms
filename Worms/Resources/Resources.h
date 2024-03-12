@@ -1,6 +1,12 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 
+extern unsigned char pngwing_data[];
+extern unsigned int pngwing_size;
+
+extern unsigned char tile_ground_data[];
+extern unsigned int tile_ground_size;
+
 extern unsigned char basehit_data[];
 extern unsigned int basehit_size;
 

@@ -9,6 +9,7 @@
 class CircleCollider;
 class GameObject;
 class Deleguate;
+class ExplosionAnimation;
 
 class Explosion : public Weapon
 {
@@ -21,11 +22,14 @@ public:
 protected:
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
 
-    float CircleRadius = 30;
+    float CircleRadius = 50;
     float DammageAmount = 10.0f;
+    float ExplosionSpriteScale = 0.6;
+    float ProjectionForce = 100000;
 
 private:
     std::shared_ptr<CircleCollider> CircleColliderComponent;
+    std::shared_ptr<ExplosionAnimation> ExplosionA;
 
     int IndexFrame = 0;
 

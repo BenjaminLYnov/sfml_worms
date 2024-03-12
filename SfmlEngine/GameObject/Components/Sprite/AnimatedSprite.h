@@ -26,6 +26,7 @@ public:
     void PauseAnimation();
     void SetFrameAt(const int IndexFrame);
     void SetStopAtLastFrame(const bool bStop); 
+    bool IsOnLastFrame() const;
 
     void Update(const float DeltaTime);
     std::shared_ptr<sf::Sprite> GetSprite();

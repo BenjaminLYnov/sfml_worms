@@ -41,6 +41,7 @@
 
 // Weapon
 #include "Items/Weapons/FireGun/FireGun.h"
+#include "Items/Weapons/FireGun/Explosion.h"
 
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"
@@ -55,7 +56,7 @@ Worm::Worm() : Character()
 {
     MaxWalkSpeed = 200;
 
-    // MaxHealth = 30;
+    MaxHealth = 30;
     MaxHealth = 1;
     // MaxHealth = 100;
     CurrentHealth = MaxHealth;
@@ -148,6 +149,10 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
         Team->RemoveWorm(this);
     if (FireGunS)
         FireGunS->SetOwner();
+    if (ExplosionS)
+    {
+        ExplosionS->SetOwner();
+    }
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();

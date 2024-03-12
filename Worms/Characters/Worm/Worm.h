@@ -12,6 +12,7 @@ class Deleguate;
 class Text;
 class Team;
 class FireGun;
+class Explosion;
 
 // Animations
 class IdleAnimation;
@@ -49,6 +50,10 @@ public:
 
     float SpeedMoveView = 500;
     float SpeedZoom = 0.5;
+
+    // Weapon
+    std::shared_ptr<FireGun> FireGunS;
+    std::shared_ptr<Explosion> ExplosionS;
 
 #pragma region State
 
@@ -105,9 +110,6 @@ private:
     std::shared_ptr<InputAction> IaResetViewport;
     std::shared_ptr<InputAction> IaRestartParty;
     std::shared_ptr<InputAction> IaLoadGraphEdition;
-
-    // Weapon
-    std::shared_ptr<FireGun> FireGunS = nullptr;
 
     int MaxHealth;
     bool bIsFacingRight;

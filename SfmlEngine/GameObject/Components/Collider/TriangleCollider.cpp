@@ -39,8 +39,10 @@ void TriangleCollider::Update(const float DeltaTime)
 
 void TriangleCollider::Render(sf::RenderWindow &Window)
 {
+#ifndef NDEBUG
     if (Shape)
         Window.draw(*Shape);
+#endif
 }
 
 HitResult TriangleCollider::TestCollision(const TriangleCollider &Other) const

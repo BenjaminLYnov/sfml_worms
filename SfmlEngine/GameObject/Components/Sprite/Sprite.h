@@ -32,11 +32,15 @@ public:
     bool LoadTextureFromMemory(const unsigned char *Data = nullptr, size_t Size = 0);
 
     void SetAnimationSpeed(const float Speed);
-    void AddAnimationFrame(const sf::IntRect &Frame);
+    void AddAnimationFrame(const sf::IntRect &Frame = sf::IntRect(0, 0, 0, 0));
+    void SetAnimationFrame(const sf::IntRect &Frame = sf::IntRect(0, 0, 0, 0));
     void SetOriginToCenter();
     void ResetAnimation();
     void SetScale(const sf::Vector2f Scale);
     void SetRotation(const float Rotation);
+
+    void SetTexture(std::shared_ptr<sf::Texture> &TextureToSet);
+    std::shared_ptr<sf::Texture> &GetTexture();
 
     // Méthode pour définir la position du sprite.
     void SetOffset(const sf::Vector2f &NewPosition);
