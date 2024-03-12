@@ -69,9 +69,11 @@ void FragmentationBall::OnCollisionEnter(GameObject *GameObjectHited)
     for (int i = 0; i < 5; i++)
     {
         std::shared_ptr<BallFragment> Fragment =
-            GetWorld()->SpawnGameObject<BallFragment>(GetWorldPosition() + sf::Vector2f(-50 + i * 10, -50));
+            GetWorld()->SpawnGameObject<BallFragment>(GetWorldPosition() + sf::Vector2f(0, -20));
         Fragment->SetOwner(GetOwner());
-        Fragment->AddForce(sf::Vector2f(0, -1000));
+        Fragment->AddForce(sf::Vector2f(0, -10000));
+        // Add random force on x axis
+        Fragment->AddForce(sf::Vector2f(rand() % 20000 - 10000, 0));
     }
     Destroy();
 }
