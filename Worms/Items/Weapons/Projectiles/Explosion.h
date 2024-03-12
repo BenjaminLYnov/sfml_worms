@@ -16,9 +16,12 @@ class Explosion : public Weapon
 {
 public:
     Explosion();
+    std::shared_ptr<Deleguate> DeleguateOnDestroy;
 
     virtual void Start() override;
     virtual void Update(const float DeltaTime) override;
+
+    void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
 
 protected:
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
@@ -34,6 +37,9 @@ private:
     std::shared_ptr<Sound> SoundExplosion;
 
     int IndexFrame = 0;
+
+    float LifeTime = 0.7f;
+    float CurrentLifeTime = 0.0f;
 
     void InitAnimations();
 };

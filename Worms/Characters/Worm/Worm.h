@@ -11,9 +11,12 @@ class TriangleCollider;
 class Deleguate;
 class Text;
 class Team;
+
 class FireGun;
 class Explosion;
 class Sound;
+class CannonBall;
+class FragmentationBall;
 
 // Animations
 class IdleAnimation;
@@ -114,6 +117,9 @@ private:
 
     std::shared_ptr<Sound> SoundJump;
     std::shared_ptr<Sound> SoundShoot;
+    
+    // Weapon
+    std::shared_ptr<FragmentationBall> FragmentationBallS;
 
     int MaxHealth;
     bool bIsFacingRight;
@@ -127,6 +133,9 @@ private:
     sf::Vector2f AimDirection = sf::Vector2f(1, 0);
 
     float movementTimer = 0;
+
+    float AimSpeed = 100;
+    float MaxWalkSpeed = 15000;
 
     float M_PI = 3.14159265358979323846;
     const float MIN_AIM_ANGLE = -82;

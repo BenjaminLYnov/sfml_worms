@@ -1,4 +1,4 @@
-#include "FireGun.h"
+#include "CannonBall.h"
 #include "Resources/Resources.h"
 #include "GameObject/Components/Sprite/Sprite.h"
 #include "GameObject/Components/Collider/SquareCollider.h"
@@ -12,14 +12,13 @@
 #include "FireGunAnimation.h"
 #include "Math/Vector/Vector.h"
 
-FireGun::FireGun() : Weapon()
+CannonBall::CannonBall() : IProjectile()
 {
-    // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
+    RigidbodyComponent = std::make_shared<Rigidbody>();
     SquareColliderComponent->SetSize(sf::Vector2f(10, 10));
     SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
-    RigidbodyComponent = std::make_shared<Rigidbody>();
     RigidbodyComponent->GravityScale = 10;
     RigidbodyComponent->HorizontalDrag = 50;
 
@@ -28,7 +27,7 @@ FireGun::FireGun() : Weapon()
     AddComponent(SquareColliderComponent.get());
     AddComponent(RigidbodyComponent.get());
 
-    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
+    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &CannonBall::OnCollisionEnter);
 
     DeleguateOnDestroy = std::make_shared<Deleguate>();
 
@@ -36,13 +35,17 @@ FireGun::FireGun() : Weapon()
     SwitchAnimation(FireGunA);
 }
 
-void FireGun::Start()
+void CannonBall::Start()
 {
-    Item::Start();
+    IProjectile::Start();
+    LifeTime = 5;
+    DammageAmount = 50;
+    RigidbodyComponent->AddForce(sf::Vector2f(1000, 0));
 }
 
-void FireGun::Update(const float DeltaTime)
+void CannonBall::Update(const float DeltaTime)
 {
+    IProjectile::Update(DeltaTime);
     Item::Update(DeltaTime);
 
     float Rotation = 0;
@@ -73,16 +76,16 @@ void FireGun::Update(const float DeltaTime)
     }
 }
 
-void FireGun::AddForce(const sf::Vector2f &Force)
+void CannonBall::AddForce(const sf::Vector2f &Force)
 {
     RigidbodyComponent->AddForce(Force);
 }
 
 // PROTECTED
 
-void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
+void CannonBall::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    if (!GameObjectHited)
+    if (!GameObjectHited || GameObjectHited == GetOwner())
         return;
 
     std::shared_ptr<Explosion> Exp = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
@@ -96,8 +99,7 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     Destroy();
 }
 
-void FireGun::Destroy(GameObject *GameObjectToDestroy)
+void CannonBall::Destroy(GameObject *GameObjectToDestroy)
 {
-
     GameObject::Destroy();
 }

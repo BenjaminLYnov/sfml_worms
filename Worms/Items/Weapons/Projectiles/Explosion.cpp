@@ -58,7 +58,7 @@ void Explosion::Update(const float DeltaTime)
 
 void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    if (!GameObjectHited)
+    if (!GameObjectHited || GameObjectHited == GetOwner())
         return;
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
@@ -73,7 +73,12 @@ void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
     }
 }
 
-// private
+void Explosion::Destroy(GameObject *GameObjectToDestroy)
+{
+    GameObject::Destroy(GameObjectToDestroy);
+}
+
+// PRIVATE
 
 void Explosion::InitAnimations()
 {

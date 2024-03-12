@@ -40,8 +40,8 @@
 #include <SFML/System/Vector2.hpp>
 
 // Weapon
-#include "Items/Weapons/FireGun/FireGun.h"
-#include "Items/Weapons/FireGun/Explosion.h"
+#include "Items/Weapons/Projectiles/CannonBall.h"
+#include "Items/Weapons/Projectiles/FragmentationBall.h"
 
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"
@@ -151,6 +151,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
     if (Team)
         Team->RemoveWorm(this);
+    if (FragmentationBallS)
+        FragmentationBallS->SetOwner();
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();
@@ -217,7 +219,6 @@ void Worm::InitAnimations()
     SwitchAnimation(IdleA);
 }
 
-// void Worm::Move(float DeltaTime)
 void Worm::Move(const sf::Vector2f Value)
 {
     if (bWon)
@@ -331,12 +332,12 @@ void Worm::Fire()
         SoundShoot->Play();
 
     const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
-    FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
-    FireGunS->SetOwner(this);
+    FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
+    FragmentationBallS->SetOwner(this);
     sf::Vector2f force = AimDirection * 20000.f;
 
-    FireGunS->AddForce(force);
-    FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    FragmentationBallS->AddForce(force);
+    FragmentationBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 
     if (!bWon)
     {
