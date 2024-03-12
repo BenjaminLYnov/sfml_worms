@@ -34,6 +34,7 @@ void Graph::Init()
             {
                 NewCell->SetName("Cell " + std::to_string(Line) + " " + std::to_string(Col));
                 NewCell->AnimationComponent->SetTexture(TextureTileGround);
+                NewCell->SetCellType(ECellType::None);
             }
         }
     }

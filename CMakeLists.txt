@@ -12,6 +12,3 @@ add_subdirectory(SfmlEngine)
 
 # Définir Worms comme projet de démarrage
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Worms)
-
-# Définir le mode de compilation par défaut sur Release
-set(CMAKE_BUILD_TYPE Release)

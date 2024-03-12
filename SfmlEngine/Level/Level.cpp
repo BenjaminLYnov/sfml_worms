@@ -6,6 +6,7 @@
 #include "GameObject/Components/Collider/SquareCollider.h"
 #include "iostream"
 #include "GameManager/GameManager.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 Level::Level()
 {
@@ -14,9 +15,29 @@ Level::Level()
 
 void Level::Start()
 {
+    InitZone();
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Start();
+}
+
+void Level::Update(const float DeltaTime)
+{
+    DeltaSecond = DeltaTime;
+    for (std::shared_ptr<GameObject> Go : GameObjects)
+        if (Go != nullptr)
+            Go->Update(DeltaTime);
+}
+
+void Level::Render(sf::RenderWindow &Window) const
+{
+    for (std::shared_ptr<GameObject> Go : GameObjects)
+        if (Go)
+            Go->Render(Window);
+
+    // for (std::shared_ptr<SquareCollider> Zone : Zones)
+    //     if (Zone->Shape)
+    //         Window.draw(*Zone->Shape);
 }
 
 void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
@@ -41,21 +62,6 @@ void Level::ProcessEvents()
     CharacterControlled->GetInputComponent()->PollActionsEvents();
 }
 
-void Level::Update(const float DeltaTime)
-{
-    DeltaSecond = DeltaTime;
-    for (std::shared_ptr<GameObject> Go : GameObjects)
-        if (Go != nullptr)
-            Go->Update(DeltaTime);
-}
-
-void Level::Render(sf::RenderWindow &Window) const
-{
-    for (std::shared_ptr<GameObject> Go : GameObjects)
-        if (Go)
-            Go->Render(Window);
-}
-
 void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterControlled)
 {
     CharacterControlled = NewCharacterControlled;
@@ -65,40 +71,13 @@ void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterContro
 
 void Level::ManageCollision()
 {
-    std::vector<std::shared_ptr<GameObject>> AllGameObjects = GameObjects;
+    // for (std::shared_ptr<SquareCollider> Zone : Zones)
+    // {
+    //     if (Zone)
+    //         ManageCollisionByGameObjects(GetGameObjectsByZone(Zone));
+    // }
 
-    for (size_t i = 0; i < AllGameObjects.size(); ++i)
-    {
-        if (!AllGameObjects[i])
-            continue;
-
-        // Récupère le collider du game object actuelle de la boucle
-        ICollider *ColliderToCheck = AllGameObjects[i]->GetComponent<ICollider>();
-
-        if (!ColliderToCheck)
-            continue;
-
-        if (!ColliderToCheck->bEnableCollision)
-            continue;
-
-        for (size_t j = i + 1; j < AllGameObjects.size(); ++j)
-        {
-            if (!AllGameObjects[j])
-                continue;
-
-            // Récupère le Collider de l'autre game object actuelle de la boucle
-            ICollider *OtherCollider = AllGameObjects[j]->GetComponent<ICollider>();
-
-            if (!OtherCollider)
-                continue;
-
-            if (!OtherCollider->bEnableCollision)
-                continue;
-
-            // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)
-            ColliderToCheck->ManageCollision(OtherCollider);
-        }
-    }
+    ManageCollisionByGameObjects(GameObjects);
 }
 
 void Level::RemoveGameObject(GameObject *GameObjectToRemove)
@@ -131,4 +110,91 @@ std::shared_ptr<Character> Level::GetCharacterControlled()
     return CharacterControlled;
 }
 
+// PROTECTED
+
+void Level::ManageCollisionByGameObjects(std::vector<std::shared_ptr<GameObject>> GameObjectsToManage)
+{
+    if (GameObjectsToManage.size() <= 1)
+        return;
+
+    for (size_t i = 0; i < GameObjectsToManage.size(); ++i)
+    {
+        if (!GameObjectsToManage[i])
+            continue;
+
+        // Récupère le collider du game object actuelle de la boucle
+        ICollider *ColliderToCheck = GameObjectsToManage[i]->GetComponent<ICollider>();
+
+        if (!ColliderToCheck)
+            continue;
+
+        if (!ColliderToCheck->bEnableCollision)
+            continue;
+
+        for (size_t j = i + 1; j < GameObjectsToManage.size(); ++j)
+        {
+            if (!GameObjectsToManage[j])
+                continue;
+
+            // Récupère le Collider de l'autre game object actuelle de la boucle
+            ICollider *OtherCollider = GameObjectsToManage[j]->GetComponent<ICollider>();
+
+            if (!OtherCollider)
+                continue;
+
+            if (!OtherCollider->bEnableCollision)
+                continue;
+
+            // Exécuter le test de collision, en cas de collision -> applique les logiques en conséquences (callbacks, annulation de collision)
+            ColliderToCheck->ManageCollision(OtherCollider);
+        }
+    }
+}
+
+void Level::InitZone()
+{
+    for (int Line = 0; Line < Lines; Line++)
+    {
+        for (int Col = 0; Col < Cols; Col++)
+        {
+            std::shared_ptr<SquareCollider> Zone = std::make_shared<SquareCollider>();
+            Zone->Start();
+            Zone->SetSize(ZoneSize);
+            Zone->Shape->setPosition(sf::Vector2f(ZoneSize.y * Col, ZoneSize.x * Line));
+            Zones.push_back(Zone);
+        }
+    }
+}
+
 // PRIVATE
+
+std::vector<std::shared_ptr<GameObject>> Level::GetGameObjectsByZone(std::shared_ptr<SquareCollider> &ZoneToGetGameObjects)
+{
+    std::vector<std::shared_ptr<GameObject>> GameObjectsToFind;
+
+    if (!ZoneToGetGameObjects)
+        return GameObjectsToFind;
+
+    std::shared_ptr<ICollider> ZoneCollider = std::dynamic_pointer_cast<ICollider>(ZoneToGetGameObjects);
+
+    for (std::shared_ptr<GameObject> Go : GameObjects)
+    {
+        if (!Go)
+            continue;
+
+        // Récupère le collider du game object actuelle de la boucle
+        ICollider *ColliderToCheck = Go->GetComponent<ICollider>();
+
+        if (!ColliderToCheck)
+            continue;
+
+        if (!ColliderToCheck->bEnableCollision)
+            continue;
+
+        HitResult Hit = ZoneCollider->TestCollision(ColliderToCheck);
+        if (Hit.bIsOnCollision)
+            GameObjectsToFind.push_back(Go);
+    }
+
+    return GameObjectsToFind;
+}

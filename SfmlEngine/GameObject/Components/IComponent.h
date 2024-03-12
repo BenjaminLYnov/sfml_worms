@@ -33,5 +33,5 @@ protected:
     
 
 private:
-    GameObject* Owner; // Pointeur vers le GameObject propriétaire.
+    GameObject* Owner = nullptr; // Pointeur vers le GameObject propriétaire.
 };

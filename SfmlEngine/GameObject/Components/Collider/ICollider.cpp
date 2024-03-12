@@ -176,8 +176,8 @@ void ICollider::Overlap(ICollider *Other)
     if (Other->GetCollisionResponse() == ECollisionResponse::Ignore)
         return;
     const HitResult Hit = TestCollision(Other);
-    ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
+    ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
 }
 
 void ICollider::Block(ICollider *Other)
@@ -222,11 +222,6 @@ void ICollider::Static(ICollider *Other)
     // Dégage l'autre s'il y a collision
     if (Hit.bIsOnCollision)
     {
-        // std::cout << Hit.CancelDistance << "\n";
-
-        // std::cout << Hit.CancelDistance << "  " << Hit.Normal.x << "  " << Hit.Normal.y << "\n";
-        // std::cout << Hit.Normal.x << "  " << Hit.Normal.y << "\n";
-
         Rigidbody *Rb = Other->GetOwner()->GetComponent<Rigidbody>();
 
         // Annuler la collision
@@ -266,26 +261,27 @@ void ICollider::Movable(ICollider *Other)
 
     const HitResult Hit = TestCollision(Other);
 
-    if (Hit.bIsOnCollision)
-    {
-        Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
+    // Dont Work Well
+    // if (Hit.bIsOnCollision)
+    // {
+    // Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
 
-        // Récupère mon Rigidbody
-        if (Rb)
-        {
-            // Dégage moi même si je suis en movement
-            if ((Rb->GetVelocity().x != 0 && Hit.Normal.x != 0) || (Rb->GetVelocity().y != 0 && Hit.Normal.y != 0))
-            {
-                Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
-                RestrictRigidbody(Hit.Normal);
-                GetOwner()->AddWorldPosition(-Hit.Normal * Hit.CancelDistance);
-            }
-        }
-        else
-        {
-            GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
-        }
-    }
+    // // Récupère mon Rigidbody
+    // if (Rb)
+    // {
+    //     // Dégage moi même si je suis en movement
+    //     if ((Rb->GetVelocity().x != 0 && Hit.Normal.x != 0) || (Rb->GetVelocity().y != 0 && Hit.Normal.y != 0))
+    //     {
+    //         Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
+    //         RestrictRigidbody(Hit.Normal);
+    //         GetOwner()->AddWorldPosition(-Hit.Normal * Hit.CancelDistance);
+    //     }
+    // }
+    // else
+    // {
+    //     GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
+    // }
+    // }
 
     ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);

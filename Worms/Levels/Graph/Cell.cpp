@@ -14,6 +14,8 @@ Cell::Cell(const sf::Vector2f Size) : GameObject()
     TriangleRightColliderComponent = std::make_shared<TriangleCollider>();
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Cell::OnCollisionEnter);
+    TriangleLeftColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Cell::OnCollisionEnter);
+    TriangleRightColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Cell::OnCollisionEnter);
 
     SquareColliderComponent->SetMobility(EMobility::Static);
     TriangleLeftColliderComponent->SetMobility(EMobility::Static);
@@ -23,15 +25,12 @@ Cell::Cell(const sf::Vector2f Size) : GameObject()
     SetSize(Size);
 
     // Définit la couleur de remplissage du rectangle en transparent
-    // Shape->setFillColor(sf::Color::Transparent);
     Shape->setFillColor(sf::Color::Blue);
-    // Shape->setFillColor(sf::Color::White);
 
     // Définit l'épaisseur de la bordure du rectangle
     Shape->setOutlineThickness(0.5);
 
     // Définit une couleur pour la bordure, par exemple, verte
-    // Shape->setOutlineColor(sf::Color::Red);
     Shape->setOutlineColor(sf::Color::Black);
 }
 
@@ -92,14 +91,15 @@ void Cell::SetCellType(const ECellType NewCellType)
         AddComponent(SquareColliderComponent.get());
         SquareColliderComponent->Start();
         AnimationComponent->SetAnimationFrame(sf::IntRect(40, 403, 333, 333));
-        AnimationComponent->SetScale(sf::Vector2f(0.3, 0.3));
+        AnimationComponent->SetScale(sf::Vector2f(0.12, 0.12));
+        // AnimationComponent->SetScale(sf::Vector2f(0.3, 0.3));
         AnimationComponent->SetRotation(0);
         break;
     case ECellType::TriangleLeft:
         AddComponent(TriangleLeftColliderComponent.get());
         TriangleLeftColliderComponent->Start();
         AnimationComponent->SetAnimationFrame(sf::IntRect(638, 424, 111, 111));
-        AnimationComponent->SetScale(sf::Vector2f(0.8, 0.8));
+        AnimationComponent->SetScale(sf::Vector2f(0.35, 0.35));
         AnimationComponent->SetRotation(180);
         break;
     case ECellType::TriangleRight:
@@ -107,7 +107,7 @@ void Cell::SetCellType(const ECellType NewCellType)
         TriangleRightColliderComponent->Start();
         AnimationComponent->SetAnimationFrame(sf::IntRect(800, 424, 111, 111));
         AnimationComponent->SetRotation(180);
-        AnimationComponent->SetScale(sf::Vector2f(0.8, 0.8));
+        AnimationComponent->SetScale(sf::Vector2f(0.35, 0.35));
         break;
     default:
         AnimationComponent->SetAnimationFrame();
@@ -119,6 +119,6 @@ void Cell::SetCellType(const ECellType NewCellType)
 
 void Cell::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    // if (dynamic_cast<Weapon *>(GameObjectHited))
-    //     Destroy();
+    if (dynamic_cast<Weapon *>(GameObjectHited))
+        Destroy();
 }

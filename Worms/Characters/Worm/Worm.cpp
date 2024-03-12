@@ -40,8 +40,9 @@
 #include <SFML/System/Vector2.hpp>
 
 // Weapon
-#include "Items/Weapons/FireGun/FireGun.h"
-#include "Items/Weapons/FireGun/Explosion.h"
+#include "Items/Weapons/Projectiles/CannonBall.h"
+#include "Items/Weapons/Projectiles/FragmentationBall.h"
+#include "Items/Weapons/Projectiles/Explosion.h"
 
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"
@@ -58,8 +59,6 @@ Worm::Worm() : Character()
     MaxWalkSpeed = 200;
 
     MaxHealth = 30;
-    MaxHealth = 1;
-    // MaxHealth = 100;
     CurrentHealth = MaxHealth;
     bIsAlive = true;
     bCanMove = false;
@@ -72,11 +71,11 @@ Worm::Worm() : Character()
 
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
-    SquareColliderComponent->SetSize(sf::Vector2f(50, 50));
+    SquareColliderComponent->SetSize(sf::Vector2f(30, 30));
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::OnCollisionEnter);
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
-    RigidbodyComponent->GravityScale = 20;
+    RigidbodyComponent->GravityScale = 15;
 
     TextName = std::make_shared<Text>(arial_data, arial_size);
     TextName->SetCharacterSize(10);
@@ -151,6 +150,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
     if (Team)
         Team->RemoveWorm(this);
+    if (FragmentationBallS)
+        FragmentationBallS->SetOwner();
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();
@@ -160,8 +161,8 @@ float Worm::TakeDamage(const float Damage)
 {
     CurrentHealth -= Damage;
 
-    if (FireGunS)
-        FireGunS->SetOwner();
+    // if (FireGunS)
+    //     FireGunS->SetOwner();
 
     if (ExplosionS)
         ExplosionS->SetOwner();
@@ -192,7 +193,8 @@ void Worm::SetupBindAction()
     InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::OnMoveStart);
     InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::OnMoveCompleted);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
-    InputComponent->BindAction(IaFire, ETriggerEvent::Started, this, &Worm::Fire);
+    InputComponent->BindAction(IaFire, ETriggerEvent::Triggered, this, &Worm::OnFireTriggered);
+    InputComponent->BindAction(IaFire, ETriggerEvent::Completed, this, &Worm::OnFireCompleted);
     InputComponent->BindAction(IaAim, ETriggerEvent::Triggered, this, &Worm::Aim);
     InputComponent->BindAction(IaMoveViewport, ETriggerEvent::Triggered, this, &Worm::MoveViewport);
     InputComponent->BindAction(IaZoomViewport, ETriggerEvent::Triggered, this, &Worm::ZoomViewport);
@@ -217,7 +219,6 @@ void Worm::InitAnimations()
     SwitchAnimation(IdleA);
 }
 
-// void Worm::Move(float DeltaTime)
 void Worm::Move(const sf::Vector2f Value)
 {
     if (bWon)
@@ -316,6 +317,48 @@ void Worm::DrawAimLine(sf::RenderWindow &window) const
     window.draw(line);
 }
 
+void Worm::OnFireTriggered()
+{
+    if (bWon)
+        return;
+
+    if (!bCanFire)
+        return;
+
+    if (RigidbodyComponent->GetVelocity().y != 0)
+        return;
+
+    if (ShootForceTimer < ShootForceTimerMax)
+    {
+        ShootForceTimer += GetWorld()->GetWorldDeltaSecond();
+        // interpolation between ShootForceMin and ShootForceMax
+        ShootForce = ShootForceMin + (ShootForceMax - ShootForceMin) * (ShootForceTimer / ShootForceTimerMax);
+    }
+    else
+    {
+        ShootForce = ShootForceMax;
+    }
+
+    std::cout << ShootForce << "\n";
+}
+
+void Worm::OnFireCompleted()
+{
+    std::cout << "ShootForce: " << ShootForce << "\n";
+    if (bWon)
+        return;
+
+    if (!bCanFire)
+        return;
+
+    if (RigidbodyComponent->GetVelocity().y != 0)
+        return;
+
+    Fire();
+    ShootForceTimer = 0;
+    ShootForce = 0;
+}
+
 void Worm::Fire()
 {
     if (bWon)
@@ -331,12 +374,18 @@ void Worm::Fire()
         SoundShoot->Play();
 
     const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
-    FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
-    FireGunS->SetOwner(this);
-    sf::Vector2f force = AimDirection * 20000.f;
+    // FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
+    // FragmentationBallS->SetOwner(this);
+    // FragmentationBallS->AddForce(AimDirection * 20000.f);
+    // FragmentationBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    // FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
+    // FragmentationBallS->SetOwner(this);
+    // sf::Vector2f force = AimDirection * ShootForce;
 
-    FireGunS->AddForce(force);
-    FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    CannonBallS = GetWorld()->SpawnGameObject<CannonBall>(Location);
+    CannonBallS->SetOwner(this);
+    CannonBallS->AddForce(AimDirection * ShootForce);
+    CannonBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 
     if (!bWon)
     {

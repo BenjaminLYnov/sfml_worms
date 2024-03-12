@@ -11,9 +11,12 @@ class TriangleCollider;
 class Deleguate;
 class Text;
 class Team;
+
 class FireGun;
 class Explosion;
 class Sound;
+class CannonBall;
+class FragmentationBall;
 
 // Animations
 class IdleAnimation;
@@ -55,6 +58,8 @@ public:
     // Weapon
     std::shared_ptr<FireGun> FireGunS;
     std::shared_ptr<Explosion> ExplosionS;
+    std::shared_ptr<FragmentationBall> FragmentationBallS;
+    std::shared_ptr<CannonBall> CannonBallS;
 
 #pragma region State
 
@@ -67,6 +72,7 @@ public:
     bool bWon;
 
 #pragma endregion State
+
     int CurrentHealth;
 
     std::shared_ptr<Rigidbody> RigidbodyComponent;
@@ -80,6 +86,8 @@ protected:
     virtual void OnMoveCompleted();
     virtual void Aim(const sf::Vector2f Value);
     virtual void Jump();
+    virtual void OnFireTriggered();
+    virtual void OnFireCompleted();
     virtual void Fire();
     virtual void MoveViewport(const sf::Vector2f Value);
     virtual void ZoomViewport(const sf::Vector2f Value);
@@ -118,15 +126,23 @@ private:
     int MaxHealth;
     bool bIsFacingRight;
 
-    sf::Vector2f JumpForce = sf::Vector2f(40000, -70000);
+    sf::Vector2f JumpForce = sf::Vector2f(20000, -50000);
 
     sf::Vector2f MoveDirection = sf::Vector2f(1, 0);
-    ;
+
+    float ShootForce;
+    float ShootForceTimerMax = 1.0f;
+    float ShootForceMax = 100000;
+    float ShootForceMin = 1000;
+    float ShootForceTimer = 0;
 
     float AimAngle = 0;
     sf::Vector2f AimDirection = sf::Vector2f(1, 0);
 
     float movementTimer = 0;
+
+    float AimSpeed = 100;
+    float MaxWalkSpeed = 15000;
 
     float M_PI = 3.14159265358979323846;
     const float MIN_AIM_ANGLE = -82;

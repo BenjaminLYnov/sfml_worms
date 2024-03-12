@@ -4,5 +4,6 @@
 SaveGraphAction::SaveGraphAction()
 {
     AddKey(Key::Keyboard::T);
+    AddKey(Key::Joystick::RLeft);
 }
 
