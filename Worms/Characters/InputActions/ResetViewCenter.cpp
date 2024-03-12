@@ -4,4 +4,6 @@
 ResetViewCenter::ResetViewCenter()
 {
     AddKey(Key::Keyboard::R);
+    AddKey(Key::Joystick::RStick);
+
 }

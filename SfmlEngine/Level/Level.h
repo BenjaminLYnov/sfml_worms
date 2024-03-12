@@ -5,6 +5,7 @@
 
 class Character;
 class GameManager;
+class SquareCollider;
 
 // Forward declaration de sf::RenderWindow
 namespace sf
@@ -20,6 +21,12 @@ public:
 
     virtual void Start();
 
+    // Met à jour tous les GameObjects du niveau
+    virtual void Update(const float DeltaTime);
+
+    // Effectue le rendu de tous les GameObjects du niveau
+    virtual void Render(sf::RenderWindow &Window) const;
+
     // Ajoute un GameObject au niveau
     void AddGameObject(std::shared_ptr<GameObject> GameObject);
 
@@ -33,12 +40,6 @@ public:
 
     // Gestionnaires d'événements
     virtual void ProcessEvents();
-
-    // Met à jour tous les GameObjects du niveau
-    virtual void Update(const float DeltaTime);
-
-    // Effectue le rendu de tous les GameObjects du niveau
-    virtual void Render(sf::RenderWindow &Window) const;
 
     void SetWindow(sf::RenderWindow *_Window);
 
@@ -67,8 +68,19 @@ protected:
 
     sf::RenderWindow *Window = nullptr;
 
+    void ManageCollisionByGameObjects(std::vector<std::shared_ptr<GameObject>> GameObjectsToManage);
+    void InitZone();
+
 private:
     float DeltaSecond = 0;
+
+    // ZONES (To optimize collisions)
+    std::vector<std::shared_ptr<SquareCollider>> Zones;
+    const int Lines = 5;
+    const int Cols = 20;
+    const sf::Vector2f ZoneSize = sf::Vector2f(100, 100);
+
+    std::vector<std::shared_ptr<GameObject>> GetGameObjectsByZone(std::shared_ptr<SquareCollider> &ZoneToGetGameObjects);
 };
 
 #include "Level.tpp"

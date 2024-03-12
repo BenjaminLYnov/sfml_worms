@@ -25,7 +25,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "GameObject/Components/Sound/Sound.h"
 
-Party::Party()
+Party::Party() : Level()
 {
 	SoundMatchNull = std::make_shared<Sound>(wbrb_data, wbrb_size);
 	SoundWin = std::make_shared<Sound>(niveau_termine_data, niveau_termine_size);

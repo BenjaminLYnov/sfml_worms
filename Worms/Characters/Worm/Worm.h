@@ -59,6 +59,7 @@ public:
     std::shared_ptr<FireGun> FireGunS;
     std::shared_ptr<Explosion> ExplosionS;
     std::shared_ptr<FragmentationBall> FragmentationBallS;
+    std::shared_ptr<CannonBall> CannonBallS;
 
 #pragma region State
 
@@ -123,7 +124,7 @@ private:
     int MaxHealth;
     bool bIsFacingRight;
 
-    sf::Vector2f JumpForce = sf::Vector2f(40000, -70000);
+    sf::Vector2f JumpForce = sf::Vector2f(20000, -50000);
 
     sf::Vector2f MoveDirection = sf::Vector2f(1, 0);
     ;

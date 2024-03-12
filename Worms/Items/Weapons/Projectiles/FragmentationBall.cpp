@@ -11,6 +11,7 @@
 #include "FireGunAnimation.h"
 #include "FragmentationBall.h"
 #include "BallFragment.h"
+#include "Math/Vector/Vector.h"
 
 FragmentationBall::FragmentationBall()
 {
@@ -22,13 +23,10 @@ FragmentationBall::FragmentationBall()
     RigidbodyComponent->GravityScale = 10;
     RigidbodyComponent->HorizontalDrag = 50;
 
-    Icon = std::make_shared<Sprite>();
-    // Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
+    DammageAmount = 50;
 
     AddComponent(SquareColliderComponent.get());
     AddComponent(RigidbodyComponent.get());
-    // AddComponent(Icon);
-    // AddComponent(Animation);
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FragmentationBall::OnCollisionEnter);
 
@@ -41,17 +39,39 @@ FragmentationBall::FragmentationBall()
 void FragmentationBall::Start()
 {
     IProjectile::Start();
-    LifeTime = 5;
-    DammageAmount = 50;
     RigidbodyComponent->AddForce(sf::Vector2f(1000, 0));
 }
 
 void FragmentationBall::Update(const float DeltaTime)
 {
-    IProjectile::Update(DeltaTime);
+    Item::Update(DeltaTime);
+
+    float Rotation = 0;
+
+    if (RigidbodyComponent->GetVelocity().x > 0)
+    {
+        Rotation = Vector::GetAngleWithXAxis(RigidbodyComponent->GetVelocity());
+        AnimationComponent->SetScale(sf::Vector2f(-FireGunSpriteScale, FireGunSpriteScale));
+    }
+    else
+    {
+        Rotation = Vector::GetAngleWithXAxis(-RigidbodyComponent->GetVelocity());
+        AnimationComponent->SetScale(sf::Vector2f(FireGunSpriteScale, FireGunSpriteScale));
+    }
+
+    AnimationComponent->SetRotation(Rotation);
+
     LifeTime -= DeltaTime;
     if (LifeTime <= 0)
+    {
+        if (GetOwner())
+        {
+            Worm *W = dynamic_cast<Worm *>(GetOwner());
+            if (W)
+                W->CallDeleguateActionDone();
+        }
         Destroy();
+    }
 }
 
 void FragmentationBall::AddForce(const sf::Vector2f &Force)

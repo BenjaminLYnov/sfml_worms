@@ -4,4 +4,5 @@
 FireAction::FireAction()
 {
     AddKey(Key::Keyboard::J);
+    AddKey(Key::Joystick::RLeft);
 }

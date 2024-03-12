@@ -29,19 +29,13 @@ protected:
     float CircleRadius = 50;
     float DammageAmount = 10.0f;
     float ExplosionSpriteScale = 0.6;
-    float ProjectionForce = 100000;
+    float ProjectionForce = 30000;
 
 private:
     std::shared_ptr<CircleCollider> CircleColliderComponent;
     std::shared_ptr<ExplosionAnimation> ExplosionA;
     std::shared_ptr<Sound> SoundExplosion;
-
     int IndexFrame = 0;
-
-    float LifeTime = 0.7f;
-    float CurrentLifeTime = 0.0f;
-
-    void InitAnimations();
 };
 
 #endif

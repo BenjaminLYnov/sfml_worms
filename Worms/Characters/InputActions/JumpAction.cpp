@@ -4,4 +4,6 @@
 JumpAction::JumpAction()
 {
     AddKey(Key::Keyboard::Space);
+    AddKey(Key::Joystick::RBottom);
+
 }

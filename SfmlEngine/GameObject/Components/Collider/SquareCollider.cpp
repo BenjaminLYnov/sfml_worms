@@ -66,6 +66,9 @@ void SquareCollider::CancelCollision(ICollider *Other)
 
 HitResult SquareCollider::TestCollision(const SquareCollider &Other) const
 {
+    if (!Shape || !Other.Shape)
+        return HitResult();
+
     const bool bIsOnCollision = RectangleShapeTestCollision(*Shape, *Other.Shape);
     const sf::Vector2f CancelVector = GetCollisionResolutionVector(*Shape, *Other.Shape);
     const sf::Vector2f Normal = -GetVectorNormal(*Shape, *Other.Shape);
@@ -96,6 +99,8 @@ sf::FloatRect SquareCollider::GetRect() const
 
 void SquareCollider::UpdatePosition()
 {
+    if (!GetOwner())
+        return;
     const sf::Vector2f NewPos = GetOwner()->GetWorldPosition() + GetOwner()->GetRelativePosition() + Offset;
     Shape->setPosition(NewPos);
     Rect.left = NewPos.x - Rect.width / 2;

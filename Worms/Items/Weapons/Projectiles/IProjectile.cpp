@@ -12,9 +12,23 @@
 #include <Resources/Resources.h>
 
 #include "Deleguate.h"
+#include <iostream>
 
 IProjectile::IProjectile()
 {
+    SquareColliderComponent = std::make_shared<SquareCollider>();
+    SquareColliderComponent->SetSize(sf::Vector2f(10, 10));
+    SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
+
+    RigidbodyComponent = std::make_shared<Rigidbody>();
+    RigidbodyComponent->GravityScale = 10;
+    RigidbodyComponent->HorizontalDrag = 50;
+
+    AddComponent(SquareColliderComponent.get());
+    AddComponent(RigidbodyComponent.get());
+
+    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &IProjectile::OnCollisionEnter);
+
     DeleguateOnDestroy = std::make_shared<Deleguate>();
 }
 
@@ -30,6 +44,7 @@ void IProjectile::Update(const float DeltaTime)
 
 void IProjectile::AddForce(const sf::Vector2f &Force)
 {
+    RigidbodyComponent->AddForce(Force);
 }
 
 void IProjectile::Destroy(GameObject *GameObjectToDestroy)

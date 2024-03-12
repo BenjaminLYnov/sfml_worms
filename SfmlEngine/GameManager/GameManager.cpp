@@ -93,9 +93,6 @@ void GameManager::InitWindow()
 
     // Limite les FPS à 60
     Window->setFramerateLimit(60);
-
-    // Désactiver la gestion automatique des événements de fenêtre
-    Window->setActive(false);
 }
 
 void GameManager::ProcessEvents()

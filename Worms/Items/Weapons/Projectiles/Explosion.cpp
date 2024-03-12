@@ -17,7 +17,7 @@ Explosion::Explosion() : Weapon()
     CircleColliderComponent = std::make_shared<CircleCollider>();
     CircleColliderComponent->SetRadius(CircleRadius);
     CircleColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
-    CircleColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Explosion::OnCollisionEnter);
+    CircleColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Explosion::OnCollisionEnter);
 
     ExplosionA = std::make_shared<ExplosionAnimation>();
     ExplosionA->SetScale(sf::Vector2f(ExplosionSpriteScale, ExplosionSpriteScale));
@@ -58,8 +58,9 @@ void Explosion::Update(const float DeltaTime)
 
 void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
 {
-    if (!GameObjectHited || GameObjectHited == GetOwner())
+    if (!GameObjectHited)
         return;
+
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
     {
@@ -76,10 +77,4 @@ void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
 void Explosion::Destroy(GameObject *GameObjectToDestroy)
 {
     GameObject::Destroy(GameObjectToDestroy);
-}
-
-// PRIVATE
-
-void Explosion::InitAnimations()
-{
 }

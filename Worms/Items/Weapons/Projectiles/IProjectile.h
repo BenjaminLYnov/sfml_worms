@@ -27,16 +27,17 @@ public:
     void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
 
 protected:
-    float LifeTime;
+    float LifeTime = 5.0f;
     float DammageAmount;
+
     float FireGunSpriteScale = 0.4f;
     std::shared_ptr<FireGunAnimation> FireGunA;
-
+    
     virtual void OnCollisionEnter(GameObject *GameObjectHited);
 
-private:
     std::shared_ptr<SquareCollider> SquareColliderComponent;
     std::shared_ptr<Rigidbody> RigidbodyComponent;
+private:
 };
 
 #endif
