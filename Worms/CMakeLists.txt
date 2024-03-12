@@ -39,7 +39,7 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-target_link_libraries(Worms PRIVATE sfml-graphics)
+target_link_libraries(Worms PRIVATE sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
 target_compile_features(Worms PRIVATE cxx_std_17)
 
 if(WIN32)

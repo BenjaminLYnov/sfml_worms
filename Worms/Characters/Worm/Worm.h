@@ -13,6 +13,7 @@ class Text;
 class Team;
 class FireGun;
 class Explosion;
+class Sound;
 
 // Animations
 class IdleAnimation;
@@ -110,6 +111,9 @@ private:
     std::shared_ptr<InputAction> IaResetViewport;
     std::shared_ptr<InputAction> IaRestartParty;
     std::shared_ptr<InputAction> IaLoadGraphEdition;
+
+    std::shared_ptr<Sound> SoundJump;
+    std::shared_ptr<Sound> SoundShoot;
 
     int MaxHealth;
     bool bIsFacingRight;

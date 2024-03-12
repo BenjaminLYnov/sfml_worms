@@ -10,6 +10,7 @@ class Graph;
 class Team;
 class DeadZone;
 class Text;
+class Sound;
 
 namespace sf
 {
@@ -36,6 +37,8 @@ private:
 
     std::shared_ptr<Text> TextEndParty;
 
+    std::shared_ptr<Sound> SoundWin;
+    std::shared_ptr<Sound> SoundMatchNull;
 
 	std::vector<std::shared_ptr<Team>> Teams;
 	std::shared_ptr<DeadZone> DZ;
@@ -46,7 +49,7 @@ private:
 
     void UpdateCurrentWorm(std::shared_ptr<Worm> NewWorm);
 
-    std::shared_ptr<Team> &GetNextTeam();
+    std::shared_ptr<Team> GetNextTeam();
     bool AllTeamAreDead() const;
     bool GameIsOver();
 

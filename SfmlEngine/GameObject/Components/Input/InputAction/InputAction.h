@@ -11,7 +11,7 @@ enum class ETriggerEvent;
 class InputAction
 {
 public:
-    virtual ~InputAction() = default;
+    virtual ~InputAction();
 
     virtual void BindAction(ETriggerEvent TriggerEvent, const InputCallback &Callback);
     virtual void PollKeyEvents();

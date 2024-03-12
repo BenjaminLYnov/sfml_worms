@@ -10,6 +10,7 @@ class CircleCollider;
 class GameObject;
 class Deleguate;
 class ExplosionAnimation;
+class Sound;
 
 class Explosion : public Weapon
 {
@@ -30,6 +31,7 @@ protected:
 private:
     std::shared_ptr<CircleCollider> CircleColliderComponent;
     std::shared_ptr<ExplosionAnimation> ExplosionA;
+    std::shared_ptr<Sound> SoundExplosion;
 
     int IndexFrame = 0;
 

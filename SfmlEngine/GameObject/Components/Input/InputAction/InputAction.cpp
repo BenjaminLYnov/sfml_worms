@@ -5,6 +5,10 @@
 #include "ActionKey.h"
 #include "Math/Vector/Vector.h"
 
+InputAction::~InputAction()
+{
+}
+
 void InputAction::BindAction(ETriggerEvent TriggerEvent, const InputCallback &Callback)
 {
     Callbacks[TriggerEvent].push_back(Callback);

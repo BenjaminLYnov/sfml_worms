@@ -10,6 +10,7 @@
 #include "GameObject/Components/Sprite/AnimatedSprite.h"
 #include "Math/Vector/Vector.h"
 #include "GameObject/Components/Rigidbody/Rigidbody.h"
+#include "GameObject/Components/Sound/Sound.h"
 
 Explosion::Explosion() : Weapon()
 {
@@ -24,6 +25,9 @@ Explosion::Explosion() : Weapon()
     SwitchAnimation(ExplosionA);
 
     AddComponent(CircleColliderComponent.get());
+
+    SoundExplosion = std::make_shared<Sound>(firered_00AB_data, firered_00AB_size);
+    SoundExplosion->Play();
 }
 
 void Explosion::Start()
@@ -59,8 +63,6 @@ void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
     {
-        std::cout << WormHited->GetName() << "\n";
-
         Rigidbody *Rb = WormHited->GetComponent<Rigidbody>();
         if (Rb)
         {
