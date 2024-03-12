@@ -36,8 +36,10 @@ void CircleCollider::Update(const float DeltaTime)
 
 void CircleCollider::Render(sf::RenderWindow &Window)
 {
+#ifndef NDEBUG
     if (Shape)
         Window.draw(*Shape);
+#endif
 }
 
 HitResult CircleCollider::TestCollision(const CircleCollider &Other) const
@@ -50,7 +52,7 @@ HitResult CircleCollider::TestCollision(const CircleCollider &Other) const
 
     // Si la distance est inférieure ou égale à la somme des rayons, il y a collision
     const bool bIsOnCollision = dist <= sumOfRadii;
-    
+
     if (!bIsOnCollision)
         return HitResult(false);
 

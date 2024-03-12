@@ -41,6 +41,7 @@
 
 // Weapon
 #include "Items/Weapons/FireGun/FireGun.h"
+#include "Items/Weapons/FireGun/Explosion.h"
 
 #include "GameObject/Components/Ui/Text.h"
 #include "GameObject/Components/Camera/Camera.h"
@@ -50,12 +51,13 @@
 
 #include "Level/Level.h"
 #include "GameManager/GameManager.h"
+#include "GameObject/Components/Sound/Sound.h"
 
 Worm::Worm() : Character()
 {
     MaxWalkSpeed = 200;
 
-    // MaxHealth = 30;
+    MaxHealth = 30;
     MaxHealth = 1;
     // MaxHealth = 100;
     CurrentHealth = MaxHealth;
@@ -106,6 +108,9 @@ Worm::Worm() : Character()
     DeleguateFire = std::make_shared<Deleguate>();
     DeleguateActionDone = std::make_shared<Deleguate>();
     DeleguateDeath = std::make_shared<Deleguate>();
+
+    SoundJump = std::make_shared<Sound>(firered_000A_data, firered_000A_size);
+    SoundShoot = std::make_shared<Sound>(firered_00AA_data, firered_00AA_size);
 }
 
 void Worm::Start()
@@ -146,8 +151,6 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
     if (Team)
         Team->RemoveWorm(this);
-    if (FireGunS)
-        FireGunS->SetOwner();
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();
@@ -156,6 +159,12 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 float Worm::TakeDamage(const float Damage)
 {
     CurrentHealth -= Damage;
+
+    if (FireGunS)
+        FireGunS->SetOwner();
+
+    if (ExplosionS)
+        ExplosionS->SetOwner();
 
     if (CurrentHealth <= 0)
     {
@@ -318,6 +327,9 @@ void Worm::Fire()
     if (RigidbodyComponent->GetVelocity().y != 0)
         return;
 
+    if (SoundShoot)
+        SoundShoot->Play();
+
     const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
     FireGunS = GetWorld()->SpawnGameObject<FireGun>(Location);
     FireGunS->SetOwner(this);
@@ -348,7 +360,11 @@ void Worm::Jump()
 
     if (RigidbodyComponent->GetVelocity().y != 0)
         return;
+
     bIsAiming = false;
+
+    if (SoundJump)
+        SoundJump->Play();
 
     RigidbodyComponent->ResetVelocity();
     RigidbodyComponent->AddForce(sf::Vector2f(JumpForce.x * (bIsFacingRight ? 1.0f : -1.0f), JumpForce.y));

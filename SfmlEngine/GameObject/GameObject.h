@@ -108,9 +108,8 @@ public:
 
     void SwitchAnimation(std::shared_ptr<Sprite> NewAnimation);
 
-
-protected:
     std::shared_ptr<Sprite> AnimationComponent;
+protected:
 
 private:
     Level *OwnerLevel; // Pointeur vers le level propriétaire.

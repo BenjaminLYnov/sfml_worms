@@ -23,9 +23,12 @@
 #include "GameObject/Components/Ui/Text.h"
 #include "Resources/Resources.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "GameObject/Components/Sound/Sound.h"
 
 Party::Party()
 {
+	SoundMatchNull = std::make_shared<Sound>(wbrb_data, wbrb_size);
+	SoundWin = std::make_shared<Sound>(niveau_termine_data, niveau_termine_size);
 }
 
 void Party::Start()
@@ -33,6 +36,12 @@ void Party::Start()
 	GameObjects.clear();
 	CurrentWorm.reset();
 	CurrentTeam.reset();
+
+	if (SoundWin)
+		SoundWin->Stop();
+
+	if (SoundMatchNull)
+		SoundMatchNull->Stop();
 
 	TextEndParty = std::make_shared<Text>(arial_data, arial_size);
 	TextEndParty->SetCharacterSize(50);
@@ -159,9 +168,9 @@ void Party::UpdateCurrentWorm(std::shared_ptr<Worm> NewWorm)
 	SetCharacterControlled(CurrentWorm);
 }
 
-std::shared_ptr<Team> &Party::GetNextTeam()
+std::shared_ptr<Team> Party::GetNextTeam()
 {
-	for (int i = 0; i < Teams.size(); i++)
+	for (size_t i = 0; i < Teams.size(); i++)
 	{
 		if (CurrentTeam == Teams[i])
 		{
@@ -195,6 +204,10 @@ bool Party::GameIsOver()
 	{
 		std::string WinMessage = "Match null !";
 		TextEndParty->SetString(WinMessage);
+		if (SoundMatchNull)
+			SoundMatchNull->Play();
+		if (SoundWin)
+			SoundWin->Stop();
 		return true;
 	}
 
@@ -217,6 +230,9 @@ bool Party::GameIsOver()
 			UpdateCurrentWorm(WinTeam->GetCurrentWorm());
 
 			TextEndParty->SetString(WinMessage);
+			if (SoundWin)
+				SoundWin->Play();
+
 			return true;
 		}
 	}

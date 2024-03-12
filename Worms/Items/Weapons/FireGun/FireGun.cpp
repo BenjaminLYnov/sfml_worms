@@ -24,12 +24,9 @@ FireGun::FireGun() : Weapon()
     RigidbodyComponent->HorizontalDrag = 50;
 
     Icon = std::make_shared<Sprite>();
-    // Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
 
     AddComponent(SquareColliderComponent.get());
     AddComponent(RigidbodyComponent.get());
-    // AddComponent(Icon);
-    // AddComponent(Animation);
 
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
 
@@ -90,6 +87,12 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
 
     std::shared_ptr<Explosion> Exp = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
     Exp->SetOwner(GetOwner());
+    if (GetOwner())
+        {
+            Worm *W = dynamic_cast<Worm *>(GetOwner());
+            if (W)
+                W->ExplosionS = Exp;
+        }
     Destroy();
 }
 

@@ -51,9 +51,10 @@ void SquareCollider::Update(const float DeltaTime)
 
 void SquareCollider::Render(sf::RenderWindow &Window)
 {
-    // Rendu du collider carré, si nécessaire
+#ifndef NDEBUG
     if (Shape)
         Window.draw(*Shape);
+#endif
 }
 
 void SquareCollider::CancelCollision(ICollider *Other)
