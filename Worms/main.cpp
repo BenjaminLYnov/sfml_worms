@@ -3,6 +3,7 @@
 #include "Levels/Party/Party.h"
 #include "Levels/Graph/GraphEdition.h"
 #include <iostream>
+#include <SFML/Window.hpp>
 
 int main()
 {
@@ -15,6 +16,7 @@ int main()
 
     SGameManager->SetStartLevel("GraphEdition");
     SGameManager->SetStartLevel("Party");
+
 
     // Run Game Loop
     SGameManager->Run();

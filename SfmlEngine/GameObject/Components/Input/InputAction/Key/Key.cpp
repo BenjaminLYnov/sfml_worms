@@ -33,8 +33,8 @@ sf::Vector2f Key::GetAxisValue(const Joystick &Button)
         AxisValue.y = sf::Joystick::getAxisPosition(JoystickIndex, sf::Joystick::Y);
         break;
     case Joystick::RStickAxis:
-        AxisValue.x = sf::Joystick::getAxisPosition(JoystickIndex, sf::Joystick::U);
-        AxisValue.y = sf::Joystick::getAxisPosition(JoystickIndex, sf::Joystick::V);
+        AxisValue.x = sf::Joystick::getAxisPosition(JoystickIndex, sf::Joystick::Z);
+        AxisValue.y = sf::Joystick::getAxisPosition(JoystickIndex, sf::Joystick::R);
         break;
     }
 
@@ -49,6 +49,9 @@ bool Key::IsUsingStick(const Joystick &Button)
     const float Deadzone = 15.0f; // Deadzone
 
     sf::Vector2f AxisValue = GetAxisValue(Button);
+
+    // std::cout << AxisValue.x << "  "  << AxisValue.y << "\n";
+
     return std::abs(AxisValue.x) > Deadzone || std::abs(AxisValue.y) > Deadzone;
 }
 

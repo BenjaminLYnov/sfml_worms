@@ -4,5 +4,5 @@
 LoadPartyAction::LoadPartyAction()
 {
     AddKey(Key::Keyboard::L);
-    AddKey(Key::Joystick::Start);
+    //AddKey(Key::Joystick::Start);
 }
