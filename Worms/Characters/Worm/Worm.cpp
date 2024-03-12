@@ -455,6 +455,21 @@ void Worm::CallDeleguateActionDone()
         DeleguateActionDone->Broadcast();
 }
 
+float Worm::GetShootForce()
+{
+    float result = 0;
+    // calculate the shoot force in percentage
+    if (ShootForceTimer < ShootForceTimerMax)
+    {
+        result = ShootForceTimer / ShootForceTimerMax * 100.0f;
+    }
+    else
+    {
+        result = 100.0f;
+    }
+    return result;
+}
+
 int Worm::DegreeToFrame(float Degree) const
 {
     // Limite les valeurs de Degree entre -85 et 85

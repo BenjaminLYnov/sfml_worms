@@ -24,11 +24,13 @@
 #include "Resources/Resources.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "GameObject/Components/Sound/Sound.h"
+#include "GameObject/Components/Ui/ProgressBar.h"
 
 Party::Party() : Level()
 {
 	SoundMatchNull = std::make_shared<Sound>(wbrb_data, wbrb_size);
 	SoundWin = std::make_shared<Sound>(niveau_termine_data, niveau_termine_size);
+	ProgressBarElement = std::make_shared<ProgressBar>();
 }
 
 void Party::Start()
@@ -46,6 +48,11 @@ void Party::Start()
 	TextEndParty = std::make_shared<Text>(arial_data, arial_size);
 	TextEndParty->SetCharacterSize(50);
 	TextEndParty->SetFillColor(sf::Color::Red);
+
+	ProgressBarElement->SetWorldPosition(sf::Vector2f(GetWindow()->getSize().x / 2, -50));
+	ProgressBarElement->SetSize(sf::Vector2f(GetWindow()->getSize().x, 100));
+	ProgressBarElement->SetFillColor(sf::Color::Red);
+	ProgressBarElement->SetBackgroundColor(sf::Color::White);
 
 	G = std::make_shared<Graph>();
 	G->World = this;
@@ -72,14 +79,20 @@ void Party::Update(const float DeltaTime)
 		if (CurrentWorm->CameraComponent)
 		{
 			TextEndParty->SetWorldPosition(CurrentWorm->CameraComponent->CurrentViewCenter);
+			ProgressBarElement->SetSize(sf::Vector2f(500, 50));
+			ProgressBarElement->SetWorldPosition(CurrentWorm->CameraComponent->CurrentViewCenter + sf::Vector2f(-250, -550));
+			ProgressBarElement->SetProgress(CurrentWorm->GetShootForce());
+			std::cout << "Progress : " << CurrentWorm->GetShootForce() << "\n";
 		}
 	}
+	// set progress bar position to the top of the camera view
 }
 
 void Party::Render(sf::RenderWindow &Window) const
 {
 	Level::Render(Window);
 	TextEndParty->Render(Window);
+	ProgressBarElement->Render(Window);
 }
 
 // PROTECTED

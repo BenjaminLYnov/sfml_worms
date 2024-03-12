@@ -71,7 +71,7 @@ protected:
     void ManageCollisionByGameObjects(std::vector<std::shared_ptr<GameObject>> GameObjectsToManage);
     void InitZone();
 
-private:
+protected:
     float DeltaSecond = 0;
 
     // ZONES (To optimize collisions)
