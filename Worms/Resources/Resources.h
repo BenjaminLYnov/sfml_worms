@@ -2110,6 +2110,9 @@ extern unsigned int firered_000A_size;
 extern unsigned char firered_00AA_data[];
 extern unsigned int firered_00AA_size;
 
+extern unsigned char firered_00AB_data[];
+extern unsigned int firered_00AB_size;
+
 extern unsigned char wbrb_data[];
 extern unsigned int wbrb_size;
 

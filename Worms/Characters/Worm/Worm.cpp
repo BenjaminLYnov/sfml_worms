@@ -162,11 +162,11 @@ float Worm::TakeDamage(const float Damage)
 {
     CurrentHealth -= Damage;
 
-    if (FireGunS)
-        FireGunS->SetOwner();
+    // if (FireGunS)
+    //     FireGunS->SetOwner();
 
-    if (ExplosionS)
-        ExplosionS->SetOwner();
+    // if (ExplosionS)
+    //     ExplosionS->SetOwner();
 
     if (CurrentHealth <= 0)
     {

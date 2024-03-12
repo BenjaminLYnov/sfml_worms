@@ -58,6 +58,7 @@ public:
     // Weapon
     std::shared_ptr<FireGun> FireGunS;
     std::shared_ptr<Explosion> ExplosionS;
+    std::shared_ptr<FragmentationBall> FragmentationBallS;
 
 #pragma region State
 
@@ -70,6 +71,7 @@ public:
     bool bWon;
 
 #pragma endregion State
+
     int CurrentHealth;
 
     std::shared_ptr<Rigidbody> RigidbodyComponent;
@@ -117,9 +119,6 @@ private:
 
     std::shared_ptr<Sound> SoundJump;
     std::shared_ptr<Sound> SoundShoot;
-    
-    // Weapon
-    std::shared_ptr<FragmentationBall> FragmentationBallS;
 
     int MaxHealth;
     bool bIsFacingRight;
