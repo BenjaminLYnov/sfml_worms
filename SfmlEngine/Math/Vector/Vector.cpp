@@ -26,7 +26,7 @@ sf::Vector2f Vector::GetDirection(sf::Vector2f VecStart, sf::Vector2f VecEnd)
 sf::Vector2f Vector::GetDirectionVector(const float &Degrees)
 {
 	// Convertir l'angle en radians
-	float Radians = Degrees * 3.14159265358979323846 / 180.0;
+	float Radians = Degrees * PI / 180.0;
 
 	// Calculer les composantes x et y du vecteur direction
 	float X = std::cos(Radians);
@@ -80,6 +80,20 @@ float Vector::DotProduct(sf::Vector2f Vec1, sf::Vector2f Vec2)
 float Vector::CrossProduct(const sf::Vector2f &u, const sf::Vector2f &v)
 {
 	return u.x * v.y - u.y * v.x;
+}
+
+float Vector::GetAngleWithXAxis(const sf::Vector2f &Vector)
+{
+	// atan2 retourne l'angle en radians par rapport à l'axe des x positifs
+	float angleRadians = std::atan2(Vector.y, Vector.x);
+	// Convertir l'angle en degrés
+	float angleDegrees = angleRadians * 180.0f / PI;
+	// Normaliser l'angle entre 0 et 360
+	if (angleDegrees < 0)
+	{
+		angleDegrees += 360.0f;
+	}
+	return angleDegrees;
 }
 
 bool Vector::IsColineaire(sf::Vector2f Vec1, sf::Vector2f Vec2)

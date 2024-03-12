@@ -35,6 +35,8 @@ void Text::Render(sf::RenderWindow &Window)
 
 void Text::UpdatePosition()
 {
+    if (!GetOwner())
+        return;
     sf::Vector2f NewPosition = GetOwner()->GetWorldPosition() + GetOwner()->GetRelativePosition() + Offset;
     TextElement->setPosition(NewPosition);
 }
@@ -55,4 +57,9 @@ void Text::SetCharacterSize(const int Value)
 void Text::SetFillColor(const sf::Color &Color = sf::Color::White)
 {
     TextElement->setFillColor(Color);
+}
+
+void Text::SetWorldPosition(const sf::Vector2f Position)
+{
+    TextElement->setPosition(Position);
 }

@@ -1,7 +1,7 @@
 #include "Explosion.h"
 #include "Resources/Resources.h"
 #include "GameObject/Components/Sprite/Sprite.h"
-#include "GameObject/Components/Collider/SquareCollider.h"
+#include "GameObject/Components/Collider/CircleCollider.h"
 #include "GameObject/GameObject.h"
 #include "iostream"
 #include "Deleguate.h"
@@ -9,15 +9,14 @@
 
 Explosion::Explosion() : Weapon()
 {
-    SquareColliderComponent = std::make_shared<SquareCollider>();
-    SquareColliderComponent->SetSize(sf::Vector2f(10, 10));
-    SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
+    CircleColliderComponent = std::make_shared<CircleCollider>();
+    CircleColliderComponent->SetRadius(CircleRadius);
+    CircleColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
-    //Icon = std::make_shared<Sprite>();
+    // Icon = std::make_shared<Sprite>();
 
-    AddComponent(SquareColliderComponent.get());
-
-    SquareColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Explosion::OnCollisionStay);
+    AddComponent(CircleColliderComponent.get());
+    CircleColliderComponent->AddCallback(ECollisionEvent::Stay, this, &Explosion::OnCollisionEnter);
 }
 
 void Explosion::Start()
@@ -28,14 +27,30 @@ void Explosion::Start()
 void Explosion::Update(const float DeltaTime)
 {
     Item::Update(DeltaTime);
+
+    if (IndexFrame > 0)
+    {
+        if (GetOwner())
+        {
+            Worm *W = dynamic_cast<Worm *>(GetOwner());
+            if (W)
+                W->CallDeleguateActionDone();
+        }
+        Destroy();
+    }
+    else
+        IndexFrame++;
 }
 
-void Explosion::OnCollisionStay(GameObject *GameObjectHited)
+void Explosion::OnCollisionEnter(GameObject *GameObjectHited)
 {
     if (!GameObjectHited)
         return;
-    if (GameObjectHited == GetOwner())
-        return;
+    Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
+    if (WormHited)
+    {
+        WormHited->TakeDamage(DammageAmount);
+    }
 }
 
 // private

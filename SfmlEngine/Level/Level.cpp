@@ -1,5 +1,5 @@
 #include "Level.h"
-#include <SFML/Graphics.hpp> // Inclure l'en-tête complet pour l'implémentation
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "GameObject/Character/Character.h"
 #include "GameObject/Components/Input/Input.h"
 #include "GameObject/Components/Collider/ICollider.h"

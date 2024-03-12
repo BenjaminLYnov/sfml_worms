@@ -9,6 +9,8 @@
 #include "Characters/Worm/Worm.h"
 #include "Explosion.h"
 #include "Levels/Party/DeadZone.h"
+#include "FireGunAnimation.h"
+#include "Math/Vector/Vector.h"
 
 FireGun::FireGun() : Weapon()
 {
@@ -22,7 +24,7 @@ FireGun::FireGun() : Weapon()
     RigidbodyComponent->HorizontalDrag = 50;
 
     Icon = std::make_shared<Sprite>();
-    //Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
+    // Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
 
     AddComponent(SquareColliderComponent.get());
     AddComponent(RigidbodyComponent.get());
@@ -32,6 +34,9 @@ FireGun::FireGun() : Weapon()
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &FireGun::OnCollisionEnter);
 
     DeleguateOnDestroy = std::make_shared<Deleguate>();
+
+    FireGunA = std::make_shared<FireGunAnimation>();
+    SwitchAnimation(FireGunA);
 }
 
 void FireGun::Start()
@@ -42,9 +47,33 @@ void FireGun::Start()
 void FireGun::Update(const float DeltaTime)
 {
     Item::Update(DeltaTime);
+
+    float Rotation = 0;
+
+    if (RigidbodyComponent->GetVelocity().x > 0)
+    {
+        Rotation = Vector::GetAngleWithXAxis(RigidbodyComponent->GetVelocity());
+        AnimationComponent->SetScale(sf::Vector2f(-FireGunSpriteScale, FireGunSpriteScale));
+    }
+    else
+    {
+        Rotation = Vector::GetAngleWithXAxis(-RigidbodyComponent->GetVelocity());
+        AnimationComponent->SetScale(sf::Vector2f(FireGunSpriteScale, FireGunSpriteScale));
+    }
+
+    AnimationComponent->SetRotation(Rotation);
+
     LifeTime -= DeltaTime;
     if (LifeTime <= 0)
+    {
+        if (GetOwner())
+        {
+            Worm *W = dynamic_cast<Worm *>(GetOwner());
+            if (W)
+                W->CallDeleguateActionDone();
+        }
         Destroy();
+    }
 }
 
 void FireGun::AddForce(const sf::Vector2f &Force)
@@ -59,21 +88,13 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     if (!GameObjectHited)
         return;
 
-    Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
-    if (WormHited)
-    {
-        WormHited->TakeDamage(DammageAmount);
-    }
-
-    // GetWorld()->SpawnGameObject<Explosion>();
+    std::shared_ptr<Explosion> Exp = GetWorld()->SpawnGameObject<Explosion>(GetWorldPosition());
+    Exp->SetOwner(GetOwner());
     Destroy();
 }
 
 void FireGun::Destroy(GameObject *GameObjectToDestroy)
 {
-    if (GetOwner())
-    {
-        DeleguateOnDestroy->Broadcast();
-    }
+
     GameObject::Destroy();
 }

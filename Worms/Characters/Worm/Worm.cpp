@@ -13,7 +13,6 @@
 #include "GameObject/Components/Sprite/Sprite.h"
 #include "GameObject/Components/Rigidbody/Rigidbody.h"
 
-// Inclusion l'entête Resources necéssaire pour instancier les animations
 #include "Resources/Resources.h"
 
 // Inclure les Animations
@@ -106,6 +105,7 @@ Worm::Worm() : Character()
 
     DeleguateFire = std::make_shared<Deleguate>();
     DeleguateActionDone = std::make_shared<Deleguate>();
+    DeleguateDeath = std::make_shared<Deleguate>();
 }
 
 void Worm::Start()
@@ -149,8 +149,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
     if (FireGunS)
         FireGunS->SetOwner();
     GameObject::Destroy();
-    if (GetWorld()->GetCharacterControlled().get() == this)
-        CallDeleguateActionDone();
+    CallDeleguateActionDone();
+    DeleguateDeath->Broadcast();
 }
 
 float Worm::TakeDamage(const float Damage)
@@ -386,7 +386,8 @@ void Worm::LoadGraphEdition()
 
 void Worm::CallDeleguateActionDone()
 {
-    DeleguateActionDone->Broadcast();
+    if (GetWorld()->GetCharacterControlled().get() == this)
+        DeleguateActionDone->Broadcast();
 }
 
 int Worm::DegreeToFrame(float Degree) const

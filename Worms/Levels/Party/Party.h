@@ -9,6 +9,12 @@ class Worm;
 class Graph;
 class Team;
 class DeadZone;
+class Text;
+
+namespace sf
+{
+    class RenderWindow;
+}
 
 class Party : public Level
 {
@@ -17,7 +23,7 @@ public:
 
     void Start() override;
     void Update(const float DeltaTime) override;
-
+    void Render(sf::RenderWindow &Window) const override;
 
 protected:
     void InitTeams();
@@ -26,6 +32,10 @@ protected:
 
 private:
     const int NbTeam = 2;
+    bool bGameIsOver = false;
+
+    std::shared_ptr<Text> TextEndParty;
+
 
 	std::vector<std::shared_ptr<Team>> Teams;
 	std::shared_ptr<DeadZone> DZ;
@@ -35,8 +45,10 @@ private:
     std::shared_ptr<Graph> G;
 
     void UpdateCurrentWorm(std::shared_ptr<Worm> NewWorm);
+
     std::shared_ptr<Team> &GetNextTeam();
     bool AllTeamAreDead() const;
+    bool GameIsOver();
 
 };
 

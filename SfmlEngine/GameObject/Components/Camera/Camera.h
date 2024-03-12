@@ -30,6 +30,8 @@ public:
     void AddZoom(const float Val);
     void ResetViewport();
 
+    sf::Vector2f GetViewportCenter() const;
+
     void MoveView(const sf::Vector2f Move);
 
     // Position initiale de la vue
