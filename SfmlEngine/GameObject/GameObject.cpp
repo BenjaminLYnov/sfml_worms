@@ -11,9 +11,12 @@ GameObject::GameObject()
 {
     WorldTransformComponent = std::make_shared<Transform>();
     RelativeTransformComponent = std::make_shared<Transform>();
+    RelativeTransformComponent = std::make_shared<Transform>();
+    AnimationComponent = std::make_shared<Sprite>();
 
     AddComponent(WorldTransformComponent.get());
     AddComponent(RelativeTransformComponent.get());
+    AddComponent(AnimationComponent.get());
 }
 
 void GameObject::Start()
@@ -47,18 +50,17 @@ void GameObject::AddComponent(IComponent *Component)
         return;
     Components.push_back(Component);
     Component->SetOwner(this);
-    // Component->SetOwner(shared_from_this());
 }
 
-void GameObject::RemoveComponent(IComponent* ComponentToRemove)
+void GameObject::RemoveComponent(IComponent *ComponentToRemove)
 {
     if (!ComponentToRemove)
         return;
 
     auto It = std::find(Components.begin(), Components.end(), ComponentToRemove);
-    if (It != Components.end()) {
+    if (It != Components.end())
+    {
         Components.erase(It);
-        delete ComponentToRemove; // Supprimez le composant et libérez la mémoire
     }
 }
 
@@ -182,6 +184,21 @@ void GameObject::Destroy(GameObject *GameObjectToDestroy)
         return;
 
     OwnerLevel->RemoveGameObject(GameObjectToDestroy);
+}
+
+void GameObject::SwitchAnimation(std::shared_ptr<Sprite> NewAnimation)
+{
+    if (!NewAnimation)
+        return;
+
+    if (!AnimationComponent)
+        return;
+
+    if (AnimationComponent.get())
+        RemoveComponent(AnimationComponent.get());
+
+    AnimationComponent = NewAnimation;
+    AddComponent(AnimationComponent.get());
 }
 
 // PRIVATE

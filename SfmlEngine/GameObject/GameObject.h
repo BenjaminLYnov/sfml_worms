@@ -8,6 +8,7 @@
 class IComponent;
 class Transform;
 class Level;
+class Sprite;
 
 // Forward declaration de sf::RenderWindow
 namespace sf
@@ -105,7 +106,12 @@ public:
     // Détruit le GameObject du Level
     virtual void Destroy(GameObject *GameObjectToDestroy = nullptr);
 
+    void SwitchAnimation(std::shared_ptr<Sprite> NewAnimation);
+
+
 protected:
+    std::shared_ptr<Sprite> AnimationComponent;
+
 private:
     Level *OwnerLevel; // Pointeur vers le level propriétaire.
 
@@ -120,6 +126,8 @@ private:
 
     // Composant Transform spécifique gérant la position, l'échelle et la rotation relative du GameObject.
     std::shared_ptr<Transform> RelativeTransformComponent;
+
+
 
     void UpdateComponentsPosition();
 };

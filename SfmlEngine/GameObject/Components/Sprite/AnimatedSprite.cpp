@@ -1,5 +1,6 @@
 #include "AnimatedSprite.h"
 #include <SFML/Graphics/Sprite.hpp>
+#include <iostream>
 
 AnimatedSprite::AnimatedSprite() : FrameTime(0.1f), ElapsedTime(0.0f), CurrentFrame(0) {}
 
@@ -26,6 +27,15 @@ void AnimatedSprite::Update(const float DeltaTime)
     if (!SfmlSprite || Frames.empty())
         return;
 
+    if (!bPlayAnimation)
+        return;
+
+    if (bStopAtLastFrame)
+    {
+        if (CurrentFrame == Frames.size() - 1)
+            return;
+    }
+
     ElapsedTime += DeltaTime;
     if (ElapsedTime >= FrameTime)
     {
@@ -37,6 +47,43 @@ void AnimatedSprite::Update(const float DeltaTime)
 
 std::shared_ptr<sf::Sprite> AnimatedSprite::GetSprite()
 {
-
     return SfmlSprite;
+}
+
+void AnimatedSprite::ResetFrames()
+{
+    Frames.clear();
+}
+
+void AnimatedSprite::RestartAnimation()
+{
+    CurrentFrame = 0;
+}
+
+void AnimatedSprite::PlayAnimation()
+{
+    bPlayAnimation = true;
+}
+
+void AnimatedSprite::PauseAnimation()
+{
+    bPlayAnimation = false;
+}
+
+void AnimatedSprite::SetFrameAt(const int IndexFrame)
+{
+    if (IndexFrame < 0)
+        return;
+
+    if (IndexFrame >= Frames.size())
+        return;
+
+    PauseAnimation();
+
+    SfmlSprite->setTextureRect(Frames[IndexFrame]);
+}
+
+void AnimatedSprite::SetStopAtLastFrame(const bool bStop)
+{
+    bStopAtLastFrame = bStop;
 }

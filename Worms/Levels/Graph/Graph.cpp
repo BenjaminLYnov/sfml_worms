@@ -18,6 +18,8 @@ void Graph::Init()
     if (!World)
         return;
 
+    Cells.clear();
+
     const sf::Vector2f Size = sf::Vector2f(CellWidth, CellWidth);
 
     for (int Line = 0; Line < Lines; Line++)

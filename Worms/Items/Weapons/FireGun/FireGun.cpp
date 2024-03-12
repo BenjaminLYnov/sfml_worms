@@ -22,7 +22,7 @@ FireGun::FireGun() : Weapon()
     RigidbodyComponent->HorizontalDrag = 50;
 
     Icon = std::make_shared<Sprite>();
-    Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
+    //Animation = std::make_shared<Sprite>(postbox_data, postbox_size);
 
     AddComponent(SquareColliderComponent.get());
     AddComponent(RigidbodyComponent.get());
@@ -59,13 +59,6 @@ void FireGun::OnCollisionEnter(GameObject *GameObjectHited)
     if (!GameObjectHited)
         return;
 
-    // DeadZone *DZ = dynamic_cast<DeadZone *>(GameObjectHited);
-    // if (DZ)
-    // {
-    //     GameObject::Destroy();
-    //     return;
-    // }
-
     Worm *WormHited = dynamic_cast<Worm *>(GameObjectHited);
     if (WormHited)
     {
@@ -80,7 +73,6 @@ void FireGun::Destroy(GameObject *GameObjectToDestroy)
 {
     if (GetOwner())
     {
-        std::cout << "toto\n";
         DeleguateOnDestroy->Broadcast();
     }
     GameObject::Destroy();

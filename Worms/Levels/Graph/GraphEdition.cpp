@@ -18,12 +18,15 @@ GraphEdition::GraphEdition() : Level()
 
 void GraphEdition::Start()
 {
-    Level::Start();
+	GameObjects.clear();
+
     SetCharacterControlled(GEController);
     GEController->SetGraphEditionLevel(this);
 
     G->World = this;
     G->Init();
+
+    Level::Start();
 }
 
 void GraphEdition::Update(const float DeltaTime)

@@ -13,7 +13,7 @@ Explosion::Explosion() : Weapon()
     SquareColliderComponent->SetSize(sf::Vector2f(10, 10));
     SquareColliderComponent->SetCollisionResponse(ECollisionResponse::Overlap);
 
-    Icon = std::make_shared<Sprite>();
+    //Icon = std::make_shared<Sprite>();
 
     AddComponent(SquareColliderComponent.get());
 

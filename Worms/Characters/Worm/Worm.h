@@ -13,6 +13,13 @@ class Text;
 class Team;
 class FireGun;
 
+// Animations
+class IdleAnimation;
+class WalkAnimation;
+class AimAnimation;
+class WinAnimation;
+class JumpAnimation;
+
 class Worm : public Character
 {
 
@@ -29,6 +36,7 @@ public:
     void Destroy(GameObject *GameObjectToDestroy = nullptr) override;
     float TakeDamage(const float Damage) override;
 
+    void SetWinAnimation();
     void CallDeleguateActionDone();
 
     std::shared_ptr<SquareCollider> SquareColliderComponent;
@@ -49,6 +57,7 @@ public:
     bool bCanMove;
     bool bCanJump;
     bool bIsAiming;
+    bool bWon;
 
 #pragma endregion State
     int CurrentHealth;
@@ -79,10 +88,11 @@ protected:
 
 private:
     // Sprites Animation
-    std::shared_ptr<Sprite> CurrentSprite;
-    std::shared_ptr<Sprite> IdleA;
-    std::shared_ptr<Sprite> WalkA;
-    std::shared_ptr<Sprite> WinnnerA;
+    std::shared_ptr<IdleAnimation> IdleA;
+    std::shared_ptr<WalkAnimation> WalkA;
+    std::shared_ptr<AimAnimation> AimA;
+    std::shared_ptr<WinAnimation> WinA;
+    std::shared_ptr<JumpAnimation> JumpA;
 
     // Input Action
     std::shared_ptr<InputAction> IaMove;
@@ -112,10 +122,12 @@ private:
     float movementTimer = 0;
 
     float M_PI = 3.14159265358979323846;
-    const float MIN_AIM_ANGLE = -85;
-    const float MAX_AIM_ANGLE = 85;
+    const float MIN_AIM_ANGLE = -82;
+    const float MAX_AIM_ANGLE = 82;
     const float MOVEMENT_DELAY = 0.1f;
 
     void Move(const sf::Vector2f Value);
     void DrawAimLine(sf::RenderWindow &Window) const;
+
+    int DegreeToFrame(float Degree) const;
 };
