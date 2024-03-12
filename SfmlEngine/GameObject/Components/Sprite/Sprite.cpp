@@ -2,26 +2,26 @@
 #include <SFML/Graphics.hpp> // Incluez l'en-tête complet pour l'implémentation de la SFML
 #include <iostream>
 #include "GameObject/GameObject.h"
+#include "AnimatedSprite.h"
 
-Sprite::Sprite(const unsigned char *Data, size_t Size)
+Sprite::Sprite()
 {
     // Initialiser les instances
     Texture = std::make_shared<sf::Texture>();
     SfmlSprite = std::make_shared<sf::Sprite>();
-
-    // Chargez la texture depuis la memoire
-    if (Data && Size > 0)
-        LoadTextureFromMemory(Data, Size);
+    Animation = std::make_shared<AnimatedSprite>();
 }
 
 void Sprite::Start()
 {
-    // Code d'initialisation spécifique si nécessaire
 }
 
 void Sprite::Update(const float DeltaTime)
 {
-    AnimatedSprite.Update(DeltaTime);
+    if (Animation)
+    {
+        Animation->Update(DeltaTime);
+    }
 }
 
 void Sprite::UpdatePosition()
@@ -32,31 +32,32 @@ void Sprite::UpdatePosition()
 
 bool Sprite::LoadTextureFromMemory(const unsigned char *Data, size_t Size)
 {
-    if (Texture->loadFromMemory(Data, Size))
-    {
-        // Améliorer la qualité de rendu de la texture
-        Texture->setSmooth(true);
+    if (!Data && Size == 0)
+        return false;
 
-        // Initialisez le sprite avec la texture chargée
-        SfmlSprite = std::make_shared<sf::Sprite>(*Texture);
-        SetOriginToCenter();
+    if (!Texture->loadFromMemory(Data, Size))
+        return false;
 
-        AnimatedSprite.SetSprite(SfmlSprite);
+    // Améliorer la qualité de rendu de la texture
+    Texture->setSmooth(true);
 
-        return true; // Chargement réussi
-    }
-    // Gérer l'erreur si le chargement échoue
-    return false;
+    // Initialisez le sprite avec la texture chargée
+    SfmlSprite = std::make_shared<sf::Sprite>(*Texture);
+    SetOriginToCenter();
+    Animation->SetSprite(SfmlSprite);
+    Animation->ResetFrames();
+
+    return true; // Chargement réussi
 }
 
 void Sprite::SetAnimationSpeed(const float Speed)
 {
-    AnimatedSprite.SetAnimationSpeed(Speed);
+    Animation->SetAnimationSpeed(Speed);
 }
 
 void Sprite::AddAnimationFrame(const sf::IntRect &Frame)
 {
-    AnimatedSprite.AddAnimationFrame(Frame);
+    Animation->AddAnimationFrame(Frame);
     SetOriginToCenter();
 }
 
@@ -74,6 +75,21 @@ void Sprite::SetOriginToCenter()
         return;
     sf::IntRect Bounds = SfmlSprite->getTextureRect();
     SfmlSprite->setOrigin(Bounds.width * 0.5, Bounds.height * 0.5);
+}
+
+void Sprite::ResetAnimation()
+{
+    if (!Animation)
+        return;
+    Animation->ResetFrames();
+    Animation->SetSprite(std::shared_ptr<sf::Sprite>());
+}
+
+void Sprite::SetScale(const sf::Vector2f Scale)
+{
+    if (!SfmlSprite)
+        return;
+    SfmlSprite->setScale(Scale);
 }
 
 sf::Vector2f Sprite::GetPosition() const

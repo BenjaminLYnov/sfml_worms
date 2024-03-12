@@ -17,9 +17,12 @@
 #include "Resources/Resources.h"
 
 // Inclure les Animations
+#include "GameObject/Components/Sprite/AnimatedSprite.h"
 #include "Animations/IdleAnimation.h"
 #include "Animations/WalkAnimation.h"
-#include "Animations/WinnnerAnimation.h"
+#include "Animations/JumpAnimation.h"
+#include "Animations/WinAnimation.h"
+#include "Animations/AimAnimation.h"
 
 // Include les Inputs Action
 #include "GameObject/Components/Input/TriggerEvent.h"
@@ -60,6 +63,7 @@ Worm::Worm() : Character()
     bIsAlive = true;
     bCanMove = false;
     bCanFire = false;
+    bWon = false;
     bCanJump = true;
 
     // Instance Animations
@@ -87,7 +91,6 @@ Worm::Worm() : Character()
     AddComponent(TextName.get());
     AddComponent(TextHp.get());
     AddComponent(SquareColliderComponent.get());
-    AddComponent(CurrentSprite.get());
     AddComponent(RigidbodyComponent.get());
 
     // Instance Inputs Acitons
@@ -114,18 +117,23 @@ void Worm::Start()
 void Worm::Update(const float DeltaTime)
 {
     // if (GetWorld()->GetCharacterControlled().get() == this)
-    //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
+    // std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
 
-    Character::Update(DeltaTime);
+    if (!bWon && !bIsAiming && RigidbodyComponent->GetVelocity().y == 0 && std::abs(RigidbodyComponent->GetVelocity().x) <= 1)
+    {
+        SwitchAnimation(IdleA);
+    }
 
     TextName->SetString(GetName());
     // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
     // AxisMoveValue = sf::Vector2f(0, 0);
     // Worm::Move(DeltaTime);
-    // CurrentSprite = WalkA;
 
-    // if (GetWorld()->GetCharacterControlled().get() == this)
-    //     std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
+    if (bIsFacingRight)
+        AnimationComponent->SetScale(sf::Vector2f(-1, 1));
+    else
+        AnimationComponent->SetScale(sf::Vector2f(1, 1));
+    Character::Update(DeltaTime);
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
@@ -141,6 +149,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
     if (FireGunS)
         FireGunS->SetOwner();
     GameObject::Destroy();
+    if (GetWorld()->GetCharacterControlled().get() == this)
+        CallDeleguateActionDone();
 }
 
 float Worm::TakeDamage(const float Damage)
@@ -151,7 +161,6 @@ float Worm::TakeDamage(const float Damage)
     {
         CurrentHealth = 0;
         bIsAlive = false;
-
         Destroy();
     }
 
@@ -160,9 +169,10 @@ float Worm::TakeDamage(const float Damage)
     return CurrentHealth;
 }
 
-void Worm::CallDeleguateActionDone()
+void Worm::SetWinAnimation()
 {
-    DeleguateActionDone->Broadcast();
+    SwitchAnimation(WinA);
+    bWon = true;
 }
 
 // PROTECTED
@@ -192,16 +202,18 @@ void Worm::InitAnimations()
 {
     IdleA = std::make_shared<IdleAnimation>();
     WalkA = std::make_shared<WalkAnimation>();
-    WinnnerA = std::make_shared<WinnnerAnimation>();
-
-    // CurrentSprite = WinnnerA;
-    // CurrentSprite = WalkA;
-    // CurrentSprite = IdleA;
+    WinA = std::make_shared<WinAnimation>();
+    JumpA = std::make_shared<JumpAnimation>();
+    AimA = std::make_shared<AimAnimation>();
+    SwitchAnimation(IdleA);
 }
 
 // void Worm::Move(float DeltaTime)
 void Worm::Move(const sf::Vector2f Value)
 {
+    if (bWon)
+        return;
+
     if (!bCanMove)
         return;
 
@@ -224,12 +236,9 @@ void Worm::Move(const sf::Vector2f Value)
     // {
     //     RigidbodyComponent->AddForce(MoveDirection * MaxWalkSpeed);
     // }
-}
 
-void Worm::OnMoveStart(const sf::Vector2f Value)
-{
-    bIsMoving = true;
-    bIsAiming = false;
+    SwitchAnimation(WalkA);
+
     MoveDirection = Value;
     if (MoveDirection.x > 0)
     {
@@ -241,19 +250,27 @@ void Worm::OnMoveStart(const sf::Vector2f Value)
         AimDirection.x *= (bIsFacingRight ? -1.0f : 1.0f);
         bIsFacingRight = false;
     }
+}
+
+void Worm::OnMoveStart(const sf::Vector2f Value)
+{
+    bIsMoving = true;
+    bIsAiming = false;
     movementTimer = 0;
 }
 
 void Worm::OnMoveCompleted()
 {
     bIsMoving = false;
-    bIsAiming = true;
+    bIsAiming = false;
 }
 
 void Worm::Aim(const sf::Vector2f Value)
 {
-    if (!bIsAiming)
+    if (bWon)
         return;
+
+    bIsAiming = true;
 
     AimAngle += 1.0f * Value.y;
     AimAngle = std::clamp(AimAngle, MIN_AIM_ANGLE, MAX_AIM_ANGLE);
@@ -264,6 +281,12 @@ void Worm::Aim(const sf::Vector2f Value)
     else
     {
         AimDirection = sf::Vector2f(-cos(AimAngle * M_PI / 180), sin(AimAngle * M_PI / 180));
+    }
+
+    if (!bWon)
+    {
+        SwitchAnimation(AimA);
+        AnimationComponent->Animation->SetFrameAt(DegreeToFrame(AimAngle));
     }
 }
 
@@ -286,6 +309,9 @@ void Worm::DrawAimLine(sf::RenderWindow &window) const
 
 void Worm::Fire()
 {
+    if (bWon)
+        return;
+
     if (!bCanFire)
         return;
 
@@ -300,19 +326,37 @@ void Worm::Fire()
     FireGunS->AddForce(force);
     FireGunS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
 
+    if (!bWon)
+    {
+        SwitchAnimation(AimA);
+        AnimationComponent->Animation->SetFrameAt(DegreeToFrame(AimAngle));
+    }
+
     bCanFire = false;
     bCanMove = false;
     bCanJump = false;
+    bIsAiming = false;
 }
 
 void Worm::Jump()
 {
+    if (bWon)
+        return;
+
     if (!bCanJump)
         return;
+
     if (RigidbodyComponent->GetVelocity().y != 0)
         return;
+    bIsAiming = false;
+
     RigidbodyComponent->ResetVelocity();
     RigidbodyComponent->AddForce(sf::Vector2f(JumpForce.x * (bIsFacingRight ? 1.0f : -1.0f), JumpForce.y));
+    RigidbodyComponent->Update(GetWorld()->GetWorldDeltaSecond());
+
+    SwitchAnimation(JumpA);
+    AnimationComponent->Animation->SetStopAtLastFrame(true);
+    AnimationComponent->Animation->RestartAnimation();
 }
 
 void Worm::MoveViewport(const sf::Vector2f Value)
@@ -338,4 +382,24 @@ void Worm::RestartParty()
 void Worm::LoadGraphEdition()
 {
     GetWorld()->GM->LoadLevel("GraphEdition");
+}
+
+void Worm::CallDeleguateActionDone()
+{
+    DeleguateActionDone->Broadcast();
+}
+
+int Worm::DegreeToFrame(float Degree) const
+{
+    // Limite les valeurs de Degree entre -85 et 85
+    if (Degree < -MAX_AIM_ANGLE)
+        Degree = -MAX_AIM_ANGLE;
+    if (Degree > MAX_AIM_ANGLE)
+        Degree = MAX_AIM_ANGLE;
+
+    // Convertit le range de -85 à 85 vers 1 à 32
+    float Frame = 32 - (Degree + MAX_AIM_ANGLE) * (31.0 / (MAX_AIM_ANGLE * 2));
+
+    // Arrondit au nombre entier le plus proche pour obtenir l'indice de la frame
+    return static_cast<int>(std::round(Frame));
 }

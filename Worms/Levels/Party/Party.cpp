@@ -51,8 +51,6 @@ void Party::Start()
 void Party::Update(const float DeltaTime)
 {
 	Level::Update(DeltaTime);
-
-
 }
 
 // PROTECTED
@@ -111,17 +109,31 @@ void Party::SwitchCharacter()
 		return;
 	}
 
-	CurrentTeam = GetNextTeam();
-
 	// Vérifier si une team n'a plus aucun worm
-	if (CurrentTeam->GetWorms().size() == 0)
+	for (int i = 0; i < Teams.size(); i++)
 	{
-		// End Party
-		std::string WinMessage = GetNextTeam()->GetName() + " a gagné la partie !";
-		std::cout << WinMessage << "\n";
-		return;
+		if (Teams[i]->GetWorms().size() == 0)
+		{
+
+			std::shared_ptr WinTeam = Teams[(i + 1) % Teams.size()];
+			std::string WinMessage = WinTeam->GetName() + " a gagné la partie !";
+
+			for (int i = 0; i <WinTeam->GetWorms().size(); i++)
+			{
+				if (WinTeam->GetWorms()[i])
+				{
+					WinTeam->GetWorms()[i]->SetWinAnimation();
+				}
+			}
+
+			UpdateCurrentWorm(WinTeam->GetCurrentWorm());
+
+			std::cout << WinMessage << "\n";
+			return;
+		}
 	}
 
+	CurrentTeam = GetNextTeam();
 	CurrentTeam->UpdateToNextWorm();
 	UpdateCurrentWorm(CurrentTeam->GetCurrentWorm());
 }

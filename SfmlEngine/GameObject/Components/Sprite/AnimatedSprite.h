@@ -9,16 +9,23 @@
 
 namespace sf
 {
-    class Sprite;  
+    class Sprite;
 }
 
-class AnimatedSprite {
+class AnimatedSprite
+{
 public:
     AnimatedSprite();
 
     void SetSprite(std::shared_ptr<sf::Sprite> SfmlSpriteToAssign);
     void SetAnimationSpeed(const float Speed);
-    void AddAnimationFrame(const sf::IntRect& Frame);
+    void AddAnimationFrame(const sf::IntRect &Frame);
+    void ResetFrames();
+    void RestartAnimation();
+    void PlayAnimation();
+    void PauseAnimation();
+    void SetFrameAt(const int IndexFrame);
+    void SetStopAtLastFrame(const bool bStop); 
 
     void Update(const float DeltaTime);
     std::shared_ptr<sf::Sprite> GetSprite();
@@ -28,5 +35,8 @@ private:
     std::vector<sf::IntRect> Frames;
     float FrameTime;
     float ElapsedTime;
-    size_t CurrentFrame;
+    int CurrentFrame;
+
+    bool bPlayAnimation = true;
+    bool bStopAtLastFrame = false;
 };
