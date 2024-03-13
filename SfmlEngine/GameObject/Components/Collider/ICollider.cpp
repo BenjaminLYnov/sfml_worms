@@ -261,28 +261,6 @@ void ICollider::Movable(ICollider *Other)
 
     const HitResult Hit = TestCollision(Other);
 
-    // Dont Work Well
-    // if (Hit.bIsOnCollision)
-    // {
-    // Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
-
-    // // Récupère mon Rigidbody
-    // if (Rb)
-    // {
-    //     // Dégage moi même si je suis en movement
-    //     if ((Rb->GetVelocity().x != 0 && Hit.Normal.x != 0) || (Rb->GetVelocity().y != 0 && Hit.Normal.y != 0))
-    //     {
-    //         Rigidbody *Rb = GetOwner()->GetComponent<Rigidbody>();
-    //         RestrictRigidbody(Hit.Normal);
-    //         GetOwner()->AddWorldPosition(-Hit.Normal * Hit.CancelDistance);
-    //     }
-    // }
-    // else
-    // {
-    //     GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
-    // }
-    // }
-
     ManageCollisionCallbacks(Other->GetOwner(), Hit.bIsOnCollision);
     Other->ManageCollisionCallbacks(GetOwner(), Hit.bIsOnCollision);
 }
@@ -339,31 +317,7 @@ void ICollider::MoveByRigidbody(const HitResult Hit)
     // Pente trop raide -> faire chuter l'object
     if (PenteAngle > Rb->MaxAnglePente)
     {
-        // RestrictRigidbody(Hit.Normal);
-
-        // if (Hit.Normal.y > 0)
-        // {
-        //     GetOwner()->AddWorldPosition(sf::Vector2f(0, 1) * Hit.CancelDistance);
-        //     return;
-        // }
-
-        // const sf::Vector2f PenteDownDirection1 = Vector::RotateVector(Hit.Normal, 90);
-        // const sf::Vector2f PenteDownDirection2 = Vector::RotateVector(Hit.Normal, -90);
-        // sf::Vector2f PenteDownDirection;
-
-        // if (PenteDownDirection1.y > PenteDownDirection2.y)
-        //     PenteDownDirection = PenteDownDirection2;
-        // else
-        //     PenteDownDirection = PenteDownDirection1;
-
-        // PenteDownDirection.y = std::abs(PenteDownDirection.y);
         GetOwner()->AddWorldPosition(Hit.Normal * Hit.CancelDistance);
-        // GetOwner()->AddWorldPosition(PenteDownDirection * Hit.CancelDistance);
-        // Rb->AddForce(PenteDownDirection);
-        // Rb->AddForce(sf::Vector2f(Hit.Normal.x, 0));
-        // std::cout << Rb->GetVelocity().x << " " << Rb->GetVelocity().y << "\n";
-
-        // Rb->AddForce(Hit.Normal * 5000.f);
     }
     else
     {

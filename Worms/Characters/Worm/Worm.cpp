@@ -41,7 +41,6 @@
 
 // Weapon
 #include "Items/Weapons/Projectiles/CannonBall.h"
-// #include "Items/Weapons/Projectiles/FragmentationBall.h"
 #include "Items/Weapons/Projectiles/Explosion.h"
 
 #include "GameObject/Components/Ui/Text.h"
@@ -74,7 +73,6 @@ Worm::Worm() : Character()
     // Init Components
     SquareColliderComponent = std::make_shared<SquareCollider>();
     SquareColliderComponent->SetSize(sf::Vector2f(30, 30));
-    SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &Worm::OnCollisionEnter);
 
     RigidbodyComponent = std::make_shared<Rigidbody>();
     RigidbodyComponent->GravityScale = 15;
@@ -204,11 +202,6 @@ void Worm::SetupBindAction()
     InputComponent->BindAction(IaLoadGraphEdition, ETriggerEvent::Started, this, &Worm::LoadGraphEdition);
 }
 
-void Worm::OnCollisionEnter(GameObject *GameObjectHited)
-{
-    // SetWorldPosition(sf::Vector2f(300, 200));
-    // std::cout << "rara\n";
-}
 
 void Worm::InitAnimations()
 {
@@ -366,14 +359,6 @@ void Worm::Fire()
         SoundShoot->Play();
 
     const sf::Vector2f Location = GetWorldPosition() + AimDirection * 50.f;
-    // FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
-    // FragmentationBallS->SetOwner(this);
-    // FragmentationBallS->AddForce(AimDirection * 20000.f);
-    // FragmentationBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
-    // FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
-    // FragmentationBallS->SetOwner(this);
-    // sf::Vector2f force = AimDirection * ShootForce;
-
     CannonBallS = GetWorld()->SpawnGameObject<CannonBall>(Location);
     CannonBallS->SetOwner(this);
     CannonBallS->AddForce(AimDirection * ShootForce);

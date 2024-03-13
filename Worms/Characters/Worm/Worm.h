@@ -102,8 +102,6 @@ protected:
 
     void SetupBindAction() override;
 
-    void OnCollisionEnter(GameObject *GameObjectHited);
-
 private:
     // Sprites Animation
     std::shared_ptr<IdleAnimation> IdleA;

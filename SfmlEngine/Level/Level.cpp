@@ -15,7 +15,6 @@ Level::Level()
 
 void Level::Start()
 {
-    // InitZone();
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Start();
@@ -34,10 +33,6 @@ void Level::Render(sf::RenderWindow &Window) const
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Render(Window);
-
-    // for (std::shared_ptr<SquareCollider> Zone : Zones)
-    //     if (Zone->Shape)
-    //         Window.draw(*Zone->Shape);
 }
 
 void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
@@ -71,12 +66,6 @@ void Level::SetCharacterControlled(std::shared_ptr<Character> NewCharacterContro
 
 void Level::ManageCollision()
 {
-    // for (std::shared_ptr<SquareCollider> Zone : Zones)
-    // {
-    //     if (Zone)
-    //         ManageCollisionByGameObjects(GetGameObjectsByZone(Zone));
-    // }
-
     ManageCollisionByGameObjects(GameObjects);
 }
 

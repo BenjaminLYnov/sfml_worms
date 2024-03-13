@@ -380,8 +380,5 @@ sf::Vector2f SquareCollider::GetVectorNormal(const sf::RectangleShape &Mover, co
         SmallestAxis = -SmallestAxis;
     }
 
-    // if (Mover.getPosition().x < Obstacle.getPosition().x)
-    //     SmallestAxis.x = -1 * SmallestAxis.x;
-
     return SmallestAxis;
 }
