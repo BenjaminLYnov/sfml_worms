@@ -59,9 +59,9 @@ void Party::Start()
 
 	InitTeams();
 	SetupUI();
-	
+
 	Level::Start();
-	
+
 	std::vector<std::shared_ptr<Worm>> Worms = GetAllGameObjectByClass<Worm>();
 	for (int i = 0; i < Worms.size(); i++)
 	{
@@ -97,16 +97,16 @@ void Party::Render(sf::RenderWindow &Window) const
 void Party::SetupUI()
 {
 	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
-	
+
 	AddCanvas(UI->CreateTopCanvas());
 	AddCanvas(UI->CreateDownCanvas());
-	
+
 	std::shared_ptr<PlayerInfos> Player1Infos = UI->GetPlayer1Infos();
 	std::shared_ptr<PlayerInfos> Player2Infos = UI->GetPlayer2Infos();
-	
+
 	Player1Infos->UpdateName("SexyWorm");
 	Player1Infos->UpdateHealth(10);
-	
+
 	Player2Infos->UpdateName("SexyWorm2");
 	Player2Infos->UpdateHealth(20);
 }
@@ -154,17 +154,18 @@ void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
 		return;
 
 	HitResult Hit;
-	const int MaxIteration = 5000;
+	const int MaxIteration = 10000;
 	int CurrentIteration = 0;
+
+	const float MinPositionX = G->Cells[0]->GetWorldPosition().x + 100;
+	const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x - 100;
+	const float MinPositionY = G->Cells[0]->GetWorldPosition().y - 200;
+	const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y - 300;
+
 	do
 	{
-		const float MinPositionX = G->Cells[0]->GetWorldPosition().x + 200;
-		const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x - 300;
-		const float MinPositionY = G->Cells[0]->GetWorldPosition().y - 300;
-		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y - 300;
-
-		const float PosX = RandomNumber::RandomFloat(MinPositionX, MaxPositionX);
-		const float PosY = RandomNumber::RandomFloat(MinPositionY, MaxPositionY);
+		const int PosX = RandomNumber::RandomInt(MinPositionX, MaxPositionX);
+		const int PosY = RandomNumber::RandomInt(MinPositionY, MaxPositionY);
 		const sf::Vector2f Position = sf::Vector2f(PosX, PosY);
 		WormToSpawn->SetWorldPosition(Position);
 
@@ -192,11 +193,13 @@ void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
 			Hit = Collider->TestCollision(ColliderToCheck);
 
 			if (Hit.bIsOnCollision)
-				break;
+				return;
 		}
 		CurrentIteration++;
 
 	} while (Hit.bIsOnCollision && CurrentIteration <= MaxIteration);
+
+	WormToSpawn->SetWorldPosition(sf::Vector2f(RandomNumber::RandomInt(MinPositionX, MaxPositionX), MinPositionY));
 }
 
 void Party::SwitchCharacter()
@@ -337,10 +340,10 @@ void Party::ApplyWindForceToRigidbody()
 
 void Party::UpdateWindForce()
 {
-	float XForce = RandomNumber::RandomFloat(MinWindForce, MaxWindForce);
+	int XForce = RandomNumber::RandomInt(MinWindForce, MaxWindForce);
 
 	if (RandomNumber::RandomInt(0, 1) == 1)
 		XForce *= -1;
 
-	WindForce = sf::Vector2f(RandomNumber::RandomFloat(-MaxWindForce, MaxWindForce), 0);
+	WindForce = sf::Vector2f(XForce, 0);
 }

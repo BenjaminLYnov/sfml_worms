@@ -57,7 +57,7 @@ private:
 
     // Wind
     sf::Vector2f WindForce = sf::Vector2f(0, 0);
-    const float MaxWindForce = 20000;
+    const float MaxWindForce = 15000;
     const float MinWindForce = 5000;
     void ApplyWindForceToRigidbody();
     void UpdateWindForce();
