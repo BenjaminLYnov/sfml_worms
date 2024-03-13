@@ -15,7 +15,7 @@ Level::Level()
 
 void Level::Start()
 {
-    InitZone();
+    // InitZone();
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Start();

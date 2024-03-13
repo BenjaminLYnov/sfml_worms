@@ -67,10 +67,14 @@ void Party::Start()
 			continue;
 		SpawnWorm(Worms[i]);
 	}
+
+	UpdateWindForce();
 }
 
 void Party::Update(const float DeltaTime)
 {
+	ApplyWindForceToRigidbody();
+
 	Level::Update(DeltaTime);
 
 	if (CurrentWorm)
@@ -80,7 +84,6 @@ void Party::Update(const float DeltaTime)
 			TextEndParty->SetWorldPosition(CurrentWorm->CameraComponent->CurrentViewCenter);
 		}
 	}
-	// set progress bar position to the top of the camera view
 }
 
 void Party::Render(sf::RenderWindow &Window) const
@@ -139,7 +142,7 @@ void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
 		const float MinPositionX = G->Cells[0]->GetWorldPosition().x;
 		const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x;
 		const float MinPositionY = G->Cells[0]->GetWorldPosition().y;
-		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y -  100;
+		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y - 100;
 
 		const float PosX = RandomNumber::RandomFloat(MinPositionX, MaxPositionX);
 		const float PosY = RandomNumber::RandomFloat(MinPositionY, MaxPositionY);
@@ -188,6 +191,7 @@ void Party::SwitchCharacter()
 	CurrentTeam = GetNextTeam();
 	CurrentTeam->UpdateToNextWorm();
 	UpdateCurrentWorm(CurrentTeam->GetCurrentWorm());
+	UpdateWindForce();
 }
 
 void Party::UpdateCurrentWorm(std::shared_ptr<Worm> NewWorm)
@@ -291,4 +295,33 @@ bool Party::GameIsOver()
 		}
 	}
 	return false;
+}
+
+void Party::ApplyWindForceToRigidbody()
+{
+	for (std::shared_ptr<GameObject> Go : GameObjects)
+	{
+		if (!Go)
+			continue;
+
+		Rigidbody *Rb = Go->GetComponent<Rigidbody>();
+
+		if (!Rb)
+			continue;
+
+		if (Rb->GetVelocity().y == 0)
+			continue;
+
+		Rb->AddForce(WindForce * GetWorldDeltaSecond());
+	}
+}
+
+void Party::UpdateWindForce()
+{
+	float XForce = RandomNumber::RandomFloat(MinWindForce, MaxWindForce);
+
+	if (RandomNumber::RandomInt(0, 1) == 1)
+		XForce *= -1;
+
+	WindForce = sf::Vector2f(RandomNumber::RandomFloat(-MaxWindForce, MaxWindForce), 0);
 }
