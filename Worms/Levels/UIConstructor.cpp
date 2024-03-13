@@ -133,11 +133,25 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	std::shared_ptr<UIPanel> HorizontalBottomHUDPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(1, 1));
 	HorizontalBottomHUDPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	HorizontalBottomHUDPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
-
+	
 	std::shared_ptr<UIPanel> Player1WeaponPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.25f, 1.f));
 	Player1WeaponPanel->SetLayout(UILayout::List, UIDirection::Vertical);
 	Player1WeaponPanel->SetAlignment(UIAlignment::Center, UIAlignment::SpaceBetween);
 
+	std::shared_ptr<UIPanel> ControlsPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.25f, 1.f));
+	ControlsPanel->SetLayout(UILayout::List, UIDirection::Vertical);
+	ControlsPanel->SetAlignment(UIAlignment::End, UIAlignment::SpaceBetween);
+	
+	std::shared_ptr<UIText> Controls = std::make_shared<UIText>("CONTROLS | Move : Q/D", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Jump = std::make_shared<UIText>("Jump : Space", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Shoot = std::make_shared<UIText>("Aim : Z/S", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Weapon = std::make_shared<UIText>("Shoot : J", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+
+	ControlsPanel->AddChild(Controls);
+	ControlsPanel->AddChild(Jump);
+	ControlsPanel->AddChild(Shoot);
+	ControlsPanel->AddChild(Weapon);
+	
 	std::shared_ptr<UIPanel> Player1WeaponIcons = std::make_shared<UIPanel>(Vec2f(0,0), Vec2f(0.8f, 0.6f));
 	Player1WeaponIcons->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1WeaponIcons->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::End);
@@ -165,7 +179,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	Player1WeaponsMunitions->AddChild(GravitMun);
 	
 	HorizontalBottomHUDPanel->AddChild(Player1WeaponPanel);
-
+	HorizontalBottomHUDPanel->AddChild(ControlsPanel);
 	BottomHUD->AddChild(HorizontalBottomHUDPanel);
 
 	BottomHUD->InitResources();
