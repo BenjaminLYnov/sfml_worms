@@ -11,7 +11,6 @@ class Team;
 class DeadZone;
 class Text;
 class Sound;
-class ProgressBar;
 
 namespace sf
 {
@@ -36,7 +35,6 @@ private:
     const int NbTeam = 2;
     bool bGameIsOver = false;
 
-    std::shared_ptr<ProgressBar> ProgressBarElement;
     std::shared_ptr<Text> TextEndParty;
 
     std::shared_ptr<Sound> SoundWin;
