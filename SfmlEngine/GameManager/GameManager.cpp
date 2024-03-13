@@ -38,6 +38,7 @@ void GameManager::Run()
         CurrentLevel->ManageCollision();
 
         Render(*Window);
+        RenderUI(*Window);
     }
 }
 
@@ -124,6 +125,13 @@ void GameManager::Render(sf::RenderWindow &Window) const
         return;
     Window.clear();
     CurrentLevel->Render(Window);
+}
+
+void GameManager::RenderUI(sf::RenderWindow& Window) const
+{
+    if (!CurrentLevel)
+        return;
+    CurrentLevel->RenderUI(Window);
     Window.display();
 }
 

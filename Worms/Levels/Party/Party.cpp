@@ -24,6 +24,7 @@
 #include "Resources/Resources.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "GameObject/Components/Sound/Sound.h"
+#include "Levels/UIConstructor.h"
 
 Party::Party() : Level()
 {
@@ -57,9 +58,10 @@ void Party::Start()
 	AddGameObject(DZ);
 
 	InitTeams();
-
+	SetupUI();
+	
 	Level::Start();
-
+	
 	std::vector<std::shared_ptr<Worm>> Worms = GetAllGameObjectByClass<Worm>();
 	for (int i = 0; i < Worms.size(); i++)
 	{
@@ -90,6 +92,23 @@ void Party::Render(sf::RenderWindow &Window) const
 {
 	Level::Render(Window);
 	TextEndParty->Render(Window);
+}
+
+void Party::SetupUI()
+{
+	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
+	
+	AddCanvas(UI->CreateTopCanvas());
+	AddCanvas(UI->CreateDownCanvas());
+	
+	std::shared_ptr<PlayerInfos> Player1Infos = UI->GetPlayer1Infos();
+	std::shared_ptr<PlayerInfos> Player2Infos = UI->GetPlayer2Infos();
+	
+	Player1Infos->UpdateName("SexyWorm");
+	Player1Infos->UpdateHealth(10);
+	
+	Player2Infos->UpdateName("SexyWorm2");
+	Player2Infos->UpdateHealth(20);
 }
 
 // PROTECTED

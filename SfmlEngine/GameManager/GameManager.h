@@ -33,6 +33,7 @@ private:
     void ProcessEvents();               // Traite les événements de la fenêtre
     void Update(const float DeltaTime); // Met à jour la logique du jeu
     void Render(sf::RenderWindow &Window) const;
+    void RenderUI(sf::RenderWindow &Window) const;
 
     bool HasLevel(const std::string LevelName) const;
     std::shared_ptr<Level> CurrentLevel;

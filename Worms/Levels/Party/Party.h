@@ -26,6 +26,8 @@ public:
     void Update(const float DeltaTime) override;
     void Render(sf::RenderWindow &Window) const override;
 
+    void SetupUI();
+
 protected:
     void InitTeams();
     virtual void SpawnWorm(std::shared_ptr<Worm> WormToSpawn);

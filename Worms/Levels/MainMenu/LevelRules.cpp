@@ -1,4 +1,4 @@
-﻿// #include "LevelRules.h"
+// #include "LevelRules.h"
 
 // #include "Deleguate.h"
 // #include "Characters/Worm/Team.h"
@@ -99,6 +99,22 @@
 // {
 // 	Level::Update(DeltaTime);
 // }
+
+/*
+std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
+	
+	AddCanvas(UI->CreateTopCanvas());
+	AddCanvas(UI->CreateDownCanvas());
+	
+	std::shared_ptr<PlayerInfos> Player1Infos = UI->GetPlayer1Infos();
+	std::shared_ptr<PlayerInfos> Player2Infos = UI->GetPlayer2Infos();
+	
+	Player1Infos->UpdateName("SexyWorm");
+	Player1Infos->UpdateHealth(10);
+	
+	Player2Infos->UpdateName("SexyWorm2");
+	Player2Infos->UpdateHealth(20);
+}*/
 
 // void LevelRules::InitGrid()
 // {
