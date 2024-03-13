@@ -9,7 +9,7 @@ class Worm;
 class Team
 {
 public:
-	Team(std::string _Name = "", const int NbWorms = 3);
+	Team(std::string _Name = "", const int NbWorms = 5);
 
 	std::vector<std::shared_ptr<Worm>> GetWorms();
 	std::shared_ptr<Worm> GetCurrentWorm();

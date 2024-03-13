@@ -158,8 +158,8 @@ void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
 	int CurrentIteration = 0;
 	do
 	{
-		const float MinPositionX = G->Cells[0]->GetWorldPosition().x;
-		const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x;
+		const float MinPositionX = G->Cells[0]->GetWorldPosition().x + 200;
+		const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x - 200;
 		const float MinPositionY = G->Cells[0]->GetWorldPosition().y;
 		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y - 100;
 
