@@ -23,7 +23,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	HorizontalTopHUDPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	HorizontalTopHUDPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Start);
 	
-	std::shared_ptr<UIPanel> Player1HUD = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.3f, 0.6f));
+	std::shared_ptr<UIPanel> Player1HUD = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.2f, 0.5f));
 	Player1HUD->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1HUD->SetAlignment(UIAlignment::Start, UIAlignment::Start);
 
@@ -31,7 +31,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1AvatarPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1AvatarPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
 
-	std::shared_ptr<UIImage> Player1Avatar = std::make_shared<UIImage>("Sprites/spoune.jpg", Vec2f(0, 0), Vec2f(0.4f, 1));
+	std::shared_ptr<UIImage> Player1Avatar = std::make_shared<UIImage>("Sprites/Worm1.png", Vec2f(0, 0), Vec2f(0.4f, 1));
 	structPlayer1Infos->SetPortrait(Player1Avatar);
 	Player1AvatarPanel->AddChild(Player1Avatar);
 	
@@ -60,7 +60,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1HUD->AddChild(Player1AvatarPanel);
 
 	
-	std::shared_ptr<UIPanel> Player2HUD = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.3f, 0.6f));
+	std::shared_ptr<UIPanel> Player2HUD = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.2f, 0.5f));
 	Player2HUD->SetLayout(UILayout::List, UIDirection::Vertical);
 	Player2HUD->SetAlignment(UIAlignment::End, UIAlignment::SpaceBetween);
 
@@ -73,7 +73,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player2Infos->SetAlignment(UIAlignment::Center, UIAlignment::Center);
 	Player2AvatarPanel->AddChild(Player2Infos);
 
-	std::shared_ptr<UIImage> Player2Avatar = std::make_shared<UIImage>("Sprites/spoune.jpg", Vec2f(0, 0), Vec2f(0.4f, 1));
+	std::shared_ptr<UIImage> Player2Avatar = std::make_shared<UIImage>("Sprites/Worm2.png", Vec2f(0, 0), Vec2f(0.4f, 1));
 	structPlayer2Infos->SetPortrait(Player2Avatar);
 	Player2AvatarPanel->AddChild(Player2Avatar);
 
@@ -127,15 +127,15 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 
 std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 {
-	std::shared_ptr<Canvas> BottomHUD = std::make_shared<Canvas>(Vec2f(0, 800), Vec2f(780, 100));
+	std::shared_ptr<Canvas> BottomHUD = std::make_shared<Canvas>(Vec2f(0, 800), Vec2f(1165, 100));
 
 	std::shared_ptr<UIPanel> HorizontalBottomHUDPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(1, 1));
 	HorizontalBottomHUDPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	HorizontalBottomHUDPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
 
-	std::shared_ptr<UIPanel> Player1WeaponPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.25f, 1.f));
+	std::shared_ptr<UIPanel> Player1WeaponPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.15f, 1.f));
 	Player1WeaponPanel->SetLayout(UILayout::List, UIDirection::Vertical);
-	Player1WeaponPanel->SetAlignment(UIAlignment::Center, UIAlignment::SpaceBetween);
+	Player1WeaponPanel->SetAlignment(UIAlignment::Start, UIAlignment::SpaceBetween);
 
 	std::shared_ptr<UIPanel> Player1WeaponIcons = std::make_shared<UIPanel>(Vec2f(0,0), Vec2f(0.8f, 0.6f));
 	Player1WeaponIcons->SetLayout(UILayout::List, UIDirection::Horizontal);
@@ -165,8 +165,13 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	
 	HorizontalBottomHUDPanel->AddChild(Player1WeaponPanel);
 
-	BottomHUD->AddChild(HorizontalBottomHUDPanel);
+	std::shared_ptr<UIPanel> UXInputsPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.7f, 1.f));
+	UXInputsPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
+	UXInputsPanel->SetAlignment(UIAlignment::Center, UIAlignment::Center);
+	
 
+	BottomHUD->AddChild(HorizontalBottomHUDPanel);
+	BottomHUD->AddChild(UXInputsPanel);
 	BottomHUD->InitResources();
 	return BottomHUD;
 }

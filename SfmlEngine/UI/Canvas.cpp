@@ -4,7 +4,6 @@
 
 Canvas::Canvas(Vec2f _pos, Vec2f _size) : UIElement(_pos, _size)
 {
-    drawDebug = true;
 }
 
 void Canvas::InitResources()

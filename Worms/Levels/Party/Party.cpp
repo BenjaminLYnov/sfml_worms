@@ -104,10 +104,10 @@ void Party::SetupUI()
 	std::shared_ptr<PlayerInfos> Player1Infos = UI->GetPlayer1Infos();
 	std::shared_ptr<PlayerInfos> Player2Infos = UI->GetPlayer2Infos();
 	
-	Player1Infos->UpdateName("SexyWorm");
+	Player1Infos->UpdateName("Sexy Worm");
 	Player1Infos->UpdateHealth(10);
 	
-	Player2Infos->UpdateName("SexyWorm2");
+	Player2Infos->UpdateName("Sexy Worm 2");
 	Player2Infos->UpdateHealth(20);
 }
 
