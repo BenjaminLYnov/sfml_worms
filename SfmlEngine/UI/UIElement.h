@@ -1,6 +1,15 @@
 ﻿#pragma once
 
-#include "SFML/Graphics.hpp"
+#include <memory>
+#include <vector>
+#include <SFML/System/Vector2.hpp> // Inclusion nécessaire pour utiliser sf::Vector2f, un type de template spécialisé de la SFML
+#include <SFML/Graphics/Rect.hpp>
+
+namespace sf
+{
+    class RenderWindow;
+    class RectangleShape;
+}
 
 using Vec2f = sf::Vector2f;
 
@@ -44,7 +53,7 @@ public:
     virtual void Update(float dTime);
     virtual void Draw(sf::RenderWindow& window);
 
-    sf::RectangleShape debugRectangle;
+    std::shared_ptr<sf::RectangleShape> debugRectangle;
 
     float initialRatio;
 };

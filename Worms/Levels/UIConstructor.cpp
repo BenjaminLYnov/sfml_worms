@@ -143,7 +143,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	ControlsPanel->SetAlignment(UIAlignment::End, UIAlignment::SpaceBetween);
 	
 	std::shared_ptr<UIText> Controls = std::make_shared<UIText>("CONTROLS | Move : Q/D", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
-	std::shared_ptr<UIText> MoveCam = std::make_shared<UIText>("Move Camera : Arrow keys", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> MoveCam = std::make_shared<UIText>("Move Camera : Arrow keys | Zoom : AE", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
 	std::shared_ptr<UIText> Jump = std::make_shared<UIText>("Jump : Space", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
 	std::shared_ptr<UIText> Shoot = std::make_shared<UIText>("Aim : Z/S", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
 	std::shared_ptr<UIText> Weapon = std::make_shared<UIText>("Shoot : Hold and release J", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
@@ -198,7 +198,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateEditorCanvas()
 	ControlsPanel->SetLayout(UILayout::List, UIDirection::Vertical);
 	ControlsPanel->SetAlignment(UIAlignment::Start, UIAlignment::SpaceAround);
 	
-	std::shared_ptr<UIText> Controls = std::make_shared<UIText>("CONTROLS | Move Camera : ZQSD", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Controls = std::make_shared<UIText>("CONTROLS | Move Camera : ZQSD | Zoom : AE", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
 	std::shared_ptr<UIText> Place = std::make_shared<UIText>("Place tile : Left click", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
 	std::shared_ptr<UIText> Remove = std::make_shared<UIText>("Remove tile : Right click", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
 	std::shared_ptr<UIText> Start = std::make_shared<UIText>("Start Game : L", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);

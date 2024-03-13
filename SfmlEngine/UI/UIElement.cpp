@@ -1,5 +1,8 @@
 ﻿#include "UIElement.h"
 #include <iostream>
+#include <SFML/Graphics//Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_size)
 {
@@ -9,9 +12,11 @@ UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_s
 
 void UIElement::InitResources()
 {
-    debugRectangle.setOutlineColor(sf::Color::Red);
-    debugRectangle.setOutlineThickness(1);
-    debugRectangle.setFillColor(sf::Color::Transparent);
+   debugRectangle = std::make_shared<sf::RectangleShape>();
+
+    debugRectangle->setOutlineColor(sf::Color::Red);
+    debugRectangle->setOutlineThickness(1);
+    debugRectangle->setFillColor(sf::Color::Transparent);
 
     for(std::shared_ptr<UIElement> child : childrenList)
         child->InitResources();
@@ -46,8 +51,8 @@ const sf::FloatRect& UIElement::UpdateRect(const sf::FloatRect& parentRect)
 
     if(drawDebug)
     {
-        debugRectangle.setPosition(renderRect.left, renderRect.top);
-        debugRectangle.setSize(sf::Vector2f(renderRect.width, renderRect.height));
+        debugRectangle->setPosition(renderRect.left, renderRect.top);
+        debugRectangle->setSize(sf::Vector2f(renderRect.width, renderRect.height));
     }
 
     for(std::shared_ptr<UIElement> child : childrenList)
@@ -98,7 +103,7 @@ void UIElement::Draw(sf::RenderWindow& window)
 {
     if(drawDebug)
     {
-        window.draw(debugRectangle);
+        window.draw(*debugRectangle);
     }
     for(std::shared_ptr<UIElement> child : childrenList)
         child->Draw(window);

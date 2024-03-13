@@ -1,5 +1,13 @@
 ﻿#pragma once
 #include "UIElement.h"
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Rect.hpp>
+
+namespace sf
+{
+    class Sprite;
+    class Texture;
+}
 
 class UIImage : public UIElement
 {
@@ -18,8 +26,7 @@ protected:
 
     sf::Color storedColor;
     sf::Color color;
-    std::string url;
-    sf::Sprite sprite;
-    sf::Texture texture;
+    std::shared_ptr<sf::Sprite> sprite;
+    std::shared_ptr<sf::Texture> texture;
     
 };

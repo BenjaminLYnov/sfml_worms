@@ -1,5 +1,16 @@
 ﻿#pragma once
 #include "UIElement.h"
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Rect.hpp>
+#include <string>
+#include <memory>
+
+namespace sf
+{
+    class Text;
+    class Font;
+    class RenderWindow;
+}
 
 class UIText : public UIElement
 {
@@ -20,7 +31,7 @@ protected:
     sf::Color storedColor;
     sf::Color color;
     sf::Color outlineColor;
-    sf::Text textObj;
-    sf::Font font;
+    std::shared_ptr<sf::Text> textObj;
+    std::shared_ptr<sf::Font> font;
     int fontSize;
 };
