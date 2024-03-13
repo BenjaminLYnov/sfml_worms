@@ -15,8 +15,6 @@ int main()
     SGameManager->AddLevel("GraphEdition", std::make_shared<GraphEdition>());
 
     SGameManager->SetStartLevel("GraphEdition");
-    SGameManager->SetStartLevel("Party");
-
 
     // Run Game Loop
     SGameManager->Run();
