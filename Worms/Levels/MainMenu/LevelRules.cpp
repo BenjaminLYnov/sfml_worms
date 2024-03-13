@@ -100,7 +100,8 @@
 // 	Level::Update(DeltaTime);
 // }
 
-	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
+/*
+std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
 	
 	AddCanvas(UI->CreateTopCanvas());
 	AddCanvas(UI->CreateDownCanvas());
@@ -113,7 +114,8 @@
 	
 	Player2Infos->UpdateName("SexyWorm2");
 	Player2Infos->UpdateHealth(20);
-}
+}*/
+
 // void LevelRules::InitGrid()
 // {
 // 	// Grid

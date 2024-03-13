@@ -15,24 +15,7 @@ void Input::BindAction(std::shared_ptr<InputAction> &IA, ETriggerEvent TriggerEv
 
 ////////////////////// 
 // 
-template <typename T, typename Method>
-InputCallback MakeBoundAction(T *obj, Method MethodToBind)
-{
-    if constexpr (arg_count<Method>() == 0)
-    {
-        return [obj, MethodToBind](sf::Vector2f)
-        { std::invoke(MethodToBind, obj); };
-    }
-    else if constexpr (arg_count<Method>() == 1)
-    {
-        return [obj, MethodToBind](sf::Vector2f arg)
-        { std::invoke(MethodToBind, obj, arg); };
-    }
-    else
-    {
-        static_assert(arg_count<MethodToBind>() <= 1, "MethodToBind cannot have more than one argument");
-    }
-}
+
 
 // Trait pour décomposer les types de fonctions
 template <typename T>
@@ -57,4 +40,23 @@ template <typename T>
 constexpr size_t arg_count()
 {
     return function_traits<T>::nargs;
+}
+
+template <typename T, typename Method>
+InputCallback MakeBoundAction(T *obj, Method MethodToBind)
+{
+    if constexpr (arg_count<Method>() == 0)
+    {
+        return [obj, MethodToBind](sf::Vector2f)
+        { std::invoke(MethodToBind, obj); };
+    }
+    else if constexpr (arg_count<Method>() == 1)
+    {
+        return [obj, MethodToBind](sf::Vector2f arg)
+        { std::invoke(MethodToBind, obj, arg); };
+    }
+    else
+    {
+        static_assert(arg_count<MethodToBind>() <= 1, "MethodToBind cannot have more than one argument");
+    }
 }

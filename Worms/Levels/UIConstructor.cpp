@@ -16,7 +16,7 @@ UIConstructor::UIConstructor()
 
 std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 {
-    std::shared_ptr<Canvas> TopHUD = std::make_shared<Canvas>(Vec2f(10, 10), Vec2f(780, 130));
+    std::shared_ptr<Canvas> TopHUD = std::make_shared<Canvas>(Vec2f(0, 0), Vec2f(1165, 200));
 
 	std::shared_ptr<UIPanel> HorizontalTopHUDPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(1, 1));
 	
@@ -127,7 +127,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 
 std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 {
-	std::shared_ptr<Canvas> BottomHUD = std::make_shared<Canvas>(Vec2f(10, 480), Vec2f(780, 100));
+	std::shared_ptr<Canvas> BottomHUD = std::make_shared<Canvas>(Vec2f(0, 800), Vec2f(780, 100));
 
 	std::shared_ptr<UIPanel> HorizontalBottomHUDPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(1, 1));
 	HorizontalBottomHUDPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
