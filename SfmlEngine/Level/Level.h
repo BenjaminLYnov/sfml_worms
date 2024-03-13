@@ -28,8 +28,6 @@ public:
     // Effectue le rendu de tous les GameObjects du niveau
     virtual void Render(sf::RenderWindow &Window) const;
 
-    virtual void RenderUI(sf::RenderWindow &Window) const;
-
     // Ajoute un GameObject au niveau
     void AddGameObject(std::shared_ptr<GameObject> GameObject);
 
@@ -63,13 +61,11 @@ public:
     GameManager *GM = nullptr;
 
     std::shared_ptr<Character> GetCharacterControlled();
-    // Character* GetCharacterControlled();
 
     std::vector<std::shared_ptr<GameObject>> GameObjects;
     std::vector<std::shared_ptr<Canvas>> CanvasList;
 
 protected:
-    // Character *CharacterControlled;
     std::shared_ptr<Character> CharacterControlled;
 
     sf::RenderWindow *Window = nullptr;

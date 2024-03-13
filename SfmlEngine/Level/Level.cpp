@@ -8,8 +8,6 @@
 #include "GameManager/GameManager.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include "UI/Canvas.h"
-
 Level::Level()
 {
     DeltaSecond = 0;
@@ -35,18 +33,6 @@ void Level::Render(sf::RenderWindow &Window) const
     for (std::shared_ptr<GameObject> Go : GameObjects)
         if (Go)
             Go->Render(Window);
-}
-
-void Level::RenderUI(sf::RenderWindow& Window) const
-{
-    for (std::shared_ptr<Canvas> canva : CanvasList)
-    {
-        if (canva)
-        {
-            canva->UpdateRect(Window.getView().getViewport());
-            canva->Draw(Window);
-        }
-    }
 }
 
 void Level::AddGameObject(std::shared_ptr<GameObject> GameObject)
@@ -115,7 +101,6 @@ sf::RenderWindow *Level::GetWindow()
 }
 
 std::shared_ptr<Character> Level::GetCharacterControlled()
-// Character* Level::GetCharacterControlled()
 {
     return CharacterControlled;
 }
