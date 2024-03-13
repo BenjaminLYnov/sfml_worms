@@ -53,6 +53,7 @@
 #include "Level/Level.h"
 #include "GameManager/GameManager.h"
 #include "GameObject/Components/Sound/Sound.h"
+#include "GameObject/Components/Ui/ProgressBar.h"
 
 Worm::Worm() : Character()
 {
@@ -63,6 +64,7 @@ Worm::Worm() : Character()
     bIsAlive = true;
     bCanMove = false;
     bCanFire = false;
+    bIsAiming = false;
     bWon = false;
     bCanJump = true;
 
@@ -110,6 +112,8 @@ Worm::Worm() : Character()
 
     SoundJump = std::make_shared<Sound>(firered_000A_data, firered_000A_size);
     SoundShoot = std::make_shared<Sound>(firered_00AA_data, firered_00AA_size);
+
+    PB = std::make_shared<ProgressBar>(50, 10, sf::Color::Red, sf::Color::White);
 }
 
 void Worm::Start()
@@ -120,30 +124,31 @@ void Worm::Start()
 
 void Worm::Update(const float DeltaTime)
 {
-    // if (GetWorld()->GetCharacterControlled().get() == this)
-    // std::cout << RigidbodyComponent->GetVelocity().x << " " << RigidbodyComponent->GetVelocity().y << "\n";
 
-    if (!bWon && !bIsAiming && RigidbodyComponent->GetVelocity().y == 0 && std::abs(RigidbodyComponent->GetVelocity().x) <= 1)
+    if (!bWon && !bIsIncreasingShootForce && !bIsAiming && RigidbodyComponent->GetVelocity().y == 0 && std::abs(RigidbodyComponent->GetVelocity().x) <= 1)
     {
         SwitchAnimation(IdleA);
     }
 
     TextName->SetString(GetName());
-    // AddWorldPosition(AxisMoveValue * MaxWalkSpeed * DeltaTime);
-    // AxisMoveValue = sf::Vector2f(0, 0);
-    // Worm::Move(DeltaTime);
 
     if (bIsFacingRight)
         AnimationComponent->SetScale(sf::Vector2f(-1, 1));
     else
         AnimationComponent->SetScale(sf::Vector2f(1, 1));
+
     Character::Update(DeltaTime);
+
+    PB->SetPosition(GetWorldPosition() + sf::Vector2f(0, -20));
 }
 
 void Worm::Render(sf::RenderWindow &Window) const
 {
     Character::Render(Window);
     DrawAimLine(Window);
+
+    if (bIsAiming)
+        PB->Render(Window);
 }
 
 void Worm::Destroy(GameObject *GameObjectToDestroy)
@@ -160,9 +165,6 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 float Worm::TakeDamage(const float Damage)
 {
     CurrentHealth -= Damage;
-
-    // if (FireGunS)
-    //     FireGunS->SetOwner();
 
     if (ExplosionS)
         ExplosionS->SetOwner();
@@ -224,31 +226,6 @@ void Worm::Move(const sf::Vector2f Value)
     if (bWon)
         return;
 
-    if (!bCanMove)
-        return;
-
-    if (RigidbodyComponent->GetVelocity().y != 0)
-        return;
-
-    // AddWorldPosition(Value * MaxWalkSpeed * GetWorld()->GetWorldDeltaSecond());
-
-    // AxisMoveValue = Value;
-
-    // const sf::Vector2f Force = sf::Vector2f(Value.x, 0) * 500.f;
-    // const sf::Vector2f Force = Value * 500.f;
-    const sf::Vector2f Force = Value * 1000.f;
-    RigidbodyComponent->AddForce(Force);
-    // if (movementTimer < 0.5f)
-    // {
-    //     movementTimer += DeltaTime;
-    // }
-    // else
-    // {
-    //     RigidbodyComponent->AddForce(MoveDirection * MaxWalkSpeed);
-    // }
-
-    SwitchAnimation(WalkA);
-
     MoveDirection = Value;
     if (MoveDirection.x > 0)
     {
@@ -260,12 +237,28 @@ void Worm::Move(const sf::Vector2f Value)
         AimDirection.x *= (bIsFacingRight ? -1.0f : 1.0f);
         bIsFacingRight = false;
     }
+
+    if (!bCanMove)
+        return;
+
+    if (RigidbodyComponent->GetVelocity().y != 0)
+        return;
+
+    if (bIsIncreasingShootForce)
+        return;
+
+    SwitchAnimation(WalkA);
+    const sf::Vector2f Force = Value * 1000.f;
+    RigidbodyComponent->AddForce(Force);
 }
 
 void Worm::OnMoveStart(const sf::Vector2f Value)
 {
     bIsMoving = true;
-    bIsAiming = false;
+
+    if (!bIsIncreasingShootForce)
+        bIsAiming = false;
+
     movementTimer = 0;
 }
 
@@ -328,23 +321,22 @@ void Worm::OnFireTriggered()
     if (RigidbodyComponent->GetVelocity().y != 0)
         return;
 
-    if (ShootForceTimer < ShootForceTimerMax)
-    {
-        ShootForceTimer += GetWorld()->GetWorldDeltaSecond();
-        // interpolation between ShootForceMin and ShootForceMax
-        ShootForce = ShootForceMin + (ShootForceMax - ShootForceMin) * (ShootForceTimer / ShootForceTimerMax);
-    }
-    else
-    {
-        ShootForce = ShootForceMax;
-    }
+    bIsIncreasingShootForce = true;
 
-    std::cout << ShootForce << "\n";
+    ShootForce += ShootForceSpeedIncrease * GetWorld()->GetWorldDeltaSecond() * (bIncreaseShootForce ? 1 : -1);
+    ShootForce = std::clamp(ShootForce, ShootForceMin, ShootForceMax);
+
+    if (ShootForce >= ShootForceMax)
+        bIncreaseShootForce = false;
+    else if (ShootForce <= ShootForceMin)
+        bIncreaseShootForce = true;
+
+    PB->SetProgress(ShootForce / ShootForceMax);
+    SwitchAnimation(AimA);
 }
 
 void Worm::OnFireCompleted()
 {
-    std::cout << "ShootForce: " << ShootForce << "\n";
     if (bWon)
         return;
 
@@ -354,6 +346,7 @@ void Worm::OnFireCompleted()
     if (RigidbodyComponent->GetVelocity().y != 0)
         return;
 
+    bIsIncreasingShootForce = false;
     Fire();
     ShootForceTimer = 0;
     ShootForce = 0;
@@ -405,6 +398,9 @@ void Worm::Jump()
         return;
 
     if (!bCanJump)
+        return;
+
+    if (bIsIncreasingShootForce)
         return;
 
     if (RigidbodyComponent->GetVelocity().y != 0)

@@ -1,53 +1,40 @@
 #include "ProgressBar.h"
-#include <iostream>
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include "GameObject/GameObject.h"
 
-ProgressBar::ProgressBar()
+ProgressBar::ProgressBar(float Width, float Height, sf::Color FillColor, sf::Color BackgroundColor)
 {
-    ProgressBarBackgroundElement = std::make_shared<sf::RectangleShape>();
-    ProgressBarFillElement = std::make_shared<sf::RectangleShape>();
+    Background = std::make_shared<sf::RectangleShape>();
+    Fill = std::make_shared<sf::RectangleShape>();
+
+    Background->setSize(sf::Vector2f(Width, Height));
+    Background->setFillColor(BackgroundColor);
+    Background->setOrigin(Background->getSize().x / 2, Background->getSize().y / 2);
+
+    Fill->setSize(sf::Vector2f(Width, Height));
+    Fill->setFillColor(FillColor);
+    Fill->setOrigin(Fill->getSize().x / 2, Fill->getSize().y / 2);
+    SetProgress(0);
 }
 
-void ProgressBar::Start()
+void ProgressBar::SetProgress(float Value)
 {
+    if (Value < 0.0f)
+        Value = 0.0f;
+    if (Value > 1.0f)
+        Value = 1.0f;
+    Fill->setSize(sf::Vector2f(Background->getSize().x * Value, Background->getSize().y));
 }
 
-void ProgressBar::Update(const float DeltaTime)
+void ProgressBar::SetPosition(const sf::Vector2f Position)
 {
-    ProgressBarFillElement->setSize(sf::Vector2f(ProgressBarBackgroundElement->getSize().x * (Progress / MaxProgress), ProgressBarBackgroundElement->getSize().y));
+    Fill->setPosition(Position);
+    Background->setPosition(Position);
 }
 
-void ProgressBar::Render(sf::RenderWindow &Window)
+void ProgressBar::Render(sf::RenderWindow &Window) const
 {
-    Window.draw(*ProgressBarBackgroundElement);
-    Window.draw(*ProgressBarFillElement);
-}
-
-void ProgressBar::SetFillColor(const sf::Color &Color)
-{
-    ProgressBarFillElement->setFillColor(Color);
-}
-
-void ProgressBar::SetBackgroundColor(const sf::Color &Color)
-{
-    ProgressBarBackgroundElement->setFillColor(Color);
-}
-
-void ProgressBar::SetWorldPosition(const sf::Vector2f Position)
-{
-    ProgressBarBackgroundElement->setPosition(Position);
-    ProgressBarFillElement->setPosition(Position);
-}
-
-void ProgressBar::SetSize(const sf::Vector2f Size)
-{
-    ProgressBarBackgroundElement->setSize(Size);
-}
-
-void ProgressBar::SetProgress(const float Value)
-{
-    Progress = Value;
-    ProgressBarFillElement->setSize(sf::Vector2f(ProgressBarBackgroundElement->getSize().x * (Progress / MaxProgress), ProgressBarBackgroundElement->getSize().y));
+    Window.draw(*Background);
+    Window.draw(*Fill);
 }

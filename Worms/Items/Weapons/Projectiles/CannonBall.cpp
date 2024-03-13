@@ -16,6 +16,9 @@ CannonBall::CannonBall() : IProjectile()
 {
     FireGunA = std::make_shared<FireGunAnimation>();
     SwitchAnimation(FireGunA);
+
+    RigidbodyComponent->HorizontalDrag = 20;
+    RigidbodyComponent->VerticalDrag = 20;
 }
 
 void CannonBall::Start()

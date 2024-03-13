@@ -192,6 +192,7 @@ std::vector<std::shared_ptr<GameObject>> Level::GetGameObjectsByZone(std::shared
             continue;
 
         HitResult Hit = ZoneCollider->TestCollision(ColliderToCheck);
+        
         if (Hit.bIsOnCollision)
             GameObjectsToFind.push_back(Go);
     }

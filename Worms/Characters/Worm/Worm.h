@@ -17,6 +17,7 @@ class Explosion;
 class Sound;
 class CannonBall;
 class FragmentationBall;
+class ProgressBar;
 
 // Animations
 class IdleAnimation;
@@ -125,6 +126,8 @@ private:
     std::shared_ptr<Sound> SoundJump;
     std::shared_ptr<Sound> SoundShoot;
 
+    std::shared_ptr<ProgressBar> PB;
+
     int MaxHealth;
     bool bIsFacingRight;
 
@@ -137,6 +140,9 @@ private:
     float ShootForceMax = 100000;
     float ShootForceMin = 1000;
     float ShootForceTimer = 0;
+    float ShootForceSpeedIncrease = 30000;
+    bool bIncreaseShootForce = true;
+    bool bIsIncreasingShootForce = false;
 
     float AimAngle = 0;
     sf::Vector2f AimDirection = sf::Vector2f(1, 0);
