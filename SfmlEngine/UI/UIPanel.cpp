@@ -31,7 +31,7 @@ void UIPanel::UpdateLayoutList()
     float currentX = 0;
     float currentY = 0;
 
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
     {
         if (direction == UIDirection::Horizontal)
         {

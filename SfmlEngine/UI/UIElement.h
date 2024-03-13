@@ -4,8 +4,6 @@
 
 using Vec2f = sf::Vector2f;
 
-
-
 class UIElement
 {
 protected:
@@ -13,7 +11,7 @@ protected:
     Vec2f size;
 
     sf::FloatRect renderRect;
-    std::vector<UIElement*> childrenList;
+    std::vector<std::shared_ptr<UIElement>> childrenList;
 
 public:
 
@@ -38,9 +36,9 @@ public:
     float GetTotalChildrenWidth();
     float GetTotalChildrenHeight();
 
-    UIElement* AddChild(UIElement* pChild);
+    std::shared_ptr<UIElement> AddChild(std::shared_ptr<UIElement> pChild);
 
-    void RemoveChild(UIElement* pChild);
+    void RemoveChild(std::shared_ptr<UIElement> pChild);
     virtual void InitResources();
     virtual const sf::FloatRect& UpdateRect(const sf::FloatRect& parentRect);
     virtual void Update(float dTime);

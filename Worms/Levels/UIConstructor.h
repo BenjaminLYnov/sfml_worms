@@ -13,9 +13,10 @@ class Canvas;
 
 struct PlayerInfos
 {
-    UIImage* portrait;
-    UIText* name;
-    UIText* health;
+    
+    std::shared_ptr<UIImage> portrait;
+    std::shared_ptr<UIText> name;
+    std::shared_ptr<UIText> health;
 
     PlayerInfos()
     {
@@ -24,9 +25,9 @@ struct PlayerInfos
         health = nullptr;
     }
 
-    void SetPortrait(UIImage* _portrait){portrait = _portrait;}
-    void SetName(UIText* _name){name = _name;}
-    void SetHealth(UIText* _health){health = _health;}
+    void SetPortrait(std::shared_ptr<UIImage>& _portrait){portrait = _portrait;}
+    void SetName(std::shared_ptr<UIText>& _name){name = _name;}
+    void SetHealth(std::shared_ptr<UIText>& _health){health = _health;}
 
     void UpdateHealth(int _health)
     {
@@ -50,13 +51,13 @@ public:
     std::shared_ptr<Canvas> CreateTopCanvas();
     std::shared_ptr<Canvas> CreateDownCanvas();
 
-    PlayerInfos* GetPlayer1Infos(){return structPlayer1Infos;}
-    PlayerInfos* GetPlayer2Infos(){return structPlayer2Infos;}
+    std::shared_ptr<PlayerInfos> GetPlayer1Infos(){return structPlayer1Infos;}
+    std::shared_ptr<PlayerInfos> GetPlayer2Infos(){return structPlayer2Infos;}
 
 private:
     sf::Font font;
 
-    PlayerInfos* structPlayer1Infos;
-    PlayerInfos* structPlayer2Infos;
+    std::shared_ptr<PlayerInfos> structPlayer1Infos;
+    std::shared_ptr<PlayerInfos> structPlayer2Infos;
     
 };

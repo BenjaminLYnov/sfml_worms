@@ -18,15 +18,15 @@ LevelRules::LevelRules()
 {
 	// Instance Main Character
 	InitPlayers();
-
+	
 	// Shapes
-	/*std::shared_ptr<Square> Square1 = std::make_shared<Square>();
+	std::shared_ptr<Square> Square1 = std::make_shared<Square>();
 	Square1->SetWorldPosition(sf::Vector2f(400, 400));
 	Square1->SquareColliderComponent->SetSize(sf::Vector2f(700, 200));
-	Square1->SquareColliderComponent->SetMobility(EMobility::Stationary);
-	AddGameObject(Square1);*/
+	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
+	AddGameObject(Square1);
 
-	LevelRules::SetupUI();
+	
 	Square1->SquareColliderComponent->SetSize(sf::Vector2f(800, 100));
 	Square1->SquareColliderComponent->SetMobility(EMobility::Static);
 	AddGameObject(Square1);
@@ -42,6 +42,8 @@ LevelRules::LevelRules()
 	Square3->SquareColliderComponent->SetSize(sf::Vector2f(300, 20));
 	Square3->SquareColliderComponent->SetMobility(EMobility::Static);
 	// AddGameObject(Square3);
+
+	LevelRules::SetupUI();
 }
 
 void LevelRules::Start()
@@ -99,8 +101,8 @@ void LevelRules::SetupUI()
 	AddCanvas(UI->CreateTopCanvas());
 	AddCanvas(UI->CreateDownCanvas());
 	
-	PlayerInfos* Player1Infos = UI->GetPlayer1Infos();
-	PlayerInfos* Player2Infos = UI->GetPlayer2Infos();
+	std::shared_ptr<PlayerInfos> Player1Infos = UI->GetPlayer1Infos();
+	std::shared_ptr<PlayerInfos> Player2Infos = UI->GetPlayer2Infos();
 	
 	Player1Infos->UpdateName("SexyWorm");
 	Player1Infos->UpdateHealth(10);

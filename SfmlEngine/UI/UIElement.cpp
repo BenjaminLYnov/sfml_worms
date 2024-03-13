@@ -13,11 +13,11 @@ void UIElement::InitResources()
     debugRectangle.setOutlineThickness(1);
     debugRectangle.setFillColor(sf::Color::Transparent);
 
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
         child->InitResources();
 }
 
-void UIElement::RemoveChild(UIElement* child)
+void UIElement::RemoveChild(std::shared_ptr<UIElement> child)
 {
     auto found = std::find(childrenList.begin(), childrenList.end(), child);
     if(found != childrenList.end())
@@ -28,7 +28,7 @@ void UIElement::RemoveChild(UIElement* child)
 
 void UIElement::Update(float dTime)
 {
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
         child->Update(dTime);
 }
 
@@ -50,7 +50,7 @@ const sf::FloatRect& UIElement::UpdateRect(const sf::FloatRect& parentRect)
         debugRectangle.setSize(sf::Vector2f(renderRect.width, renderRect.height));
     }
 
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
         child->UpdateRect(renderRect);
 
     return renderRect;
@@ -67,7 +67,7 @@ void UIElement::SetVisibility(bool _vis)
 float UIElement::GetTotalChildrenWidth()
 {
     float totalWidth = 0;
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
     {
         totalWidth += child->GetSize().x;
     }
@@ -77,14 +77,14 @@ float UIElement::GetTotalChildrenWidth()
 float UIElement::GetTotalChildrenHeight()
 {
     float totalHeight = 0;
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
     {
         totalHeight += child->GetSize().y;
     }
     return totalHeight;
 }
 
-UIElement* UIElement::AddChild(UIElement* pChild)
+std::shared_ptr<UIElement> UIElement::AddChild(std::shared_ptr<UIElement> pChild)
 {
     if (std::find(childrenList.begin(), childrenList.end(), pChild) == childrenList.end())
     {
@@ -100,6 +100,6 @@ void UIElement::Draw(sf::RenderWindow& window)
     {
         window.draw(debugRectangle);
     }
-    for(UIElement* child : childrenList)
+    for(std::shared_ptr<UIElement> child : childrenList)
         child->Draw(window);
 }
