@@ -41,7 +41,7 @@
 
 // Weapon
 #include "Items/Weapons/Projectiles/CannonBall.h"
-#include "Items/Weapons/Projectiles/FragmentationBall.h"
+// #include "Items/Weapons/Projectiles/FragmentationBall.h"
 #include "Items/Weapons/Projectiles/Explosion.h"
 
 #include "GameObject/Components/Ui/Text.h"
@@ -155,8 +155,7 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
 {
     if (Team)
         Team->RemoveWorm(this);
-    if (FragmentationBallS)
-        FragmentationBallS->SetOwner();
+   
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();
