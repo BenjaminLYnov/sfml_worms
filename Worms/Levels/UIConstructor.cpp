@@ -31,7 +31,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1AvatarPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1AvatarPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
 
-	std::shared_ptr<UIImage> Player1Avatar = std::make_shared<UIImage>("Sprites/spoune.jpg", Vec2f(0, 0), Vec2f(0.4f, 1));
+	std::shared_ptr<UIImage> Player1Avatar = std::make_shared<UIImage>("Sprites/Worm1.png", Vec2f(0, 0), Vec2f(0.4f, 1));
 	structPlayer1Infos->SetPortrait(Player1Avatar);
 	Player1AvatarPanel->AddChild(Player1Avatar);
 	
@@ -73,7 +73,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player2Infos->SetAlignment(UIAlignment::Center, UIAlignment::Center);
 	Player2AvatarPanel->AddChild(Player2Infos);
 
-	std::shared_ptr<UIImage> Player2Avatar = std::make_shared<UIImage>("Sprites/spoune.jpg", Vec2f(0, 0), Vec2f(0.4f, 1));
+	std::shared_ptr<UIImage> Player2Avatar = std::make_shared<UIImage>("Sprites/Worm2.png", Vec2f(0, 0), Vec2f(0.4f, 1));
 	structPlayer2Infos->SetPortrait(Player2Avatar);
 	Player2AvatarPanel->AddChild(Player2Avatar);
 

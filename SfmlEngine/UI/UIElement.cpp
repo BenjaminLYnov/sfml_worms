@@ -4,11 +4,11 @@
 UIElement::UIElement(const Vec2f& _pos, const Vec2f& _size) : pos(_pos), size(_size)
 {
     initialRatio = _size.x / _size.y;
+    drawDebug = false;
 }
 
 void UIElement::InitResources()
 {
-    drawDebug = false;
     debugRectangle.setOutlineColor(sf::Color::Red);
     debugRectangle.setOutlineThickness(1);
     debugRectangle.setFillColor(sf::Color::Transparent);
