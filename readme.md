@@ -44,5 +44,6 @@
     - J pour charger et tirer au relachement
     - Flèches directionnel pour déplacer le viewport
     - A/E pour Zoom / Dézoom
+    - O pour reload une partie
 
 Le jeu est jouable à la manette*
