@@ -22,7 +22,7 @@ public:
     
     void SaveGraph();
 
-    const float MaxCellUnone = 400;
+    const float MaxCellUnone = 250;
     std::shared_ptr<Graph> G;
     
 protected:

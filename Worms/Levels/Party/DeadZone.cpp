@@ -5,7 +5,7 @@
 DeadZone::DeadZone()
 {
     SquareColliderComponent = std::make_shared<SquareCollider>();
-    SquareColliderComponent->SetSize(sf::Vector2f(5000, 200));
+    SquareColliderComponent->SetSize(sf::Vector2f(5000, 1000));
     SquareColliderComponent->AddCallback(ECollisionEvent::Enter, this, &DeadZone::OnCollisionEnter);
     AddComponent(SquareColliderComponent.get());
 }

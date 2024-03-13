@@ -54,7 +54,7 @@ void Party::Start()
 	G->EnableCellsCollision(true);
 
 	DZ = std::make_shared<DeadZone>();
-	DZ->SetWorldPosition(sf::Vector2f(0, 1000));
+	DZ->SetWorldPosition(sf::Vector2f(0, 1500));
 	AddGameObject(DZ);
 
 	InitTeams();
@@ -154,14 +154,14 @@ void Party::SpawnWorm(std::shared_ptr<Worm> WormToSpawn)
 		return;
 
 	HitResult Hit;
-	const int MaxIteration = 1000;
+	const int MaxIteration = 5000;
 	int CurrentIteration = 0;
 	do
 	{
 		const float MinPositionX = G->Cells[0]->GetWorldPosition().x + 200;
 		const float MaxPositionX = G->Cells[G->Cells.size() - 1]->GetWorldPosition().x - 200;
 		const float MinPositionY = G->Cells[0]->GetWorldPosition().y;
-		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y - 100;
+		const float MaxPositionY = G->Cells[G->Cells.size() - 1]->GetWorldPosition().y - 1000;
 
 		const float PosX = RandomNumber::RandomFloat(MinPositionX, MaxPositionX);
 		const float PosY = RandomNumber::RandomFloat(MinPositionY, MaxPositionY);
