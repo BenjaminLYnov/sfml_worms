@@ -50,6 +50,7 @@ public:
 
     std::shared_ptr<Canvas> CreateTopCanvas();
     std::shared_ptr<Canvas> CreateDownCanvas();
+    std::shared_ptr<Canvas> CreateEditorCanvas();
 
     std::shared_ptr<PlayerInfos> GetPlayer1Infos(){return structPlayer1Infos;}
     std::shared_ptr<PlayerInfos> GetPlayer2Infos(){return structPlayer2Infos;}
