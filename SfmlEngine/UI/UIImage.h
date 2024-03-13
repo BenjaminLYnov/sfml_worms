@@ -4,7 +4,7 @@
 class UIImage : public UIElement
 {
 public:
-    UIImage(const std::string& _url, const Vec2f& _pos, const Vec2f& _size, const sf::Color& _color = sf::Color::White);
+    UIImage(const unsigned char *Data, size_t Size, const Vec2f& _pos, const Vec2f& _size, const sf::Color& _color = sf::Color::White);
     virtual const sf::FloatRect& UpdateRect(const sf::FloatRect& _parentRect);
     virtual void InitResources() override;
     virtual void Draw(sf::RenderWindow& _window) override;

@@ -1,15 +1,18 @@
 ﻿#include "UIImage.h"
 
-UIImage::UIImage(const std::string& _url, const Vec2f& _pos, const Vec2f& _size, const sf::Color& _color)
-    : UIElement(_pos, _size), color(_color), url(_url)
+UIImage::UIImage(const unsigned char *Data, size_t Size, const Vec2f& _pos, const Vec2f& _size, const sf::Color& _color)
+    : UIElement(_pos, _size), color(_color)
 {
+    if (!Data && Size == 0)
+        return;
+
+    if (!texture.loadFromMemory(Data, Size))
+        return;
 }
 
 void UIImage::InitResources()
 {
     UIElement::InitResources();
-
-    texture.loadFromFile(url);
     sprite.setTexture(texture);
     SetColor(color);
     storedColor = color;

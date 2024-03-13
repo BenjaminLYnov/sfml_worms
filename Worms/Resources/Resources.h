@@ -7,6 +7,36 @@ extern unsigned int pngwing_size;
 extern unsigned char tile_ground_data[];
 extern unsigned int tile_ground_size;
 
+extern unsigned char arrow_data[];
+extern unsigned int arrow_size;
+
+extern unsigned char blank_data[];
+extern unsigned int blank_size;
+
+extern unsigned char gravit_data[];
+extern unsigned int gravit_size;
+
+extern unsigned char grenade_data[];
+extern unsigned int grenade_size;
+
+extern unsigned char heart_data[];
+extern unsigned int heart_size;
+
+extern unsigned char infinity_data[];
+extern unsigned int infinity_size;
+
+extern unsigned char pistol_data[];
+extern unsigned int pistol_size;
+
+extern unsigned char wind_data[];
+extern unsigned int wind_size;
+
+extern unsigned char Worm1_data[];
+extern unsigned int Worm1_size;
+
+extern unsigned char Worm2_data[];
+extern unsigned int Worm2_size;
+
 extern unsigned char airjetb_data[];
 extern unsigned int airjetb_size;
 
@@ -24,9 +54,6 @@ extern unsigned int aquashp1_size;
 
 extern unsigned char aquashp2_data[];
 extern unsigned int aquashp2_size;
-
-extern unsigned char arrow_data[];
-extern unsigned int arrow_size;
 
 extern unsigned char arrow00_data[];
 extern unsigned int arrow00_size;
@@ -228,9 +255,6 @@ extern unsigned int grds7_size;
 
 extern unsigned char grds8_data[];
 extern unsigned int grds8_size;
-
-extern unsigned char grenade_data[];
-extern unsigned int grenade_size;
 
 extern unsigned char hairmsl_data[];
 extern unsigned int hairmsl_size;

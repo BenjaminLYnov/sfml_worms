@@ -5,6 +5,7 @@
 #include "UI/UIImage.h"
 #include "UI/UIPanel.h"
 #include "UI/UIText.h"
+#include "Resources/Resources.h"
 
 UIConstructor::UIConstructor()
 {
@@ -31,7 +32,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1AvatarPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1AvatarPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
 
-	std::shared_ptr<UIImage> Player1Avatar = std::make_shared<UIImage>("Sprites/Worm1.png", Vec2f(0, 0), Vec2f(0.4f, 1));
+	std::shared_ptr<UIImage> Player1Avatar = std::make_shared<UIImage>(Worm1_data, Worm1_size, Vec2f(0, 0), Vec2f(0.4f, 1));
 	structPlayer1Infos->SetPortrait(Player1Avatar);
 	Player1AvatarPanel->AddChild(Player1Avatar);
 	
@@ -52,7 +53,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	structPlayer1Infos->SetHealth(Player1Life);
 	Player1LifePanel->AddChild(Player1Life);
 
-	std::shared_ptr<UIImage> Player1Heart = std::make_shared<UIImage>("Sprites/heart.png", Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
+	std::shared_ptr<UIImage> Player1Heart = std::make_shared<UIImage>(heart_data, heart_size, Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
 	Player1LifePanel->AddChild(Player1Heart);
 
 	Player1Infos->AddChild(Player1LifePanel);
@@ -73,7 +74,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player2Infos->SetAlignment(UIAlignment::Center, UIAlignment::Center);
 	Player2AvatarPanel->AddChild(Player2Infos);
 
-	std::shared_ptr<UIImage> Player2Avatar = std::make_shared<UIImage>("Sprites/Worm2.png", Vec2f(0, 0), Vec2f(0.4f, 1));
+	std::shared_ptr<UIImage> Player2Avatar = std::make_shared<UIImage>(Worm2_data, Worm2_size, Vec2f(0, 0), Vec2f(0.4f, 1));
 	structPlayer2Infos->SetPortrait(Player2Avatar);
 	Player2AvatarPanel->AddChild(Player2Avatar);
 
@@ -89,7 +90,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	structPlayer2Infos->SetHealth(PlayerLife);
 	Player2LifePanel->AddChild(PlayerLife);
 
-	std::shared_ptr<UIImage> Player2Heart = std::make_shared<UIImage>("Sprites/heart.png", Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
+	std::shared_ptr<UIImage> Player2Heart = std::make_shared<UIImage>(heart_data, heart_size, Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
 	Player2LifePanel->AddChild(Player2Heart);
 
 	Player2Infos->AddChild(Player2LifePanel);
@@ -99,7 +100,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	WindPanel->SetLayout(UILayout::List, UIDirection::Vertical);
 	WindPanel->SetAlignment(UIAlignment::Center, UIAlignment::SpaceAround);
 
-	std::shared_ptr<UIImage> WindLogo = std::make_shared<UIImage>("Sprites/wind.png", Vec2f(0, 0), Vec2f(0.2f, 0.3f));
+	std::shared_ptr<UIImage> WindLogo = std::make_shared<UIImage>(wind_data, wind_size, Vec2f(0, 0), Vec2f(0.2f, 0.3f));
 	WindPanel->AddChild(WindLogo);
 	
 	std::shared_ptr<UIPanel> WindArrowPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.9f, 0.5f));
@@ -110,7 +111,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	WindForce->SetColor(sf::Color::White, sf::Color::White);
 	WindArrowPanel->AddChild(WindForce);
 	
-	std::shared_ptr<UIImage> WindArrow = std::make_shared<UIImage>("Sprites/arrow.png", Vec2f(0, 0), Vec2f(0.15f, 0.4f));
+	std::shared_ptr<UIImage> WindArrow = std::make_shared<UIImage>(arrow_data, arrow_size, Vec2f(0, 0), Vec2f(0.15f, 0.4f));
 	WindArrowPanel->AddChild(WindArrow);
 	
 	WindPanel->AddChild(WindArrowPanel);
@@ -142,9 +143,9 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	Player1WeaponIcons->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::End);
 	Player1WeaponPanel->AddChild(Player1WeaponIcons);
 
-	std::shared_ptr<UIImage> Gun1 = std::make_shared<UIImage>("Sprites/pistol.png", Vec2f(0, 0), Vec2f(0.3f, 0.8f));
-	std::shared_ptr<UIImage> Grenade1 = std::make_shared<UIImage>("Sprites/grenade.png", Vec2f(0, 0), Vec2f(0.3f, 0.8f));
-	std::shared_ptr<UIImage> Gravit1 = std::make_shared<UIImage>("Sprites/gravit.png", Vec2f(0, 0), Vec2f(0.3f, 0.8f));
+	std::shared_ptr<UIImage> Gun1 = std::make_shared<UIImage>(pistol_data, pistol_size, Vec2f(0, 0), Vec2f(0.3f, 0.8f));
+	std::shared_ptr<UIImage> Grenade1 = std::make_shared<UIImage>(grenade_data, grenade_size, Vec2f(0, 0), Vec2f(0.3f, 0.8f));
+	std::shared_ptr<UIImage> Gravit1 = std::make_shared<UIImage>(gravit_data, gravit_size, Vec2f(0, 0), Vec2f(0.3f, 0.8f));
 
 	Player1WeaponIcons->AddChild(Gun1);
 	Player1WeaponIcons->AddChild(Grenade1);
@@ -155,7 +156,7 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	Player1WeaponsMunitions->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
 	Player1WeaponPanel->AddChild(Player1WeaponsMunitions);
 
-	std::shared_ptr<UIImage> Infinity = std::make_shared<UIImage>("Sprites/infinity.png", Vec2f(0,0), Vec2f(0.2f, 0.7f));
+	std::shared_ptr<UIImage> Infinity = std::make_shared<UIImage>(infinity_data, infinity_size, Vec2f(0,0), Vec2f(0.2f, 0.7f));
 	std::shared_ptr<UIText> Explode = std::make_shared<UIText>("3/3", font, Vec2f(0,0), Vec2f(0.15f, 0.3f), 20);
 	std::shared_ptr<UIText> GravitMun = std::make_shared<UIText>("1/1", font, Vec2f(0,0), Vec2f(0.15f, 0.3f), 20);
 	
