@@ -96,19 +96,18 @@ void Party::Render(sf::RenderWindow &Window) const
 
 void Party::SetupUI()
 {
-	std::shared_ptr<UIConstructor> UI = std::make_shared<UIConstructor>();
+	UI = std::make_shared<UIConstructor>();
 
 	AddCanvas(UI->CreateTopCanvas());
 	AddCanvas(UI->CreateDownCanvas());
 
-	std::shared_ptr<PlayerInfos> Player1Infos = UI->GetPlayer1Infos();
-	std::shared_ptr<PlayerInfos> Player2Infos = UI->GetPlayer2Infos();
+	Player1Infos = UI->GetPlayer1Infos();
+	Player2Infos = UI->GetPlayer2Infos();
+	UI->SetActualPlayer(Player1Infos);
+	Player2Infos->GreyPlayer(true);
 
-	Player1Infos->UpdateName("SexyWorm");
-	Player1Infos->UpdateHealth(10);
-
-	Player2Infos->UpdateName("SexyWorm2");
-	Player2Infos->UpdateHealth(20);
+	UI->grenade->SetGreyed(true);
+	UI->gravit->SetGreyed(true);
 }
 
 // PROTECTED
@@ -212,8 +211,13 @@ void Party::SwitchCharacter()
 
 	CurrentTeam = GetNextTeam();
 	CurrentTeam->UpdateToNextWorm();
-	UpdateCurrentWorm(CurrentTeam->GetCurrentWorm());
+	std::shared_ptr<Worm> CurrentWorm = CurrentTeam->GetCurrentWorm();
+	UpdateCurrentWorm(CurrentWorm);
 	UpdateWindForce();
+	UI->SwitchPlayer();
+	UI->actualPlayer->SetHealth(CurrentWorm->CurrentHealth);
+	Player1Infos->SwitchGreyState();
+	Player2Infos->SwitchGreyState();
 }
 
 void Party::UpdateCurrentWorm(std::shared_ptr<Worm> NewWorm)
@@ -343,7 +347,11 @@ void Party::UpdateWindForce()
 	int XForce = RandomNumber::RandomInt(MinWindForce, MaxWindForce);
 
 	if (RandomNumber::RandomInt(0, 1) == 1)
+	{
 		XForce *= -1;
+	}
 
 	WindForce = sf::Vector2f(XForce, 0);
+	UI->SwitchWindDirection(XForce < 0);
+	UI->SetWindForce(XForce / 1000);
 }

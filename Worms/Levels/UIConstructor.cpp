@@ -1,5 +1,7 @@
 ﻿#include "UIConstructor.h"
 
+#include <iomanip>
+
 #include "Deleguate.h"
 #include "UI/Canvas.h"
 #include "UI/UIImage.h"
@@ -49,11 +51,12 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player1LifePanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1LifePanel->SetAlignment(UIAlignment::Start, UIAlignment::End);
 
-	std::shared_ptr<UIText> Player1Life = std::make_shared<UIText>("100", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.5f), 20);
+	std::shared_ptr<UIText> Player1Life = std::make_shared<UIText>("30", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.5f), 20);
 	structPlayer1Infos->SetHealth(Player1Life);
 	Player1LifePanel->AddChild(Player1Life);
 
 	std::shared_ptr<UIImage> Player1Heart = std::make_shared<UIImage>(heart_data, heart_size, Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
+	structPlayer1Infos->heart = Player1Heart;
 	Player1LifePanel->AddChild(Player1Heart);
 
 	Player1Infos->AddChild(Player1LifePanel);
@@ -86,11 +89,12 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	Player2LifePanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player2LifePanel->SetAlignment(UIAlignment::Start, UIAlignment::End);
 
-	std::shared_ptr<UIText> PlayerLife = std::make_shared<UIText>("100", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.5f), 20);
+	std::shared_ptr<UIText> PlayerLife = std::make_shared<UIText>("30", font, Vec2f(0.1f, 0.1f), Vec2f(0.6f, 0.5f), 20);
 	structPlayer2Infos->SetHealth(PlayerLife);
 	Player2LifePanel->AddChild(PlayerLife);
 
 	std::shared_ptr<UIImage> Player2Heart = std::make_shared<UIImage>(heart_data, heart_size, Vec2f(0, 0), Vec2f(0.2f, 0.6f), sf::Color::Red);
+	structPlayer2Infos->heart = Player2Heart;
 	Player2LifePanel->AddChild(Player2Heart);
 
 	Player2Infos->AddChild(Player2LifePanel);
@@ -108,11 +112,17 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 	WindArrowPanel->SetAlignment(UIAlignment::Center, UIAlignment::Start);
 
 	std::shared_ptr<UIText> WindForce = std::make_shared<UIText>("3 m/s", font, Vec2f(0.1f, 0.1f), Vec2f(0.4f, 0.4f), 15);
+	windForceText = WindForce;
 	WindForce->SetColor(sf::Color::White, sf::Color::White);
 	WindArrowPanel->AddChild(WindForce);
-	
-	std::shared_ptr<UIImage> WindArrow = std::make_shared<UIImage>(arrow_data, arrow_size, Vec2f(0, 0), Vec2f(0.15f, 0.4f));
-	WindArrowPanel->AddChild(WindArrow);
+
+	std::shared_ptr<UIPanel> WindArrowContainer = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.15f, 0.4f));
+	WindArrowContainer->SetLayout(UILayout::List, UIDirection::Vertical);
+	WindArrowContainer->SetAlignment(UIAlignment::Center, UIAlignment::Center);
+	std::shared_ptr<UIImage> WindArrow = std::make_shared<UIImage>(arrow_data, arrow_size, Vec2f(0, 0), Vec2f(1.f, 1.f));
+	WindArrowContainer->AddChild(WindArrow);
+	windDirection = WindArrow;
+	WindArrowPanel->AddChild(WindArrowContainer);
 	
 	WindPanel->AddChild(WindArrowPanel);
 	
@@ -164,6 +174,9 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	std::shared_ptr<UIImage> Gun1 = std::make_shared<UIImage>(pistol_data, pistol_size, Vec2f(0, 0), Vec2f(0.3f, 0.8f));
 	std::shared_ptr<UIImage> Grenade1 = std::make_shared<UIImage>(grenade_data, grenade_size, Vec2f(0, 0), Vec2f(0.3f, 0.8f));
 	std::shared_ptr<UIImage> Gravit1 = std::make_shared<UIImage>(gravit_data, gravit_size, Vec2f(0, 0), Vec2f(0.3f, 0.8f));
+	pistol = Gun1;
+	grenade = Grenade1;
+	gravit = Gravit1;
 
 	Player1WeaponIcons->AddChild(Gun1);
 	Player1WeaponIcons->AddChild(Grenade1);
@@ -211,4 +224,24 @@ std::shared_ptr<Canvas> UIConstructor::CreateEditorCanvas()
 	EditorHUD->AddChild(ControlsPanel);
 	EditorHUD->InitResources();
 	return EditorHUD;
+}
+
+void UIConstructor::SwitchWindDirection(bool _left)
+{
+	if(windIsLeft != _left)
+	{
+		Vec2f size = windDirection->GetSize();
+		windDirection->SetSize(Vec2f(-size.x, size.y));
+		windIsLeft = _left;
+	}
+}
+
+void UIConstructor::SetWindForce(int _force)
+{
+	windForceText->SetText(std::to_string(std::abs(_force)) + " m/s");
+}
+
+void UIConstructor::SwitchPlayer()
+{
+	actualPlayer = actualPlayer == structPlayer1Infos ? structPlayer2Infos : structPlayer1Infos;
 }

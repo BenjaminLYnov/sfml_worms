@@ -5,6 +5,8 @@
 
 #include "Level/Level.h"
 
+class UIConstructor;
+struct PlayerInfos;
 class Worm;
 class Graph;
 class Team;
@@ -27,6 +29,10 @@ public:
     void Render(sf::RenderWindow &Window) const override;
 
     void SetupUI();
+
+    std::shared_ptr<PlayerInfos> Player1Infos;
+    std::shared_ptr<PlayerInfos> Player2Infos;
+    std::shared_ptr<UIConstructor> UI;
 
 protected:
     void InitTeams();
