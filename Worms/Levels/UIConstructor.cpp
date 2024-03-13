@@ -10,7 +10,7 @@
 UIConstructor::UIConstructor()
 {
 	font = sf::Font();
-	font.loadFromFile("arial.ttf");
+	font.loadFromMemory(arial_data, arial_size);
 	structPlayer1Infos = std::make_shared<PlayerInfos>();
 	structPlayer2Infos = std::make_shared<PlayerInfos>();
 }
