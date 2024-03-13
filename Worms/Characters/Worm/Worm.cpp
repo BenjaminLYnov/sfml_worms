@@ -28,6 +28,7 @@
 #include "Characters/InputActions/MoveAction.h"
 #include "Characters/InputActions/JumpAction.h"
 #include "Characters/InputActions/FireAction.h"
+#include "Characters/InputActions/ChangeWeaponAction.h"
 #include "Characters/InputActions/AimAction.h"
 #include "Characters/InputActions/ZoomViewportAction.h"
 #include "Characters/InputActions/ResetViewCenter.h"
@@ -100,6 +101,7 @@ Worm::Worm() : Character()
     IaJump = std::make_shared<JumpAction>();
     IaFire = std::make_shared<FireAction>();
     IaAim = std::make_shared<AimAction>();
+    IaChangeWeapon = std::make_shared<ChangeWeaponAction>();
     IaMoveViewport = std::make_shared<MoveViewportAction>();
     IaZoomViewport = std::make_shared<ZoomViewportAction>();
     IaResetViewport = std::make_shared<ResetViewCenter>();
@@ -157,6 +159,8 @@ void Worm::Destroy(GameObject *GameObjectToDestroy)
         Team->RemoveWorm(this);
     if (FragmentationBallS)
         FragmentationBallS->SetOwner();
+    if (CannonBallS)
+        CannonBallS->SetOwner();
     GameObject::Destroy();
     CallDeleguateActionDone();
     DeleguateDeath->Broadcast();
@@ -195,6 +199,7 @@ void Worm::SetupBindAction()
     InputComponent->BindAction(IaMove, ETriggerEvent::Started, this, &Worm::OnMoveStart);
     InputComponent->BindAction(IaMove, ETriggerEvent::Completed, this, &Worm::OnMoveCompleted);
     InputComponent->BindAction(IaJump, ETriggerEvent::Started, this, &Worm::Jump);
+    InputComponent->BindAction(IaChangeWeapon, ETriggerEvent::Started, this, &Worm::ChangeWeapon);
     InputComponent->BindAction(IaFire, ETriggerEvent::Triggered, this, &Worm::OnFireTriggered);
     InputComponent->BindAction(IaFire, ETriggerEvent::Completed, this, &Worm::OnFireCompleted);
     InputComponent->BindAction(IaAim, ETriggerEvent::Triggered, this, &Worm::Aim);
@@ -375,10 +380,21 @@ void Worm::Fire()
     // FragmentationBallS->SetOwner(this);
     // sf::Vector2f force = AimDirection * ShootForce;
 
-    CannonBallS = GetWorld()->SpawnGameObject<CannonBall>(Location);
-    CannonBallS->SetOwner(this);
-    CannonBallS->AddForce(AimDirection * ShootForce);
-    CannonBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    std::shared_ptr<IProjectile> ProjectileS;
+    if (bIsSecondWeaponEquipped)
+    {
+        FragmentationBallS = GetWorld()->SpawnGameObject<FragmentationBall>(Location);
+        FragmentationBallS->SetOwner(this);
+        FragmentationBallS->AddForce(AimDirection * ShootForce);
+        FragmentationBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    }
+    else
+    {
+        CannonBallS = GetWorld()->SpawnGameObject<CannonBall>(Location);
+        CannonBallS->SetOwner(this);
+        CannonBallS->AddForce(AimDirection * ShootForce);
+        CannonBallS->DeleguateOnDestroy->AddCallback(this, &Worm::CallDeleguateActionDone);
+    }
 
     if (!bWon)
     {
@@ -418,6 +434,12 @@ void Worm::Jump()
     SwitchAnimation(JumpA);
     AnimationComponent->Animation->SetStopAtLastFrame(true);
     AnimationComponent->Animation->RestartAnimation();
+}
+
+void Worm::ChangeWeapon()
+{
+    bIsSecondWeaponEquipped = !bIsSecondWeaponEquipped;
+    std::cout << "ChangeWeapon\n";
 }
 
 void Worm::MoveViewport(const sf::Vector2f Value)

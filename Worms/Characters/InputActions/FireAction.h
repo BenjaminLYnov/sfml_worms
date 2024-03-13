@@ -10,7 +10,6 @@ public:
     FireAction();
 
 private:
-
 };
 
 #endif

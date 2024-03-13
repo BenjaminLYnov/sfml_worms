@@ -12,7 +12,6 @@ class Deleguate;
 class Text;
 class Team;
 
-class FireGun;
 class Explosion;
 class Sound;
 class CannonBall;
@@ -59,10 +58,11 @@ public:
     float SpeedZoom = 0.5;
 
     // Weapon
-    std::shared_ptr<FireGun> FireGunS;
     std::shared_ptr<Explosion> ExplosionS;
     std::shared_ptr<FragmentationBall> FragmentationBallS;
     std::shared_ptr<CannonBall> CannonBallS;
+
+    bool bIsSecondWeaponEquipped;
 
 #pragma region State
 
@@ -89,6 +89,7 @@ protected:
     virtual void OnMoveCompleted();
     virtual void Aim(const sf::Vector2f Value);
     virtual void Jump();
+    virtual void ChangeWeapon();
     virtual void OnFireTriggered();
     virtual void OnFireCompleted();
     virtual void Fire();
@@ -115,6 +116,7 @@ private:
     // Input Action
     std::shared_ptr<InputAction> IaMove;
     std::shared_ptr<InputAction> IaJump;
+    std::shared_ptr<InputAction> IaChangeWeapon;
     std::shared_ptr<InputAction> IaFire;
     std::shared_ptr<InputAction> IaAim;
     std::shared_ptr<InputAction> IaMoveViewport;

@@ -42,9 +42,10 @@ void Explosion::Update(const float DeltaTime)
     if (IndexFrame > 0)
     {
         CircleColliderComponent->bEnableCollision = false;
-        if (GetOwner() != nullptr)
+        GameObject *Owner = GetOwner();
+        if (Owner != nullptr)
         {
-            Worm *W = dynamic_cast<Worm *>(GetOwner());
+            Worm *W = dynamic_cast<Worm *>(Owner);
             if (W)
                 W->CallDeleguateActionDone();
         }
