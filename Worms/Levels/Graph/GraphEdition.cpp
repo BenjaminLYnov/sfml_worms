@@ -6,6 +6,7 @@
 #include "Graph.h"
 #include "GraphData.h"
 #include "GameManager/GameManager.h"
+#include "Levels/UIConstructor.h"
 
 GraphEdition::GraphEdition() : Level()
 {
@@ -13,6 +14,7 @@ GraphEdition::GraphEdition() : Level()
     GD = std::make_shared<GraphData>();
 
     GEController = std::make_shared<GraphEditionController>();
+    SetupUI();
 }
 
 void GraphEdition::Start()
@@ -44,6 +46,13 @@ void GraphEdition::SaveGraph()
 
     GD->CellTypes = CellTypes;
     GD->SaveGraph();
+}
+
+
+void GraphEdition::SetupUI()
+{
+    std::shared_ptr<UIConstructor> UIC = std::make_shared<UIConstructor>();
+    AddCanvas(UIC->CreateEditorCanvas());
 }
 
 Cell *GraphEdition::GetCellByPosition(const sf::Vector2f Position)

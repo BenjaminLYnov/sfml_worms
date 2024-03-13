@@ -10,7 +10,7 @@
 UIConstructor::UIConstructor()
 {
 	font = sf::Font();
-	font.loadFromFile("arial.ttf");
+	font.loadFromMemory(arial_data, arial_size);
 	structPlayer1Infos = std::make_shared<PlayerInfos>();
 	structPlayer2Infos = std::make_shared<PlayerInfos>();
 }
@@ -128,16 +128,34 @@ std::shared_ptr<Canvas> UIConstructor::CreateTopCanvas()
 
 std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 {
-	std::shared_ptr<Canvas> BottomHUD = std::make_shared<Canvas>(Vec2f(0, 800), Vec2f(780, 100));
+	std::shared_ptr<Canvas> BottomHUD = std::make_shared<Canvas>(Vec2f(0, 800), Vec2f(1100, 200));
 
 	std::shared_ptr<UIPanel> HorizontalBottomHUDPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(1, 1));
 	HorizontalBottomHUDPanel->SetLayout(UILayout::List, UIDirection::Horizontal);
 	HorizontalBottomHUDPanel->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::Center);
-
-	std::shared_ptr<UIPanel> Player1WeaponPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.25f, 1.f));
+	
+	std::shared_ptr<UIPanel> Player1WeaponPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.25f, 0.5f));
 	Player1WeaponPanel->SetLayout(UILayout::List, UIDirection::Vertical);
 	Player1WeaponPanel->SetAlignment(UIAlignment::Center, UIAlignment::SpaceBetween);
 
+	std::shared_ptr<UIPanel> ControlsPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(0.25f, 1.f));
+	ControlsPanel->SetLayout(UILayout::List, UIDirection::Vertical);
+	ControlsPanel->SetAlignment(UIAlignment::End, UIAlignment::SpaceBetween);
+	
+	std::shared_ptr<UIText> Controls = std::make_shared<UIText>("CONTROLS | Move : Q/D", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> MoveCam = std::make_shared<UIText>("Move Camera : Arrow keys", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Jump = std::make_shared<UIText>("Jump : Space", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Shoot = std::make_shared<UIText>("Aim : Z/S", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Weapon = std::make_shared<UIText>("Shoot : Hold and release J", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Reload = std::make_shared<UIText>("Reload Scene : O | Editor Mode : P", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+
+	ControlsPanel->AddChild(Controls);
+	ControlsPanel->AddChild(MoveCam);
+	ControlsPanel->AddChild(Jump);
+	ControlsPanel->AddChild(Shoot);
+	ControlsPanel->AddChild(Weapon);
+	ControlsPanel->AddChild(Reload);
+	
 	std::shared_ptr<UIPanel> Player1WeaponIcons = std::make_shared<UIPanel>(Vec2f(0,0), Vec2f(0.8f, 0.6f));
 	Player1WeaponIcons->SetLayout(UILayout::List, UIDirection::Horizontal);
 	Player1WeaponIcons->SetAlignment(UIAlignment::SpaceBetween, UIAlignment::End);
@@ -165,9 +183,32 @@ std::shared_ptr<Canvas> UIConstructor::CreateDownCanvas()
 	Player1WeaponsMunitions->AddChild(GravitMun);
 	
 	HorizontalBottomHUDPanel->AddChild(Player1WeaponPanel);
-
+	HorizontalBottomHUDPanel->AddChild(ControlsPanel);
 	BottomHUD->AddChild(HorizontalBottomHUDPanel);
 
 	BottomHUD->InitResources();
 	return BottomHUD;
+}
+
+std::shared_ptr<Canvas> UIConstructor::CreateEditorCanvas()
+{
+	std::shared_ptr<Canvas> EditorHUD = std::make_shared<Canvas>(Vec2f(-300, 0), Vec2f(300, 200));
+
+	std::shared_ptr<UIPanel> ControlsPanel = std::make_shared<UIPanel>(Vec2f(0, 0), Vec2f(1.f, 1.f));
+	ControlsPanel->SetLayout(UILayout::List, UIDirection::Vertical);
+	ControlsPanel->SetAlignment(UIAlignment::Start, UIAlignment::SpaceAround);
+	
+	std::shared_ptr<UIText> Controls = std::make_shared<UIText>("CONTROLS | Move Camera : ZQSD", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Place = std::make_shared<UIText>("Place tile : Left click", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Remove = std::make_shared<UIText>("Remove tile : Right click", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+	std::shared_ptr<UIText> Start = std::make_shared<UIText>("Start Game : L", font, Vec2f(0, 0), Vec2f(0.3f, 0.2f), 20);
+
+	ControlsPanel->AddChild(Controls);
+	ControlsPanel->AddChild(Place);
+	ControlsPanel->AddChild(Remove);
+	ControlsPanel->AddChild(Start);
+
+	EditorHUD->AddChild(ControlsPanel);
+	EditorHUD->InitResources();
+	return EditorHUD;
 }

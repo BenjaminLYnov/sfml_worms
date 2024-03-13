@@ -24,6 +24,8 @@ public:
 
     const float MaxCellUnone = 250;
     std::shared_ptr<Graph> G;
+
+    void SetupUI();
     
 protected:
 private:
